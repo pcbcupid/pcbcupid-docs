@@ -1,0 +1,51 @@
+---
+description: A male USB-A plug with its power and data pins exposed on a circuit board. It's used to build custom USB devices, like macro pads or dongles, that plug directly into a host computer.
+title: USB-A [MALE]
+---
+
+A [USB-A MALE](https://shop.pcbcupid.com/product/gb003/) is a small PCB that takes a standard USB-A male plug (like the plug end of a USB cable) and “breaks out” the 4 (or sometimes 5) USB pins — VBUS (5 V), D+, D-, GND (and sometimes shield / shell) — to easily accessible 2.54 mm (0.1″) spaced solder pads or header pins.
+
+export const USBAMaleCarousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB-A-MALE/USB-A-MALE-ILLUSTRATION.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB-A-MALE/USB-A.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/usb-a-male.glb";
+
+}
+
+<USBAMaleCarousel />
+
+## Pin Configuration
+ 
+- **VBUS / 5V** : +5V power from USB
+- **D-** : USB Data Negative
+- **D+** : USB Data Positive
+- **GND** : Ground	
+
+## Key Features
+
+- Exposes standard **USB-A male pins** (VBUS, D+, D-, GND) to **easily solderable headers/pads**.
+- Supports **5V power supply** for microcontrollers, sensors, and small electronics.
+- Provides access to **USB data lines** for prototyping or debugging USB communication.
+- **Compact and breadboard-friendly** design for DIY projects and enclosures.
+- Eliminates the need to **cut and splice USB cables**, giving a clean, reliable connection.
+- Can be used for **custom USB devices, IoT boards, and power distribution**.
+
+## Applications
+
+- Used in **industrial test benches** to power or interface microcontrollers and diagnostic tools via USB.
+- Integrated into **control panels** for providing stable 5V supply to embedded modules or data-logging devices.
+- Helps in **firmware flashing, debugging, and maintenance** of industrial controllers through USB access points.
+- Utilized in **prototype development** for industrial IoT (IIoT) devices, sensors, and gateways.
+- Used in **production line fixtures** where a reliable USB connector is needed for repeated plugging/unplugging.
+
+<Warning title="⚠️ Precaution Note">
+
+- Ensure the USB port can safely supply the required 5V to avoid overheating or port damage.
+- Never short VBUS (5V) to GND, as this can damage both the breakout and the USB source.
+- Handle D+ and D- data lines carefully—long or loose wires can cause noise or communication errors.
+- Use proper soldering and strain relief to prevent connector loosening or accidental pull-outs.
+  
+</Warning>
+

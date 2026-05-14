@@ -1,0 +1,121 @@
+---
+description: In this article, we'll discuss how to do routing in kicad and the steps to follow. 
+title: KiCad PCB Routing
+
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_routing.avif
+---
+# PCB Routing In KiCad
+
+![KiCad:How_To_Do_PCB_Routing_In_KiCad_with_Basic_PCB_Design_Rules](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_routing.avif)
+
+In this article let's see how we can route (connect) all the components that we place in the [previous article](https://learn.pcbcupid.com/pcb-design/kicad-tutorial/kicad-pcb-layout-editor).
+
+To do that, first we need to setup some constraints and setup some net classes. This will make sure we are making all the connection according to the manufacturer specifications. 
+
+![PCBCUPID_KICAD_boardsetup](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_boardsetup.avif)
+
+To confirm the Net class assignment, we’ll exit this window, go under the appearance panel, and select the Nets tab. (Please refer to the video on bottom of this article)
+
+![PCBCUPID_KICAD_HIDENETCLASSES](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_hidelayers.avif)
+
+Here we can see all the net names and also the net classes we defined. To confirm, we’ll just hide the power class; we can see the power connections are gone; similarly, the signal class and all the signal connections are gone. That’s a pretty good sign, which says we have assigned classes to all the nets. But in your case, if you see any connection, that means those net’s are not assigned to any of these 2 classes.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_preview.avif)
+
+## PCB Routing 
+
+Let’s unhide both of them for now and start with routing.
+
+Routing is nothing but a process of connecting all footprints together using copper traces. It’s pretty simple to do because we already know how things are connected with the rules that we set on the net class assignment and the schematic that we drew.
+
+In [Kicad](https://www.kicad.org/), we can use this route track tool, either using this button or just select the pad and do a right click to start the track; we can see the track follows the cursor. Then select the end to finish the connection.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_track_tool.avif)
+
+We can also do a left click while moving the track, which will lock in the position of the track before ending the connection.  If you have noticed, [Kicad](https://www.kicad.org/) will automatically try to keep the connection at 45 degrees and also try to keep the distance short, and you will hear a lot about these design rules while working on a PCB. The minimum distance will reduce any unwanted inductance that’s created by the longer tracks, and avoiding sharp angles will reduce the effect called reflections.
+
+![PCBCUPID_KICAD_design%20rule](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_design%20rule.avif)
+
+## PCB Routing Evolution: Curves to Angles in KiCad
+
+Initially when PCBs were invented all the tracks were curved and you cannot see any sharp angles in the tracks because in early days the routing process was done by hand. But when the designers started using the early CAD software it changed a lot. The early CAD software had a lot of difficulty in handling many curves, so they switched to 45 degree angle tracks. But not sure why it is stuck around even if modern software can easily handle the curves. Because even the 45 degree angle would cause reflection, but still way better than 90 degree. For optimal connection it's always good to use a curve.
+
+![PCBCUPID_KICAD_track_rule](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_track_rule.avif)
+
+In Kicad we can do this by selecting the tracks, then do right click then click on fillet, then we'll enter the curvature radius of 5 mm and then hit OK . Here you can see we are using curves to connect these two pads instead of using a angle track.
+
+![PCBCUPID_KICAD_curve_track](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_curve_track.avif)
+
+Click here to learn more about this reflections and why we need to follow these rules and also why do we need optimal angle for the traces. 
+
+## Routing All the Components
+
+Anyway now with the basic rules of no sharp angles and keeping the track distance shot, lets quickly try to route most of the footprints. Here we can notice two different things, first we have the different track width for different traces that's because of the way that we assigned the net classes.
+
+![PCBCUPID_KICAD_nets](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_nets.avif)
+
+So lets quickly go to the board setup and if you go under net classes, the nets that are assigned to the power classes will have the track width of 0.5 mm and the nets that are assigned to the signal classes will have the track width of 0.3 mm.
+
+![PCBCUPID_KICAD_power_class](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_power_class.avif)
+
+And here on the top if you see we have the track and use net width class, so that's the reason we had the seamless switching between the different track width. But in some cases if you want to force the track width, we can always do that. You can go under this drop down and select 0.3 mm.
+
+![PCBCUPID_KICAD_net_class_width](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_net_class_width.avif)
+
+Make sure you turn this off, so that we can use this particular width instead of using the width that is previously assigned to this particular pad. So since this is turned off and we have set it to 0.3 and when we try to do the track, you can see the track width has been changed.
+
+![PCBCUPID_KICAD_tracks](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_tracks.avif)
+
+## Adding Via's
+
+Anyway now let's turn this back on and we'll use the net class width instead of us manually selecting them. So that's one observation and second, you can see I haven't connected few of the connections. So this is just to show how we can switch between layers. Currently we are on the front copper layer and we can confirm this by going to the 3D View and you can see all the tracks are on the top layer of the PCB and there's nothing on the bottom.
+
+![PCBCUPID_KICAD_bottom_layer](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_bottom_layer.avif)
+
+Now to draw the tracks on the bottom layer, we can simply select the bottom layer and then use the same tool and start drawing. We can see that we have connected the pads of the led to the microcontroller through the bottom layer. Let's go to the 3D viewer again and you can see on the bottom layer we have the LED track.
+
+So lets create a hypothetical situation where it's difficult to do on both top layer as well as on the bottom layer and create a track over here and if you go to the front copper layer you can see that we can just pass the bottom layer but not the front layer and similarly when we are on the bottom layer you can see we can't pass through this particular track.
+
+![PCBCUPID_KICAD_bottomlayer_error](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_bottomlayer_error.avif)
+
+In this case we can use one of the PCB feature called Vias. Vias basically helps in making the connection from the top layer to the bottom layer, so we can use this to jump between layers. Lets quickly see an example how that's done. First lets go to the top copper layer and draw a track, once we cross the bottom track we just do a double click and then escape and select the vias tool and then click on this particular track.
+
+![PCBCUPID_KICAD_track_overlap](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_track_overlap.avif)
+
+let's go back to the bottom layer and continue drawing my connection. we can see hat we made the connection between these two ground pads while using the track on both the top and the bottom layer.
+
+![PCBCUPID_KICAD_3dview_toplayer](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_3dview_toplayer.avif)
+
+Now lets see how this looks on the 3D viewer. Here, you can see the connection that's traveling up to here and then goes to the bottom until it continues to finish the connection to the component, so this is the reason why we use vias, to make a connection from the top layer to the bottom layer.
+
+![PCBCUPID_KICAD_3dtrack_bottomlayer](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_3dtrack_bottomlayer.avif)
+
+Currently, we don't have a much complicated circuit to show it but vias will be of great help when you're working with SMD components. But in case of through hole, it's much easier to just use the pads as vias. But in our case, in this circuit vias are not necessary, so lets just simplify it by removing the via and connecting the track back to its original location. 
+
+## Improving Manufacturing & Heat Dissipation with Copper Fill
+
+This PCB looks good but will cause a lot of issues in terms of manufacturing, because we need to remove a lot of copper in the etching process to make these tracks, during which there are high chances that these tracks can become open circuit or short circuit within the PCB. To avoid this, we can add the copper fill.
+
+![PCBCUPID_KICAD_doctool](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_doctool.avif)
+
+We can do that in Kicad by using the copper fill tool and then click on the document and a window will pop up and here in this window we need to tell KiCad in which layers we need to do the copper fill. In this case lets make sure it is done on both the front copper layer and the bottom copper layer. And then we need to assign a net to this copper fill, it's not mandatory to connect a net to the copper fill but you can see Kicad throws an warning telling that it will result in an isolated copper island. In this case what people usually do is connect the copper fill to ground. We'll just select ground and we can keep the rest of the settings to default and click ok.
+
+![PCBCUPID_KICAD_copperzone_prop](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_copperzone_prop.avif)
+
+Now you can see a polygon tool follows the cursor. Now we'll use this tool and draw a boundary across the PCB.  This copper fields that we created will not only help in the process of etching but also will help in dissipation of heat from the components and spread them evenly across the PCB.
+
+![PCBCUPID_KICAD_final_sketch](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_final_sketch.avif)
+
+We can go to the 3D viewer and see how efficient our PCB is now. You can see during etching process the amount of copper removed from the PCB will be very small. This completes the PCB routing.
+
+![PCBCUPID_KICAD_final_3d_cut](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Routing/PCBCUPID_KICAD_final_3d_cut.avif)
+
+You can watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe width="1024" height="515" src="https://www.youtube.com/embed/9HpYpP2L10A?list=PLn6004q9oeqGl91KifK6xHGuqvXGb374G" title="#10 How To Do PCB Routing In KiCad 7.0  with Basic PCB Design Rules | #PCBCupid" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+In the next article, we'll see how to do design rule check which is very similar to electrical rule check that we discussed in the schematic editor, after which our PCB will be ready for production. If you have any queries, please drop them [here](https://forum.pcbcupid.com/).
+
+Until then, keep learning and keep creating!

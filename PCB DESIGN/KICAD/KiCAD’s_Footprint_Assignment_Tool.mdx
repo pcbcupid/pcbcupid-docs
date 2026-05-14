@@ -1,0 +1,154 @@
+---
+description: This article is about to assign the footprint to the components using the KiCad’s footprint assignment tool.
+title: KiCad Footprint Assignment Tool  
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_footrpint_assignment.webp
+---
+# Footprint Assignment Tool in KiCAD
+
+![How_To_Use_KiCAD’s_Footprint_Assignment_Tool](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_footrpint_assignment.webp)
+
+In the last [aritcle](https://learn.pcbcupid.com/pcb-design/kicad-tutorial/kicad-footprint-selection), we discussed various factors on how to select the right footprint for your components. Now, we’ll discuss how we can assign the footprint to the components using the KiCad’s footprint assignment tool.
+
+## Footprint Assignment Tool
+
+![PCBCUPID_KICAD_intro](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_intro.avif)
+
+Here we can see some of the components are assigned by KiCAD and unsigned components are highlighted in yellow (shown in the figure above). This window is primarily used to assign the correct components to the symbols, to understand how this tool works, let’s start with the menu bar.
+
+![PCBCUPID_KICAD_footprint%20libraries](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_footprint%20libraries.avif)
+
+The second option on the menu bar takes us to the footprint libraries. Where we can see all the footprint that’s available on KiCAD and it’s physically location that’s stored on the computer. We can also use this same option to include custom libraries or external libraries that’s created by community members.
+
+![PCBCUPID_KICAD_selected%20footprint](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_selected%20footprint.avif)
+
+Then we have, view the selected footprint. This will open the footprint and show it on a different window. You can either use this button or you can click on the component to select the component and then a right click and finally click on the view selected footprint, as shown in the figure below.
+
+![PCBCUPID_KICAD_view%20selected%20image](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_view%20selected%20image.avif)
+
+## Footprint Viewer
+
+This opens a footprint window, which is fairly easy to use. Where most of the tools and navigation are similar to the schematic editor. You can zoom in, zoom out and pan same control as before and also use the tools on the top and left toolbar as we discussed in the earlier article.
+
+![PCBCUPID_KICAD_reference%20img](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_reference%20img.avif)
+
+The primary purpose of this window is to confirm the correct footprint that we’ll be using in the project. Here, we’ll be majorly using the measure tool (shown below) to measure the component dimension and check for compatibility with the physical component.
+
+![PCBCUPID_KICAD_measure%20tool](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_measure%20tool.avif)
+
+The below outline tools also can come in handy to hide unwanted details on the footprint, for example the hide/unhide pin tool:
+
+![PCBCUPID_KICAD_hideunhide%20pin%20tool](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_hideunhide%20pin%20tool.avif)
+
+Outline mode for pads:
+
+![PCBCUPID_KICAD_Outline%20mode%20for%20pads](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_Outline%20mode%20for%20pads.avif)
+
+Outline mode for texts:
+
+![PCBCUPID_KICAD_Outline%20mode%20for%20texts](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_Outline%20mode%20for%20texts.avif)
+
+And outline mode for all the graphics:
+
+![PCBCUPID_KICAD_outline%20mode%20for%20all%20the%20graphics](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_outline%20mode%20for%20all%20the%20graphics.avif)
+
+Unfortunately, this window is to just view the footprint and we have no way to edit or modify. In future article we’ll look into how to customize and edit the footprint using footprint editor. For now let’s continue with the footprint assignment tool.
+
+## Assignment Tool Menu Bar
+
+To go through all the unassigned components you can use these two buttons to navigate and find the unassigned component. You might already what the next two buttons (undo and redo) so we’ll skip them and go to the next option.
+
+![PCBCUPID_KICAD_undo%20and%20redo](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_undo%20and%20redo.avif)
+
+This option is little tricky and can make you think KiCAD would assign all the components with some default footprint with just a click of a button. But that’s not the case, KiCAD uses a special footprint association file to assign footprint to the component and this file has to be manually created.
+
+![PCBCUPID_KICAD_auto%20footprint%20aasign](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_auto%20footprint%20aasign.avif)
+
+To add the footprint association file you can go under *Preference -> Mange footprint assignment* . In this pop up you can add the footprint association file.
+
+![PCBCUPID_KICAD_footprint%20association%20file](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_footprint%20association%20file.avif)
+
+Let us give you a gist of how this footprint association file works with an example. So, let’s assume we have some collection of components that are already procured. Based on which we can create a footprint association file with the format that KiCAD is looking for and when that is done, we can include this footprint association file while doing any project that we’ll use the same procured components and it will automatically assign the footprint to the components that we already have.
+
+![PCBCUPID_KICAD_automatically%20assign](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_automatically%20assign.avif)
+
+This might seem a lot of work, but when you are working as company or giving a service to multiple client this can reduce a ton of work down the road. So far we explained this about the footprint association file just for information and it’s not something we would recommend for beginners or who is just getting started with KiCAD.
+
+Next option on the menu bar is pretty simple. This will reset all the footprint associated to the symbols.
+
+![PCBCUPID_KICAD_reset%20all%20the%20footprint](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_reset%20all%20the%20footprint.avif)
+
+## Narrow down to 1 Footprint!
+
+If notice at the bottom status bar, you can see we have over 12,000 footprint that are by default installed with KiCad. There are times this can slow down your computer when you search for a component. To solve this, KiCad has some custom filters that we can apply during search and narrow down that one footprint that’s you actually need.
+
+![PCBCUPID_KICAD_custom%20filters](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_custom%20filters.avif)
+
+First we have a *filter footprint based on the symbol description* .
+
+![PCBCUPID_KICAD_filter%20footprint](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_filter%20footprint.avif)
+
+This will just show us all the footprint that is related to the symbol. In this case we can show all the components that are related to resistors and we have brought down our option from 12000 to just 177 footprints!
+
+To reduce further we have the pin number filter.
+
+![PCBCUPID_KICAD_pin%20number%20filte](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_pin%20number%20filte.avif)
+
+For a fact we know that our resistors have two pins, but some of the footprints here have more than two pins, so we’ll remove the footprints that have more than two pins by selecting the pin filter, KiCad has narrowed down the footprints to 136.
+
+![PCBCUPID_KICAD_pin%20filter](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_pin%20filter.avif)
+
+But it does show footprints from various libraries, like THT and SMD. In our case we’ll be using THT so, to filter by THT use the next filter ‘filter by library’. Turn ON the filter and just click on the footprint library where we need to search, that would be the resistor THT.
+
+![PCBCUPID_KICAD_filter%20by%20librar](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_filter%20by%20librar.avif)
+
+Now we have narrowed down from 12k footprints to just 88 footprints. That’s amazing!! We are now just left with narrowing down to the one footprint that we need.
+
+In our collection, we have the resistor of the length 6.3 mm and the diameter of 2.16mm.
+
+![PCBCUPID_KICAD_calliper1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_calliper1.avif)
+
+![PCBCUPID_KICAD_calliper2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_calliper2.avif)
+
+## KiCad Naming Convention
+
+Now how do we find this footprint in KiCAD? Let’s break down the names that are available for us in KiCAD.
+
+![PCBCUPID_KICAD_KiCad%20Naming%20Convention](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_KiCad%20Naming%20Convention.avif)
+
+First we have the package name, resistor THT, followed by DIN code, a standard used to differentiate the various types of resistors that’s available in the market. Then we have the ‘L’ which tells us the Length, ‘D’ which tells us the diameter, ‘P’ stands for pitch which tells us the distance between the leads, and finally we have orientation which can be vertical or horizontal.
+
+We would choose the below footprint which has the following features: horizontal orientation, it’s just easier to solder as well as easy to place and we don’t have to fold the resistor which is the case with vertical orientation. If we measure the length and width, it is approximately the same. Then there are also other reasons which are based on design constraint or assembly constraint which you will deal differently for each project.
+
+![PCBCUPID_KICAD_reference%20aimg%20axial](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_reference%20aimg%20axial.avif)
+
+## Assigning The Footprint
+
+Before adding the footprint to the symbol we can double check by cross verifying measurement and viewing it on 3d.
+
+![PCBCUPID_KICAD_Assigning%20The%20Footprint](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_Assigning%20The%20Footprint.avif)
+
+Don’t worry much about the tools and navigation on the 3d viewer. We’ll have a dedicated article for that, but for now just remember to right click move to rotate the PCB, middle click move to pan and finally you can zoom-in/zoom-out with the scroll wheel.
+
+To assign this footprint to the component, exit the view window and go to footprint assignment window and select the component and then double click on the footprint that needs to be assigned to the symbol. You can follow this procedure to assign footprint to rest of the resistors and other components.
+
+![PCBCUPID_KICAD_footprint%20assignment%20window](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_footprint%20assignment%20window.avif)
+
+The tricky part in footprint is when we don’t have a footprint. For example in this particular circuit the condenser microphone footprint isn’t available by default in kiCad. In this case we would either download a custom footprint or make our own footprint using *footprint editor* . But we never discussed these, so we’ll try to find another symbol with similar shape/dimension and replace it for now. So, we are placing this footprint temporarily instead of the microphone, as they both look very similar and take the same space.
+
+![PCBCUPID_KICAD_fianl%20before%203d](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_fianl%20before%203d.avif)
+
+After assigning footprint to all the symbols, click on* ‘Apply, Save schematic & Continue* ‘. After that click on ‘Ok’
+
+Once all the components assigned, let’s see how all the components look together on a PCB using 3D viewer.
+
+![PCBCUPID_KICAD_3d%20final%20out](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Footprint_assignment/PCBCUPID_KICAD_3d%20final%20out.avif)
+
+This completes the footprint assignment article. If you like to watch a complete tutorial as [video ](https://www.youtube.com/watch?v=JMa9q4YhRDk)please check this out:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#6 How To Select The Right Footprint For Symbols in KiCad 7.0  | #PCBCupid" width="1024" height="515" src="https://www.youtube.com/embed/JMa9q4YhRDk?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+In the next article we’ll see how we can put all these together on a PCB. So far, if you have any doubts or questions, you can always reach out to us at using [PCB Cupid Q&amp;A](https://forum.pcbcupid.com/ "PCB Cupid Q&A").
+
+Until next article, keep learning and keep creating!

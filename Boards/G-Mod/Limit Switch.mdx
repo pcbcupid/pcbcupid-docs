@@ -1,0 +1,119 @@
+---
+description: A limit switch detects position and triggers a circuit.
+title: Limit Switch
+---
+
+A **limit switch** is an electromechanical device used to detect the presence, absence, or position of an object. It operates by physical contact: when an object moves into a predefined position, it actuates the switch, opening or closing an electrical circuit. Limit switches are widely used in industrial machinery, automation systems, and safety devices to control movement, prevent over-travel, and provide position feedback.
+
+export const LimitSwitch_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid-limit-switch-illustration.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid-sideview-limit-switch-boardview.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://example.com/model.glb";
+
+}
+
+{/* 
+<div class="centerImg">
+ <img src="https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid_limit-switch-alterrnative2.avif" width="350"/> 
+ &nbsp;
+ <img src="https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid_limit-switch-alterrnative.avif" width="350"/> 
+</div> 
+*/}
+
+## Pin Configuration
+ 
+- S - SIGNAL
+- G - GND
+- V - VCC
+
+## Key Features
+
+- Mechanical or electromechanical operation for detecting position or motion
+- Durable and reliable for repeated actuation
+- Variety of actuator types: lever, roller, plunger, whisker, etc.
+- Normally Open (NO) and Normally Closed (NC) contacts for flexible circuit design
+- Wide voltage and current handling depending on model
+- Compact and robust design suitable for industrial environments
+
+## Applications
+
+- Industrial Machinery – detects the end of travel of moving parts
+- Conveyor Systems – position sensing and item detection
+- Robotics & Automation – motion control and position feedback
+- Safety Interlocks – prevents machine over-travel or unsafe operation
+- Elevators & Lifts – detects door positions and travel limits
+- CNC Machines – homing switches for axes
+
+<Note>
+ We have 2 variant's of the limit switch, one is GLYPH compatible (in terms of dimension) and the other one is generic. Please choose the variant based on the size and the direction fo the switch! otherwise both of them are electrically same.   
+</Note>
+
+## Step 1: Hardware Required
+1) Glyph Boards
+2) Limit Switch
+
+## Step 2: Circuit Diagram
+![LIMIT_SWITCH-CIRCUIT-DIAGRAM](https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid_limit_switch.avif)
+## Step 3: Code Setup
+
+1. **Open Arduino IDE.**
+2. **Make sure to install the  library**
+3. **Copy and paste the following code into the Arduino IDE:**
+
+```cpp
+#define LIMIT_SWITCH_PIN  2  // Use the GPIO pin you're connecting the limit switch to
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);  // Enable internal pull-up resistor
+}
+
+void loop() {
+  int switchState = digitalRead(LIMIT_SWITCH_PIN);
+
+  // When pressed, switchState will be LOW (0), otherwise HIGH (1)
+  if (switchState == LOW) {
+    Serial.println("1");  // Pressed
+  } else {
+    Serial.println("0");  // Not pressed
+  }
+
+  delay(100);  // Small delay to prevent flooding the serial monitor
+}
+
+```
+
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+  Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3` 
+<Warning>
+   For the `Pcbcupid Glyph C3 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater or equal to 3.1.0.
+</Warning>
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+   - Click the upload button (➡️ icon) or use the shortcut `CRTL + U` in Arduino IDE to upload the code to the board.
+  
+## Step 5: Observe the Output
+The Serial Monitor output will be a stream of 1s and 0s depending on the state of the limit switch:
+
+- 1 → Limit switch is pressed/activated (circuit closed, GPIO reads LOW)
+- 0 → Limit switch is not pressed (circuit open, GPIO reads HIGH)
+
+![LIMIT_SWITCH-result](https://files.pcbcupid.com/Documentation/Boards/g-mod/limit_switch/pcbcupid_limit_switch_result.avif)
+

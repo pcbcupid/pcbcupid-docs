@@ -1,0 +1,43 @@
+---
+description: Standardized Qwiic 4-in-1 Breakout board description.
+title: Qwiic 4-in-1
+---
+
+A [QWIIC 4 IN 1](https://shop.pcbcupid.com/product/gb005/) expands a single I²C port into four, enabling easy connection of multiple Qwiic devices without soldering.
+
+export const Qwiic_4_in_1_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/QWIIC-4-IN-1%20(1).avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/Qwiic-4in1.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/qwiic-4in1.glb";
+
+}
+
+## Pin Configuration
+ 
+- **GND** : Common ground reference for power and signals
+- **SCL** : I²C Serial Clock line used for communication timing
+- **SDA** : I²C Serial Data line used for data transfer
+- **3V3** : Provides regulated 3.3V power to connected Qwiic devices
+	
+
+## Key Features
+
+- Four plug-and-play I²C ports
+- 3.3V compatible
+- Compact and easy integration
+
+## Applications
+
+- Multi-sensor setups
+- Rapid prototyping
+- IoT and embedded projects
+
+<Warning title="⚠️ Precaution Note">
+
+- Ensure all devices use 3.3V logic
+- Avoid I²C address conflicts
+- Keep cables short for stable communication
+
+</Warning>

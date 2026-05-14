@@ -1,0 +1,299 @@
+---
+description: DIY Mp3 player using GLYPH,  speaker.
+title: SoundBox
+---
+
+The G-Kit SoundBox is a standalone MP3 player kit built around the [Glyph Development Board](https://shop.pcbcupid.com/product-category/development-boards/) designed to capture the charm of a vintage boombox while showcasing the power and flexibility of modern modular electronics.<br />
+
+![SoundBox](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/35.avif)
+
+{/* Need to a 3d model here */}
+{/* Need to a working GIF or video of it's working  */}
+
+This project combines digital audio, intuitive UI design, and hands-on hardware interaction in one compact build.
+It’s not just a music player it’s an educational platform that teaches you the fundamentals of audio electronics, embedded programming, and system design, all while delivering a fun, nostalgic experience.
+
+**Learn Embedded Audio Design**
+
+- At its heart, the SoundBox is a hands-on journey into audio technology.
+You’ll explore how digital audio is processed, transmitted, and amplified step by step:
+- Audio Pipeline: From MP3 decoding → I²S transmission → DAC/amplifier → speaker output.
+- I²S Audio Interface: Learn how digital sound data flows from the ESP32 to a dedicated audio chip.
+- Real-Time Feedback: Watch track metadata, elapsed time, and progress sync instantly on the OLED display.
+- Best part, You can do all this within Arduino!
+
+Whether you’re a beginner learning the basics of digital sound or an advanced user exploring embedded DSP, SoundBox provides a tangible way to learn how sound systems actually work.
+
+**Inspired by the Classics**
+
+- The SoundBox is designed to replicate the look and feel of a classic boombox, reimagined with modern components. 
+- The speaker and button placement mirror traditional stereo layouts giving a tactile, balanced aesthetic.
+- Each button has a distinct function and feedback, evoking the experience of operating vintage hardware.
+
+## Key features
+### Audio Features
+
+- MP3 / WAV Playback from SD card.
+- Track Navigation: Next, Previous, Play, Pause.
+- Non-blocking Audio Loop → keeps UI and buttons responsive.
+- Track Metadata Handling: Displays song title & duration.
+
+### Display & UI Features
+
+- High-contrast and simple to use OLED UI with U8g2lib.
+- Track Info Screen: Title, total time, play/pause state.
+- Volume Display (0–100%).
+- UI Navigation System (prev/next/select).
+
+### Controls
+
+- 3 Physical Buttons (Prev, Play/Select, Next).
+- Debounced Input using OneButton library.
+- Expandable → supports long press, double-click, etc.
+- Volume control from Range: 0–100%.
+- UI & Player Sync → ensures displayed volume = actual volume.
+
+## Build Guide
+
+Build your SoundBox! below you'll find a clear, step-by-step guide that walks you through everything from wiring and flashing the firmware to assembling the case and first power-on tests. Follow each step in order, take care with pin connections and polarity, and code snippets as you go; by the end of this guide you’ll have a fully functional, customizable vintage-style boombox powered by the Glyph ecosystem.
+
+### Step 1: Hardware Required
+
+#### Get Your Electronics Ready
+
+Unbox and get your hardware ready!Make sure it checks with the Hardware required as mentioned below. 
+
+| S. No. | Image                                                                                              | Component Name | Function                                   |
+| ------ | -------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------ |
+| 1      | ![glyph](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_glyph.avif)     | [GLYPH](https://shop.pcbcupid.com/product/gd002/) | Main Microcontroller (can be GLYPH C3 / GLYPH C6 / GLYPH S3)|
+| 2      | ![audio](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_codec.avif)     | GMOD-NAU8325    | I2S CODEC + 3W AMP |
+| 3      | ![oled](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_oled.avif)       | 1.3inch SH1106 OLED  | Visual output (text, status, data display) |
+| 4      | ![sdcard](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_sdcrad.avif)   | GMOD-MicroSD | Audio file storage        |
+| 5      | ![kit](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_kit.avif)         |G-Kit Soundbox            | Base board for the soundbox   |
+| 6      | ![speaker](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_speaker.avif) | 4Ohm 3W Speaker        | Audio output for sound/playback            |
+| 7      | ![battery](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_battery.avif) | Battery        | Provides power to the entire system        |
+| 8      | ![switch](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_switch.avif)   | Switch         | Power control switch for the device        |
+| 9      | ![button](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_buttons.avif)  | Buttons        | User input for control and commands        |
+| 10     | ![usb](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/pcbcupid_7usb.avif)        | Type C USB   | USB connectivity Extender|
+
+#### Get Your 3D printed parts ready
+
+Make sure you 3d printed every parts that's needed for the assembly if you haven't bought it as a part of the kit. You can check download the files here. 
+
+| S. No. | Image                                                                                              | Part Name | Function                                   |
+| ------ | -------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------ |
+| 1      | ![Main-case](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-1.avif)     | [Soundbox-shell](https://shop.pcbcupid.com/product/gd002/) | This enclose the entire circuit & speaker system|
+| 2      | ![Heat-Inserts](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-2.avif)     | Heat-inserts    | Added heat-inserts to the soundbox shell|
+| 3      | ![Button Caps](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-3.avif)       | Custom Button Caps | Engraved functions on top the caps|
+| 4      | ![Speaker-holder](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-4.avif)   | Speaker-Mount | Speaker Mount |
+| 5      | ![Back-plate](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-5.avif)         |Back-plate | back-plate to cover the soundbox shell  |
+| 6      | ![Handle-Holder](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3d-6.avif) | Handle-holder | Handle-holder which attaches to the soundbox shell|
+
+### Step 2: Pin Configuration:
+
+This table gives a overview of how the each module is connected to the controller (Assuming it's GLYPH C6) internally on the G-Kit base board. 
+
+| **Component**          | **Function**  | **GlyphC6 Pin (GPIO)** |
+| ---------------------- | ------------- | ---------------------- |
+| **SD Card**            | CS            | 17                     |
+|                        | MISO          | 23                     |
+|                        | MOSI          | 22                     |
+|                        | SCK           | 21                     |
+| **Audio Codec (I²S)**  | MCLK          | 16                     |
+|                        | BCLK          | 15                     |
+|                        | WS (LRCK)     | 14                     |
+|                        | DOUT          | 18                     |
+| **Buttons**            | Previous      | 3                      |
+|                        | Play / Select | 2                      |
+|                        | Next          | 9                      |
+| **OLED Display (I²C)** | SDA           | 4                      |
+|                        | SCL           | 5                      |
+
+### Step 3: Circuit Diagram
+
+You can follow the below circuit and build the Soundbox by yourself with a breadboard and few jumpers. Without needing to use the PCB. 
+
+![SoundBox](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/soundbox%20circuit%20daigram/pcbcupid_sound_box.jpg)
+
+### Step 4: Assembly
+
+This sections walks you through the complete assembly of your G-kit SoundBox, from preparing components to final enclosure fitting. Follow each step carefully and refer to the provided images for visual guidance. By the end, you’ll have a fully functional SoundBox
+
+<Warning>
+Make sure to follow the steps from **Step-5** & **Step-6** starting installation. This will make sure GLYPH has necessary firmware to run the soundbox features and also tests all the electronics are working.  
+</Warning>
+
+#### Start with the Button
+
+Place the 3d printed button cap on top of G-MOD 3x1 Key Array. It won't be a snap fit but this should be fine and it works great without needing to add glue or adhesive.
+
+![1](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/1.avif)
+The enclosure is printed to tight tolerances, so components fit snugly and the assembly feels solid once completed.
+So, before proceeding, check that all mounting points and openings are clear of print residue. <br/><br/>
+The button array with the 3d printed cap will snap-fit on the extrusion (shown below) to hold the button array in place. 
+
+![2](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/2.avif)
+
+Make sure to slowly algin the mounting holes on the button array to the snap fit point's on the enclosure, also while guide the button in a way that, the header is facing away from the soundbox (or facing towards you). 
+
+![3](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/3.avif)
+
+You might have to apply some pressure until the mounting holes snap fit, be gentle and apply pressure on one side. When one side is fitted in place. Apply pressure on the other side to have the entire button array on place. 
+
+<Warning>
+    The snap fit might be too perfect and can hold the button array very firmly, so it can be difficult to remove once the button array is in place.  
+</Warning>
+
+![4](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/4.avif)
+
+Double checke if the button is fit well and the header pin is facing towards you, This is crcuial as this will be acessed by the G-kit base board. 
+
+![5](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/5.avif)
+
+These steps should make sure you have the buttons installed correctly. 
+
+![6](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/6.avif)
+
+#### Installing the Speakers
+
+To mount the speaker, we have designed a 3d printed adapter which hold the speaker to the enclouser. 
+![7](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/7.avif)
+This adapter would hold the speaker perfectly in place, while not distrubting the wiring. 
+![8](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/8.avif)
+Now align this speaker adapter correctly to the mounting points on the enclouser as shown below. Just follow this for both the speaker. 
+
+![9](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/9.avif)
+
+Once, the alignment is done correctly use M3 screw given in the kit to fasten in place. 
+
+![10](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/10.avif)
+
+Once, the fastening is done for the speaker, make sure the speaker wire connector are facing the right direction(toward the display). This will make it easier for connecting the speaker to the G-kit base board. 
+
+![11](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/11.avif)
+
+#### Installing the OLED
+
+Start with assembling the OLED with 10mm nylon standoff. This will hold the OLED firmly to the PCB. 
+<p align="center">
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/oled.avif" width="45%" />
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/oled-assembled-spacer.avif" width="45%" />
+</p>
+
+Connect the OLED display with the base board.
+
+<p align="center">
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/oled-assembled-top.avif" width="45%" />
+</p>
+
+align the OLED correctly so the stands off can be installed correctly. You don't need a bolt on the other side to keep the standoff, as this will be held by the base board and also supported
+by the 3d printed parts that's on the enclouser. 
+
+#### Installing the base board
+
+Once the display is placed, place the base board into the encoluser
+
+![12](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/12.avif)
+while making sure the header on the top the base board fit's onto the button that we place earlier. 
+
+![13](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/13.avif)
+Once everything seems to be in place, fasten them in place using the M2.5mm bolt. 
+
+![14](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/14.avif)
+
+Next add the toggle button which, will handle the turn on and turn off feature of the soundbox!
+
+![15](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/15.avif)
+
+Connect the connectors from the speaker and toggle switch to the right location on to the base board as shown in the  
+
+<p align="center">
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/oled-assembled.avif" width="45%" />
+</p>
+
+The battery is carefully selected based on required voltage, capacity, and size to ensure the Soundbox operates efficiently and fits properly within the case.
+
+<p align="center">
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/19a_1.avif" width="45%" />
+  <img src="https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/19b_1.avif" width="45%" />
+</p>
+
+Apply double sided tape on the battery to make sure it doesn't move around when it's placed inside the soundbox. 
+
+Place the battery as shown in the below picture. 
+
+![20](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/20.avif)
+
+#### Installing the Audio CODEC
+Place the audio codec module onto the G-Kit as shown.
+![21](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/21.avif)
+
+#### Installing the SD Card
+Place a 8mm nylon spacer on the G-kit PCB to support the GMOD-microSD.  
+![22](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/22.avif)
+Followed by the nylon spacer place the GMOD-microSD card module and check if the SD card is accessible outside the box. 
+![23](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/23.avif)
+Insert the SD card with pre-loaded music/songs into the SD-Card Module.
+![24](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/24.avif)
+
+#### Installing the USB
+Insert the Type C USB from outside. 
+
+![25](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/25.avif)
+
+Make sure it fits snugly on the grove made for the C-port on the 3d model. 
+
+![26](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/26.avif)
+Add a 2mm bolts and nuts to the Type C USB port to hold it together with the 3d model.
+![27](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/27.avif)
+Once the Type C in place, solder the wires to the GLYPH board (Black -> GND | Red -> USB)
+![29](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/29.avif)
+That's it for the electronics assembly! Now you can finish it off by adding the back panel. 
+![31](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/31.avif)
+This is how the Soundbox looks after full assembly.
+![32](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/32.avif)
+You can start the soundbox, just by toggling the switch! 
+![33](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/33.avif)
+If all the steps are followed correctly, after few seconds you should see the soundbox bootup.  
+![30](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/30.avif)
+Now you can navigate and select the songs that you would like to play!
+![35](https://files.pcbcupid.com/Documentation/Boards/g-kit/Soundbox/35.avif)
+
+### Step 5: Code Setup
+
+1. **Open Arduino IDE.**
+2. **Make sure to install the  library**
+3. **Copy and paste the following code into the Arduino IDE:**
+
+The code is little complex and broken down into multiple files. You can download the code from our [GITHUB REPO](https://github.com/pcbcupid/soundpod/tree/main)
+
+### Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+  Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C6` 
+<Warning>
+   For the `Pcbcupid Glyph C6 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater or equal to 3.1.0.
+</Warning>
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+   - Click the upload button (➡️ icon) or use the shortcut `CRTL + U` in Arduino IDE to upload the code to the board.
+  
+### Step 5: Observe the Output
+- Expected Visual + Audio Behavior
+-  Music playback from SD card over I2S DAC.
+- OLED UI with track title, duration, elapsed time, volume.
+- Buttons for control (Prev / Play / Next / Vol Up / Vol Down).
+- UI updates in sync with audio (progress bar, elapsed time).

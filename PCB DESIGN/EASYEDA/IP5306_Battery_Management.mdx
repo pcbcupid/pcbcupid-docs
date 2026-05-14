@@ -1,0 +1,134 @@
+---
+description: In this article, we will learn how to use schematic editor in EasyEDA while learning to IC IP5306.
+title: EasyEDA Schematic Editor
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Introduction/PCBCUPID_EASYEDA_1.webp
+---
+
+# IP5306 Schematic in EasyEDA
+
+![IP5306_Schematic_in_EasyEDA](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_2.webp)
+
+Lithium batteries have become very popular in recent years, mostly due to EVs popping up everywhere. These batteries are perfect for storing higher energy levels with a very small footprint, but where there’s immense power, there’s an element of risk lurking!
+
+So, in this article, we’ll discuss how to use [EasyEDA](https://learn.pcbcupid.com/) to facilitate component selection, circuit design, and PCB development for a battery management circuit for consumer electronics like MP3 players, wireless devices, and other electronics gadgets using **IP5306** .
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20charge.avif)
+
+Consumer electronics oversimplifies the working of lithium batteries for the user experience.They don’t just follow a linear progression from 0 to 100 and back to 0. Instead, when the battery is fully charged, it boasts a voltage of 4.2 volts, and when it is discharged, it drops the voltage to around 2.5 to 2.7 volts.  Now, why do these voltage values matter?
+
+## Critical Voltage Limits for Lithium-Ion Batteries
+
+Lithium-ion or polymer batteries have a high energy density, and this voltage level tells us the energy level of the battery. So, whenever we use one of these batteries in the circuit, we need to make sure that the battery doesn’t “***overcharge*** ” above 4.2 volts or “***overdischarge*** ” below 2.5 volts.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20lesser.avif)
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20greater.avif)
+
+If it’s over 4.2 volts, the battery temperature might shoot up and possibly explode at some point, and if it’s below 2.5 volts, the battery will completely drain and lose its ability to charge again. So, it’s very crucial to monitor this while charging and discharging lithium batteries.
+
+Also, we should also make sure the battery doesn’t short circuit or pull current greater than the rated current, because this could increase the temperature of the battery and reduce its lifetime.
+
+With the above parameters, we can come up with a BMS design.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20circuit.avif)
+
+For few an application this should be sufficient. The load can be directly connected to the output of the BMS, considering we only have to add a voltage regulator and the circuit only needs 3.3 volts. But this method is very inefficient, and some applications need voltages up to 5 volts to operate. In this case, we need to have a buck or boost converter for voltage conversion to use the battery more efficiently.
+
+There is a lot more to battery management, like having a fuse, monitoring individual cells in series, current sensing, and auto-cut off after charging (which is shown in the below image) .
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20complete%20circuit.avif)
+
+## IP5306
+
+Based on the block diagram, we can build individual circuits for each of the parameters using discrete parts, but it’s very inefficient, time-consuming, and expensive to do so. So, after doing some research, we discovered IC IP5306, which has all the functionality that we need with a one single package. Also, It’s easy to integrate and has an in-built battery level indicator! We did find more alternative components, but this IC was significantly cheaper, easier, and simpler to use.
+
+![PCBCUPID_EASYEDA_circuit](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_circuit%20design.avif)
+
+###### Testing IP5306 module on a test circuit
+
+## Circuit Diagram
+
+If we see the datasheet for this particular IC, we can see all the protection it offers, along with some more features that are more advanced than the most commonly used TP4056. Now to learn how to use this IC, jump into the [datasheet](https://www.datasheetcafe.com/ip5306-datasheet-battery-ic/) and search for the application diagram. This should give us the minimal setup that we need to use the IP5306 and basic understanding on how the IC operates.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20circuit%20mod.png)
+
+## Adding IP5306
+
+Since we now know what components and connections we need for the IC, let’s dive deep into [EasyEDA](https://easyeda.com/ "EasyEDA") to start the schematic design.
+
+Here, start with adding the major components.
+
+* Go to the Components library (use shortcut ***Shift + F*** )
+* Search for the part needed
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20library.avif)
+
+Here on the library, we can see it directly pulls up the symbol from LCSC, along with it’s cost and stock availability, which is super handy if we decide to assemble the PCB with JLCPCB.
+
+## Designing The Schematic
+
+To add the selected part from the library to the sheet, just double-click on the part and then left-click to place it on the sheet. Once, the component is place, just hit escape key on the keyboard to exit the component placement tool.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20ic.avif)
+
+IP5306 is the only uncommon component that we had to find for the circuit; the rest of them, like capacitors, resistors, and inductors, should be easily available in the common library of EasyEDA. So, find the rest of the components that need for the minimal circuit (given in the application diagram of the datasheet) and place them on the schematic sheet.
+
+*Hint : If you like to rotate the component, you can just press ‘**R** ’ and ‘**escape** ’ to come out of the component placement tool.*
+
+## Wire Connections
+
+Once all the required components are placed, we can move on to connecting the components together. First, select the wire tool from the wiring tools window, or you can just use the shortcut ***‘W* ‘** .
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20components.avif)
+
+Then select the pins with a left click and connect to the next pin that you’d like to connect. We can also change the direction of the net just by doing a left click and stop the net with a right click whenever necessary.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20circuit%20complete.avif)
+
+You can see for temporarily the key pin is ignored in the schematic. This could confuse both us and EasyEDA when the circuit gets complicated. So let’s use the No Connection Flag from the floating window and place it here. Once you do any major changes make sure to always save the file with shortcut ***Ctrl + S*** .
+
+Now Go to the design manager to check how many components and nets we have in the circuit.
+
+![PCBCUPID_EASYEDA_battery](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_battery%20components%20replace.avif)
+
+We can understand most of the things in the component folder, but it’s very complicated to understand what’s happening with the nets.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_tool%20functions.avif)
+
+So to clean this up, we can use the net labels tool and give names to these nets. Once names are given to the Nets, you can hit the small refresh icon in the design manager to see the changes. This net label not only reduces confusion, but it also helps in avoiding overlapping nets by separating them into different modules.
+
+There are more tools in this floating window, but a few of the tools are just duplicates, like these power nets, which are also available directly from the common library of EasyEda.
+
+Apart from these, there is the voltage probe tool, which is used for simulation; the group tool for grouping components together; and finally, the bus/bus entry tool for more complex circuits.
+
+## Assigning values to components
+
+Currently we have made the schematic but most of the passive components don’t have any values, so to add values to this component. Just select the component you need and double-click on the value. And on the pop-up, we can enter the value that fits our circuit. I will make sure I do this for all the components in this schematic
+
+![PCBCUPID_EASYEDA_other](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_other%20tool%20options.avif)
+
+The schematic looks good, but we need more information and details on this document if we are planning to share it with the team or make it open source. To do that, we need to make this circuit look nicer by using the drawing tools.
+
+*Hint : You can also change the values on the document sheet by just double-clicking on the items and renaming them (Company name, date, revision). *
+
+## Crafting The Outline
+
+To add a border to the circuit, we can either use the line tool or rectangle tool; just select the tool, click on the area, and start drawing. Once it looks good, just right-click.
+
+![PCBCUPID_EASYEDA_outline](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_outline.avif)
+
+We can use more drawing tools and personalize the schematic better. Most of the tools behave just like they should, according to the icons they have. They have arcs, arrows, text, drawings, polygons, circles, and pie.
+
+However, these two bottom tools can be utilized to relocate the circuit and establish the document’s origin, a practice seldom employed. Therefore, if you desire further customization, each tool and element offers unique properties to tailor the circuit extensively. In addition, grids can be removed, net colors altered, text colors changed, and many more modifications made to enhance the design.
+
+![PCBCUPID_EASYEDA_extra](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/IP5306/PCBCUPID_EASYEDA_extra%20tools.avif)
+
+You can watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#2 How to make Battery Management Circuit | EasyEDA 2023 #pcbucpid" width={1024} height={515} data-src="https://www.youtube.com/embed/FtDwvSHdbdw?list=PLn6004q9oeqHgTo-p_RMqnqTO8AN6kYT3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+This brings us to the end of the article. In the next article, we will discuss more about how to create our own symbol for EasyEDA, if it is not found in the library list.
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/ "here")!

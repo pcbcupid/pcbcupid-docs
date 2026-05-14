@@ -1,0 +1,69 @@
+---
+description: All Glyph Development boards have a Glink connector which is compatible with QWIIC / STEMMA QT connector.
+title: What's GLINK?
+---
+
+![pcbcupid glink feature image](https://files.pcbcupid.com/Documentation/Boards/Examples/glink/pcbucpid-glink-feature-image.avif)
+
+All Glyph Development boards have a GLINK connector which is compatible with QWIIC / STEMMA QT connector.
+GLINK offer a solder-free, easy-to-use solution for connecting development boards to various sensors, shields, and accessories. Their polarized connectors eliminate the risk of incorrect wiring, while daisy-chaining capabilities allow multiple devices to be connected efficiently using the I2C bus
+
+GLINK ensure compatibility with a wide range of I2C-based modules and sensors produced by Adafruit & Sparkfun. This standardized approach not only accelerates prototyping but also enhances the overall user experience by eliminating common wiring errors and reducing setup time.
+
+![pcbcupid glink connector & cable](https://files.pcbcupid.com/Documentation/Boards/Examples/glink/glink-connector-and-cable.avif)
+
+## Feature
+GLINK connectors provide several key advantages:
+
+- Solder-free connections for rapid prototyping and experimentation
+- Polarized connectors to prevent incorrect wiring
+- Daisy-chaining capability for connecting multiple devices efficiently
+- Compatibility with the widely-used I2C communication protocol
+- Interoperability with QWIIC and STEMMA QT ecosystems
+
+## Standard
+GLINK follows [QWIIC](https://www.sparkfun.com/qwiic) standard:
+- JST PH (2mm pitch) Connector
+- Pinout - GND, VCC, SDA & SCL 
+- Device connected using GLINK should be 3.3V
+- Max current on a GLINK cable is 226mA
+- Using 28AWG is good for up to 1.4A (recommended not push more than 1.4A)
+- The GLINK cable length can be upto 1M
+
+## GLINK Pinout 
+
+<div class="centerImg">
+![pcbcupid glink connector](https://files.pcbcupid.com/Documentation/Boards/Examples/glink/pcbcupid-glink-connector.avif)
+</div>
+The GLINK connector follows a standardized pinout, identical to Adafruit's STEMMA QT:
+
+- <span style={{ color: "#ffde59", fontWeight: "bold" }}>SCL (Yellow wire)</span>{" "}
+- <span style={{ color: "#004aad", fontWeight: "bold" }}>SDA (Blue wire)</span>{" "}
+- <span style={{ color: "#ff5757", fontWeight: "bold" }}>3.3V (Red wire)</span>{" "}
+- <span style={{ color: "##000000", fontWeight: "bold" }}>GND (Black wire)</span>
+
+This consistent pinout ensures compatibility across different devices and ecosystems, allowing users to mix and match components from various manufacturers seamlessly. 
+
+## Technical Information
+
+### Power Lines
+
+**GND** : Serves as the common ground reference for both power and data.
+
+**3.3V**: Provides power to connected devices. While the standard specifies 3.3V, the system can accommodate voltages between 3-5V DC for flexibility with certain high-current devices.
+
+### Data Lines
+
+**SDA (Serial Data)**: Carries the bidirectional data for I2C communication.
+
+**SCL (Serial Clock)**: Provides the clock signal for synchronizing I2C data transfer.
+
+## Important Considerations
+
+- **Voltage Compatibility**: While GLINK operates at 3.3V, connected devices must be capable of operating within the 3-5V range. Devices requiring lower voltages must incorporate their own voltage regulators.
+- **Pull-up Resistors**: I2C devices are expected to include pull-up resistors on the SDA and SCL lines to the positive voltage (3.3V). This is crucial for proper I2C communication.
+- **Level Shifting**: Connected devices should implement I2C level shifting if operating at different logic levels.
+- **Current Limitations**: It's crucial to stay within the 226mA limit per GLINK cable to ensure safe and reliable operation or you can decrease your wire gauge to handle  current up to 1.4A. 
+- **Daisy-Chaining**: When connecting multiple devices in a daisy-chain configuration, be mindful of the cumulative current draw and potential voltage drop across the chain.
+
+By sticking to these standards and considerations, GLINK provides a robust and flexible connectivity solution for [GLYPH development boards](https://shop.pcbcupid.com/product-category/development-boards/), enabling rapid prototyping and seamless integration with a vast ecosystem of compatible sensors and modules. 

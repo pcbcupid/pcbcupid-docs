@@ -1,0 +1,103 @@
+---
+description: In this article, we'll learn how to use Kicad's PCB layout effectively to design a printed circuit board. 
+title: KiCad PCB Layout Editor
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_pcblayout.avif
+---
+# PCB Layout editor in KiCad
+
+![KiCad:How_to_use_PCB_Layout_editor_in_KiCad](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_pcblayout.avif)
+
+From the [previous article](https://learn.pcbcupid.com/pcb-design/kicad-tutorial/kicad-constraints-net-class-directive) you should be familiar with Constraints and Net Class Directive tool. So, in this article we'll fully focus on designing the PCB using this editor.
+
+Here, first make sure the edge-cut layer is selected and select the circle tool. And then draw a circle of any radius.
+
+![PCBCUPID_KICAD_EDGECUT_LAYER](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_EDGECUT_LAYER.avif)
+
+Then press Esc to come out of the circle tool. Now click the circle and press the keyboard shortcut E, or use right-click and click on properties.But I will go with the easiest option by clicking the keyboard shortcut ‘**E**’.
+
+Using these properties, we can change the location of the circle on the document, and by using these properties, we can change how the circle looks on the document. For now, let’s just set the radius to 30mm.
+
+![PCBCUPID_KICAD_selection%20filter](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_selection%20filter.avif)
+
+And also, check the locked option. This will make sure we don’t accidentally move or resize the edge layer. We can see that once its applied to the properties, we don’t have access to the circle anymore, and we won’t be able to select the circle for modification. But if you want to apply some changes to this shape, we can go to the bottom right corner and under the selection filter, check the locked items and that should let you make the modification to the circle even when it's locked.  
+
+![PCBCUPID_KICAD_LOCKEDIN](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_LOCKEDIN.avif)
+
+## Verifying Shape 
+
+This section filters; we’ll help in selecting only the required items, and it will prevent users from selecting unwanted features of the PCB. In this case, let’s make sure to turn off the locked selection. It’s not mandatory, but this will prevent us from accidentally changing the locked values.
+
+![PCBCUPID_KICAD_UNCHECK](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_UNCHECK.avif)
+
+Now, going back to the PCB, we can quickly verify that we have defined the shape of the PCB on the 3D viewer by using the shortcut ALT+3. The 3D viewer output will be this only if the shape is on an edge-cut layer; if the shape is drawn on another layer, [Kicad](https://www.kicad.org/) will try to automatically draw the edge-cut layer based on the content we put on the document.
+
+![PCBCUPID_KICAD_verify%20shape](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_verify%20shape.avif)
+
+## Import from Schematic
+
+Since we have the base ready, all we need to do is get the components and place them within this circle. It should be pretty easy, as we converted all our symbols into footprint in the previous article
+
+On the top toolbar, click on the update PCB button. This will help in importing all the symbols with footprints into the PCB editor. Here we can keep all 3 options checked, and if you like to know what each one of them does, you can just hover the cursor over them, and they’ll have pretty good explanations.
+
+Now click on update PCB and then hit close.
+
+![PCBCUPID_KICAD_verify%20shape%202](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_verify%20shape%202.avif)
+
+## Component Placement in KiCad PCB Editor
+
+We can see the complete circuit is imported and moves along with the cursor. So let’s bring the cursor close to the circle and try to place it within it.
+
+![PCBCUPID_KICAD_COMPONENT_MOVEMENT](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_COMPONENT_MOVEMENT.avif)
+
+The circuit is a little chaotic and not properly arranged. We need to arrange components in such a way it’s easy to fit on the 3d design. You can download the 3d model for reference from the link in the description.
+
+![PCBCUPID_KICAD_component%20optimization](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_component%20optimization.avif)
+
+Here you would be already familiar with most of the tools, they are similar to the schematic editor tools that we learnt in the previous articles. So, here we won’t go into much in detail how things work.
+
+Take look at the reference image above to see how we can place the microphone then followed by LDR and finally the LED. We won’t have control over these placements of these 3 components because of the features we need. But we can move other parts around and optimize the space occupied on the PCB.
+
+## Ratlines in KiCad
+
+If you notice there are some lines going across the components; these are called ratlines. They correspond to how the components are connected in the schematic diagram. If it’s annoying, we can turn it on or off using the button on the left tool bar, and you can toggle the button to change the way the rat lines are drawn.
+
+Sometimes these lines can be very confusing if you have way too many components. In that case we can turn off all the rat lines and use this tool.
+
+![PCBCUPID_KICAD_COMPONENT_PLACEMENT](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_COMPONENT_PLACEMENT.avif)
+
+## Component Placement
+
+Do reduce the routing distance place the components close to each other based on the connection (during this you can turn on / off the ratlines).
+
+Here we tried to keep all the components as close to each other as possible and also a little packed together. So we can use the rest of the space for adding logos and other information.
+
+![PCBCUPID_KICAD_BOTTOM_LAYER](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_BOTTOM_LAYER.avif)
+
+Overall, this looks pretty good. We can quickly fix this by selecting these resistors and right-clicking. Click on align, and then align to the bottom. I will do this again, but this time I will click on distribute. This will make sure the components have enough space. I will use this technique to align the rest of the components.
+
+![PCBCUPID_KICAD_component%20streamline%201](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_component%20streamline%201.avif)
+
+Now it looks way better!
+
+We can quickly check how it looks in 3D by using the 3D viewer (***shortcut : ALT + 3***).
+
+![PCBCUPID_KICAD_component%20streamline%202](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_component%20streamline%202.avif)
+## Integrating External 3D Models into KiCad PCB Editor
+
+Hmm.. the PCB looks good, but it looks very odd with this pin for MIC and no 3D model on the other component. So let me show you how we can quickly add external 3D models to the PCB layout editor.
+
+You can either create your own 3D model or go to the website like GrabCAD to search for the components you need.
+
+Once you make your custom 3D model make sure to export them in .stp or .step file (it's the same if you download the from GrabCAD). With that you can go back to the [Kicad](https://www.kicad.org/) PCB editor and go to the properties of the footprint where you would like to add the 3D file and add them here. 
+
+![PCBCUPID_KICAD_external%203d](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/PCB_Layout_editor/PCBCUPID_KICAD_external%203d.avif)
+
+For better understanding please watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#9 How to use PCB Layout editor in KiCad 7.0  | #PCBCupid" width="1024" height="515" data-src="https://www.youtube.com/embed/c-vxiM7npqQ?list=PLn6004q9oeqGl91KifK6xHGuqvXGb374G" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+This brings us to the end of the article, until the next one keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/)

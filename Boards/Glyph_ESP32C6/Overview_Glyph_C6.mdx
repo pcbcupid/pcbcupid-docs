@@ -1,0 +1,90 @@
+---
+description: Introducing the Glyph ESP32-C6, a powerful microcontroller packed with features for your next IoT project. With the robust capabilities of the Glyph ESP32-C6 chip. 
+title: Glyph-C6 Overview  
+---
+
+Introducing the Glyph-C6, a super efficient microcontroller development board packed with features for your next IoT project! With the robust capabilities of the ESP32-C6 chip, the Glyph-C6 is designed to provide reliable performance and extensive connectivity options in a compact form factor.
+
+export const GlyphC6Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/glyph_c6/PCBCUPID_esp32c6-overview_result.avif', label: 'ILLUSTRATION VIEW',id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/glyph_c6/pcbcupid-C6-board%20view.avif', label: 'BOARD VIEW', id: 'board' }
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/esp32c6.glb";
+
+}
+
+<GlyphC6Carousel />
+
+{/* ![ESP32-C6 Glyph Back](your_image_link_here) */}
+
+- **Dimensions**: Measures 50.8mm x 22.8mm x 1.6mm without headers soldered in
+- **Processor**: ESP32-C6 32-bit RISC-V single-core processor running at 160 MHz @ 3.3V logic and power
+- **RAM**: 512 KB SRAM
+- **Flash Memory**: 4 MB SPI FLASH 
+- **GPIO**: 20 GPIO pins with the following capabilities:
+  - 12-bit ADCs
+  - I2C
+  - SPI
+  - UART
+  - USB Serial
+  
+  All the important peripherals, labeled for easy access.
+
+- **Power Management**:
+  - USB Type C connector for power, programming, and serial port debugging
+  - 3.3V regulator with 600mA peak current output
+  - Built-in lipoly/li-ion charger with charging status indicator LED
+  - Auto Switch between Battery & USB Power
+  - Ability to Measure Battery Capacity
+  - Ability to Turn off the battery with the onboard slide switch
+  - Reverse Voltage protection with Diode
+
+- **Additional Feature**:
+
+  - On-board LED (Connected to GPIO14)
+  - On-board GLINK connector for easy integration with QWIIC, STEMMA QT compatible sensors & modules.
+  - High Quality Reset and Bootloader button for easy access
+{/* ![ESP32-C6 Glyph Edge](your_image_link_here) */}
+
+### Bootloader and Programming
+The Glyph-C6 features a built-in USB bootloader that makes programming new firmware easy and keeps the cost of the board down. On first time use, hold down the BOOT button while plugging it into USB, and it will appear as COM PORT in your device Manager. If you face any issue related to hardware not detecting on your system, please check out our troubleshooting guide [here](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup#hardware-not-detecting).
+
+### Connectivity
+Featuring built-in Bluetooth, Thread, Zigbee and Wi-Fi the ESP32-C6 Glyph excels in connectivity, ideal for IoT applications requiring reliable wireless communication.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c6/PCBCUPID_c6_connectivity_updated_result.avif" alt= "PCBCUPID_c6_connectivity_updated_result" width="300"/>
+
+</div>
+<br/>
+<Info>
+The wireless module on GLYPH board is CE & FCC Certified
+</Info>
+
+### Development Support
+The ESP32-C3 Glyph is supported by a variety of development environments, including:
+
+  - **Arduino**
+  - **MicroPython**
+  - **ESP-IDF (Espressif IoT Development Framework)**
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt= "PCBCUPID_arduino_espressif_micropython_result" width="350"/>
+
+</div>
+
+With extensive library support and a large community, getting started with the Glyph-C6 is straightforward.
+
+### Memory and Storage
+While the Glyph ESP32-C6 has 512KB onboard SRAM, it also relies on an external flash chip for program storage. On this board, there is 4 MB of flash memory, which is shared between the code, file storage and OTA.
+{/* ![ESP32-C6 Glyph Angle](your_image_link_here) */}
+
+### ESP32-C6 Chip Features
+  - **BluFi**
+  - **RF Coexistence**
+  - **ESP-BLE-MESH**
+  - **ESP-WIFI-MESH**
+{/* ![ESP32-C6 Glyph Header](your_image_link_here) */}
+
+You can read more about it in [ESP32C6 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph_c6/PCBCUPID_ESP32C6_DATASHEET.pdf) and [ESP32C6 OFFICIAL](https://docs.espressif.com/projects/esp-idf/en/v5.3.1/esp32c6/get-started/index.html) documentation.

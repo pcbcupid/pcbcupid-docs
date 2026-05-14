@@ -1,0 +1,133 @@
+---
+description:  This is an example of controlling a Servo Motor using PWM on GLYPH-C6 development board.
+title: Servo Motor
+---
+
+# Drive Servo Motor using PWM on GLYPH-C6
+
+![pcbcupid_servo_motor2](https://files.pcbcupid.com/Documentation/Boards/Examples/servo_motor/PCBCUPID_servomotor2.avif)
+
+## Introduction
+
+**What is a Servo Motor and its Working Priciple**
+
+A **Servo Motor** is a rotary or linear actuator designed for precise control of angular or linear position, velocity, and acceleration. It consists of a DC or AC motor, a position sensor (usually a potentiometer or encoder), and a control circuit.The motor’s position is controlled by varying the width of a Pulse Width Modulated (PWM) signal.
+
+A Servo Motor consists of a Motor (DC or AC), a potentiometer, gear assembly, and a controlling circuit. First of all, we use gear assembly to reduce RPM(Revolutions Per Minute) and to increase torque of the motor. Say at initial position of servo motor shaft, the position of the potentiometer knob is such that there is no electrical signal generated at the output port of the potentiometer. Now an electrical signal is given to another input terminal of the error detector amplifier. Now the difference between these two signals, one comes from the potentiometer and another comes from other sources, will be processed in a feedback mechanism and output will be provided in terms of error signal. This error signal acts as the input for motor and motor starts rotating. Now motor shaft is connected with the potentiometer and as the motor rotates so the potentiometer and it will generate a signal. So as the potentiometer’s angular position changes, its output feedback signal changes. After sometime the position of potentiometer reaches at a position that the output of potentiometer is same as external signal provided. At this condition, there will be no output signal from the amplifier to the motor input as there is no difference between external applied signal and the signal generated at potentiometer, and in this situation motor stops rotating.
+
+This guide will help you interface a Servo Motor with [GLYPH-C6](https://shop.pcbcupid.com/product/gd002/) board using PWM to control its angular position.
+
+**Key Features of Servo Motors:**
+
+- Closed-loop Control: Uses feedback from the position sensor to adjust movement for high accuracy.
+- High Torque & Precision: Can maintain a set position accurately.
+- Controlled via PWM: Typically controlled using a Pulse Width Modulation (PWM) signal in hobby applications.
+- Gearing System: Often includes a gearbox to reduce speed and increase torque.
+
+**Types of Servo Motors:**
+
+- AC Servo Motors: Used in industrial automation, robotics, and CNC machines. High efficiency and accuracy.
+- DC Servo Motors: Common in robotics, RC cars, and consumer electronics. Cheaper but require more maintenance.
+- Stepper-based Servo Motors: Combine stepper motor principles with closed-loop feedback.
+- Linear Servo Motors: Provide linear motion rather than rotational.
+
+**Applications of Servo Motors:**
+
+✅Robotics – Used for arm movement, humanoid robots, and industrial automation.
+✅CNC Machines – Provide precise positioning for cutting, milling, and machining.
+✅Drones & RC Vehicles – Control steering, flaps, and other movable parts.
+✅Medical Equipment – Used in surgical robots and precision medical devices.
+
+## Step 1: Hardware Required
+
+1) GLYPH C6
+2) Servo Motor (e.g., SG90 or MG995)
+3) External Power Source (if required by the servo)
+4) Male-to-Male Jumper Wires
+5) Breadboard (optional)
+6) Male to Male Jumper Wires (If you use just the servo motor)
+
+## Step 2: Circuit Diagram
+
+Connect the servo motor to the GLYPH-C6 as follows
+
+- **VCC (Red wire)** → Connect to 3.3V or 5V of the GLYPH-C6 (depending on servo power requirements).
+- **GND (Black/Brown wire)** → Connect to GND of the GLYPH-C6.
+- **Signal (Yellow/Orange wire)** → Connect to GPIO6 (or any PWM-capable pin on GLYPH-C6).
+
+![pcbcupid_servo_motor_circuit](https://files.pcbcupid.com/Documentation/Boards/Examples/servo_motor/PCBCUPID_servomotor_circuitdiagram.avif)
+
+# Step 3: Code Setup
+
+1. **Open Arduino IDE**
+2. **Install the Necessary  Libraries**
+Open Arduino IDE and navigate to `Sketch > Include Library > Manage Libraries`. Search for `ESP32Servo` and install the library by Kevin Harrington.
+
+3. **Enter the following code into the Arduino IDE**
+
+```cpp
+#include <ESP32Servo.h>  // Include the ESP32 Servo library
+
+Servo myServo;  // Create a Servo object
+
+#define SERVO_PIN 6 // Use any PWM-capable GPIO on GLYPH-C6
+
+void setup() {
+    Serial.begin(115200);  // Start serial communication
+    myServo.attach(SERVO_PIN);  // Attach the servo to the defined pin
+}
+
+void loop() {
+    // Move servo from 0° to 180°
+    for (int pos = 0; pos <= 180; pos += 5) {
+        myServo.write(pos);
+        Serial.print("Servo Position: ");
+        Serial.println(pos);
+        delay(15);  // Adjust delay for smoother motion
+    }
+
+    // Move servo from 180° back to 0°
+    for (int pos = 180; pos >= 0; pos -= 5) {
+        myServo.write(pos);
+        Serial.print("Servo Position: ");
+        Serial.println(pos);
+        delay(15);
+    }
+}
+
+  ```
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+   Do the following settings in your Arduino IDE,
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C6` 
+
+<Warning>
+   For the `Pcbcupid GLYPH C6 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater than or equal to 3.1.0.
+</Warning>
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+- Click the upload button (➡️ icon) or use the shortcut `CTRL + U` in Arduino IDE to upload the code to the board.
+
+## Step 5: Observe the Output
+  After uploading the code, open the Serial Monitor (Tools > Serial Monitor) and set the baud rate to 115200.
+
+You should see the servo motor moving back and forth from 0° to 180° and back, with the position being printed on the Serial Monitor.(If your servo does not move, check the wiring and ensure your power supply is sufficient for the servo's requirements).
+
+![pcbcupid_servo_motor_turn](https://files.pcbcupid.com/Documentation/Boards/Examples/servo_motor/PCBCUPID_servomotor_turn_compressed.gif)
+
+![pcbcupid_servo_motor_serialmon_lowangle](https://files.pcbcupid.com/Documentation/Boards/Examples/servo_motor/PCBCUPID_servo_motor_serialmon_low_angle.avif)
+
+![pcbcupid_glyph_intro-led_changebrightnesswithPot](https://files.pcbcupid.com/Documentation/Boards/Examples/servo_motor/PCBCUPID_servo_motor_serialmon_high_angle.avif)

@@ -1,0 +1,105 @@
+---
+description: In this article, we'll discuss how to build a optimized PCB using KiCad
+title: KiCad PCB Optimization
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_optimisation.avif
+---
+# Optimizing PCB in KiCad
+
+![KiCad:How_To_Optimize_PCB_in_KiCad_For_Beginners ](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_optimisation.avif)
+
+Now we’ll rebuild the PCB with proper dimensions so it can fit within the 3D model.
+
+![PCBCUPID_KiCAD_intro1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_intro1.avif)
+
+Here we can see we tried to make a PCB with the actual dimension, and there are lots of issues with the placement of the components. Mostly due to the through-hole components we chose. So, let’s re-make a new version for the PCB. Unfortunately, [KiCad](https://www.kicad.org/) currently doesn’t support version control by default; we have to either use github or duplicate the [KiCad](https://www.kicad.org/) project file to make a new version. Here, we will use the later method, so it will be easier for people who are unaware of how Github works.
+
+Let’s duplicate the project folder and open the PCB layout of the project. Currently, we’ll keep the existing layout for reference and see how we can fit all these components within the required dimension.
+
+![PCBCUPID_KiCAD_intro2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_intro2.avif)
+
+And to get this dimension, let’s take a look at the 3D model and check for the dimension of the base where the PCB will be sitting. Click [here](https://github.com/pcbcupid/Kicad-7-Series/tree/main/15_PCB_Optimization) to download the 3D file.
+
+## Redesign the PCB
+
+In this case, we need an 18-mm radius. But making a PCB with an exact radius of 18mm can cause tolerance issues while 3D printing this model.
+
+So let’s go back to the PCB editor and make a circle with a radius of 17mm in the edge-cut layer. Which will give us a little wiggle room for the PCB to fit within the model without any tolerance issues.
+
+Before starting to place the component onto the shape, go to board setup and enable both F.fab and B.fab. We deactivated this to reduce the complexity when we started learning KiCad. But now we’ll use this layer to do some reference drawing, which will help us align footprints with the PCB.
+
+![PCBCUPID_KiCAD_Precision%20PCB1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Precision%20PCB1.avif)
+
+With the F.fab layer selected, draw lines across the circle both horizontally and vertically. We’ll use these lines to align the footprint and maintain the symmetry of the PCB.
+Now let’s start with the cell holder footprint and see how we can place it. Once we align the cell holder to the lines, you can see this takes up to 70% of the PCB.
+
+![PCBCUPID_KiCAD_Precision%20PCB2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Precision%20PCB2.avif)
+
+## Optimizing Layout
+
+If we search for “minimal footprint cell holder CR2032” online, we can find plenty of them. But the issue is that most of them are very expensive and not easy to source in very low quantities. So here we are trading off the space for easier sourcing and cost reduction.
+
+Coming back to the PCB editor, we’ll move the LDR, LED, and MIC to the PCB. Since all these components are extended and not going to sit on the PCB, we won’t need this fancy silkscreen. We’ll replace them with the same footprint as the microphone and arrange them in order so it’s easy to assemble within the 3D model.
+
+![PCBCUPID_KiCAD_Optimizing%20Layout1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Optimizing%20Layout1.avif)
+
+Here we are overlapping the courtyard; we have to break the rule to fit the component within the PCB, but this won’t compromise the functionality of the circuit; it just adds a little bit of hassle during assembly, which we can handle.
+
+Next we’ll get the Attiny85. Hmm.. it seems like there is no way we can place the Attiny85 next to the cell holder. We can try placing it on the back, but still, this would cause a lot of issues during soldering and how it might interact with the cell holder, so how about the SMD version of the Attiny85?
+
+Let’s quickly check on the Attiny85 datasheet. Here we have the dimension and the footprint for the SMD version of the Attiny85. But can we source them? After a quick search online, it seems like we can get these for the same price as their through-hole counterpart. So, let’s go back to the pcb layout editor and change the footprint of the attiny85
+
+Luckily, we did not have to create or download an external footprint for this attiny 85 SMD, as Kicad had them by default under the DIP SMD package. Just to be sure, we will double check if the footprint dimensions match the dimensions on the datasheet.
+
+![PCBCUPID_KiCAD_Optimizing%20Layout2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Optimizing%20Layout2.avif)
+
+That looks pretty good. We’ll place this footprint under the cell holder.
+
+We know that assembling components on both sides of the PCB can be cumbersome, but it’s still doable if it’s for a small quantity and you are doing it yourself. However, during large production, it can increase the cost and complexity of the PCB. Therefore, opt for two-sided assembly only if it’s necessary, or stick with one-sided assembly.
+
+In this case, we will convert most of the components to SMD and place all of them on the bottom side of the PCB. So, we can perform automatic assembly on the bottom, and once the assembled PCB arrives, we can just install the cell holder manually with very little soldering.
+
+## Converting through hole components to SMD
+
+Let’s start by changing these through-hole resistors into SMD ones, but they come in multiple packages with various codes. Just like how the through-hole version has different sizes for different applications.
+
+So, choosing the right package for SMD resistors will depend on multiple factors.
+
+![PCBCUPID_KiCAD_Right%20SMD%20Resistor](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Right%20SMD%20Resistor.avif)
+
+* power rating: This will depend on the voltage and the current consumption of the circuit; in our case, it’s 3.3 volts, and we will assume the circuit consumes around 50 mA. With this value, we’ll roughly get the power of 0.165; this is just an exaggeration, but they can consume even lower power. According to this value, if we try to select, we have the options from 2512 to 0805, maybe even 0603 or 0402 depending on the manufacturer.
+
+* Now we know the package option we have on the circuit based on the power rating, we need to shortlist these values based on size constraints in the PCB, ease of assembly, and finally, cost.In terms of size constraints, we have plenty of space on the PCB, and we also just need to place 3 resistors, so our option still lies between 2512 and 0402.
+
+* Since we are not planning on going for mass manufacturing and are planning to assemble it ourselves, The 0402 package and 0603 package make the assembly job a little difficult because the size of these packages is roughly around 1mm.
+
+* With this, the option falls between 2512 and 0805. Now it’s really your choice what you want to select, if we look into the availability and cost of the package. we already have plenty of 0805 packages, and it’s extremely cheap for us to source them in very small quantities, whereas for others we might have to buy them in larger quantities.
+
+With these points, let’s choose the **0805 package**.
+
+## Optimizing Components and Layout in KiCad PCB Design
+
+Coming back to the PCB layout, we will replace the resistors with the 0805 package and make sure it has the tag *hand-soldered*. This will have a slightly larger pad for easy soldering with a soldering iron.
+
+![PCBCUPID_KiCAD_Optimizing%20Components1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Optimizing%20Components1.avif)
+
+Similarly, the switch we chose is quite large, and soldering on the top layer will just increase the cost of assembly. So we chose an alternative footprint for which we already have the component.
+
+![PCBCUPID_KiCAD_Optimizing%20Components2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Optimizing%20Components2.avif)
+
+But accessing this from the bottom can be a hassle when the PCB is installed on the model. So we cut a slot using the edge cut layer and these graphics tools near the switch. This gives us access later, where we can turn on and turn off the switch without actually turning over the PCB.
+
+![PCBCUPID_KiCAD_Optimizing%20Components3](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Optimize_PCB_in_KiCad/PCBCUPID_KiCAD_Optimizing%20Components3.avif)
+
+The rest of the design is pretty simple; we’ll just add some logos, designs, and some text.
+
+Finally we have optimized the PCB and it's ready for manufacturing after the gerber generation. 
+
+For better understanding you can watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#15 How To Optimize PCB in KiCad 7.0 For Beginners | #PCBCupid" width="1024" height="515" data-src="https://www.youtube.com/embed/vSYdMl5VLFs?list=PLn6004q9oeqGl91KifK6xHGuqvXGb374G" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+This brings us to the end of the article, until then keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/ "forum")

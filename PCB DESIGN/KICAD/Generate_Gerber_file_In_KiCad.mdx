@@ -1,0 +1,104 @@
+---
+description: In this article, let’s see how we can export KiCad project file into a Gerber file, which we can send for manufacturing!
+title: KiCad Gerber Generation 
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_gerber.avif
+---
+# Generate Gerber file In KiCad
+
+![KiCad:How_To_Generate_Gerber_file_In_KiCad](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_gerber.avif)
+
+Now at the final stage, we can export the [Kicad](https://www.kicad.org/) project file into a Gerber file, which we can send for manufacturing!
+
+There are 100’s, if not 1000’s, of different designers and companies that use various different E-CAD software. It is hard for manufacturers to be experts at each one of them and use the data from the project file for manufacturing. So, they prefer using a file standard called Gerber. 
+
+## What’s a Gerber file?
+
+A Gerber file is a collection of different files containing design information and vector coordinates of copper traces, vias, pads, solder masks, and silkscreen. The best part about the Gerber file is that it’s human-readable, and the Gerber file standard is widely accepted by all the fabrication plants around the world. So, all the E-CAD software allows exporting the design file into a gerber file. This results in the same output regardless of what software was used for PCB design.
+
+Click [here](https://pcbcupid.com/tools/gerber-viewer/) to learn more in detail about Gerber and Gerber Standard, which would help a lot in understanding why we use Gerber format.
+
+Now let’s jump back to [KiCad](https://www.kicad.org/) and see how to export a Gerber file from our PCB layout editor.
+
+On the toolbar, we have the option to plot. Click on it.
+
+![PCBCUPID_KiCAD_intro1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_intro1.avif)
+
+On this window, make sure the Gerber is selected and the layers are included. Let’s include the Margin and Courtyard layers because we just used these layers to keep our design clean and to help during DRC. Since we are past that stage, we won’t need them anymore.
+
+Then let’s set the path where we want the Gerber file to be generated.
+
+Here we have plenty of options that we can mess around with, but most of the time the default settings are pretty good. But let’s walk through a few of them and see what they do.
+
+![PCBCUPID_KiCAD_intro2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_intro2.avif)
+
+## Configuring Gerber File Options in Kicad
+
+First, we have a “**Plot Drawing Sheet**”. This will include the drawing sheet data while generating the Gerber file, which will have the details that we have given to the drawing sheet, like the name, company name, and project name. Let’s keep this unchecked, as it’s not much use for the manufacturers to see these details.
+
+![PCBCUPID_KiCAD_Configuring%20Gerber%20File1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Configuring%20Gerber%20File1.avif)
+
+“**Plot footprint Values**”, This will include the value of the components that are by default stored in the Fab layer. But if you remember, we disabled the layer to reduce the complexity. So, let’s uncheck this.
+
+“**Plot reference designators**”, This will plot the designators like R1 and R2, which we need for reference during assembly. So keep that checked.
+
+This next option will force values and references to be generated forcefully; currently, we don’t have any invisible values, but we still do not recommend using it.
+
+The grayed option will work only on a few “**plot formats**”, but it’s nothing we need to bother with until we start manufacturing our own PCB. You don’t have to use this option as well, since it will work only on the Fab layer.
+
+Keep the **zone filling** checked so Kicad performs zone filling again before generating the gerber file, so if we have messed up something while performing DRC, that can be fixed here.
+
+On the right, we have drill settings. Let’s leave this to default and the Gerber Options to default, as they are already set with recommended settings. But if you’d like to learn more about these settings, you can just hover over them for a more detailed explanation.
+
+With these settings, we can just plot the files.
+
+![PCBCUPID_KiCAD_Configuring%20Gerber%20File2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Configuring%20Gerber%20File2.avif)
+
+## Generating Drill Files in KiCad for PCB Manufacturing
+
+If we go to the output folder, we have the gerber files which have various data about our PCB Layer but it does not contain any drill information. Like where and how the holes have to be drilled. So, let’s go back to [kicad](https://www.kicad.org/) and generate that.
+
+Go Plot and here Click on “Generate Drill Files”, it seems like we have way too many options but we can get rid of most of them just selecting the latest Gerber format Gerber X2. In this format [KiCad](https://www.kicad.org/) will choose the best setting to generate the Gerber file.
+
+To Generate the fill just click on “Generate Drill File”
+
+![PCBCUPID_KiCAD_Generating%20Drill%20Files](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Generating%20Drill%20Files.avif)
+
+## Creating ZIP Files and Verifying Gerbers in Kicad
+
+With these steps we have fully generated gerber files. Now this can be directly shared as a folder, but it’s just more convenient to share it as a single ZIP file. Also most manufactures online sites and few Gerber viewer software only accept ZIP files.
+
+So, select the folder and convert the folder into a zip file.
+
+![PCBCUPID_KiCAD_Creating%20ZIP%20Files1](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Creating%20ZIP%20Files1.avif)
+
+Just to be sure, we can verify this ZIP, by using Kicad’s Gerber Viewer. Here most of the settings and the navigation style is very similar to the ones from the schematic and PCB editor so it should be pretty easy to use.
+
+So, Let’s see how we can open the zip file we created in this window.
+
+Go to files, click on “Open Zip Archive file” and then select the zip file we have created.
+
+![PCBCUPID_KiCAD_Creating%20ZIP%20Files2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Creating%20ZIP%20Files2.avif)
+
+You can see it loads up all the layers of the PCB that we designed, now we can use these tools and compare these layers with the original design file.
+
+![Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Creating%20ZIP%20Files3](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_Creating%20ZIP%20Files3.avif)
+
+KiCad provides plenty of options here in the gerber viewer, it’s pretty good to use. But there are also online tools which give you some beautiful SVG files when we feed in this Gerber file.
+
+Go to [https://tools.pcbcupid.com/gerber-viewer/](https://tools.pcbcupid.com/gerber-viewer/)
+
+Here you can just upload the zip file and you can see we have the output as a beautiful 2d image. And you can go to the layers tab and use these interactive menus to analyze the gerber file we generated.
+
+We can also  use this button to download the SVG file which we can showcase on a website or can be converted into another image format to share on social media or for other reference.
+
+![Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_final](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/Generate_Gerber_file_In_KiCad/PCBCUPID_KiCAD_final.avif)
+
+you can watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#12 How To Generate Gerber file In KiCad 7.0 | #PCBCupid" width="1024" height="515" data-src="https://www.youtube.com/embed/C_UdqlUmDNA?list=PLn6004q9oeqGl91KifK6xHGuqvXGb374G" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+This brings us to the end of the article, until the next one keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/)

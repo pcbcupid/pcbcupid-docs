@@ -1,0 +1,151 @@
+---
+description: Code Composer Studio (CCS) is an IDE for developing and debugging firmware on their microcontrollers.
+title: CCS-IDE Setup
+---
+
+# Code Composer Studio (CCS IDE)
+
+To get the complete power of Texas Instruments (TI) microcontrollers Code Composer Studio (CCS) would be the best option out there. This guide provides a step-by-step walkthrough for setting up CCS on your system, ensuring you're ready to develop applications for your Glyph boards.
+
+## Installation Process
+
+### Download
+
+The installation file for Code Composer Studio can be obtained from the below site:
+
+https://www.ti.com/tool/CCSTUDIO
+
+<Info>
+**Note:** The download size is approximately 1.0 GB, so ensure you have a stable internet connection.
+</Info>
+
+### System Check
+The installer will check the system to see if it meets the requirements for installation. Any issues that need to be addressed will be displayed. Disabling security software is recommended but optional.
+
+Example on Windows host OS:
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-2.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+Example on Ubuntu 22.04 LTS host OS:
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-3.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+Please exit the installer and resolve any missing dependencies before trying again.
+
+### Installation Location
+
+Choose a location to install Code Composer Studio. This location must not already contain a Code Composer Studio installation. If multiple versions of Code Composer Studio or Code Composer Studio will be installed then it is recommended to install them in versioned folders.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-4.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+### Device Support
+
+Choose the desired device families to install support for.
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-5.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+### Progress
+As the installation proceeds the progress screen will show what the installer is doing. Depending on how many device families were selected the installation may take a significant amount of time.
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-6.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+### Completion
+The last screen shown during installation is the successful completion screen. This screen provides options to launch Code Composer Studio and create a desktop shortcut.
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-7.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+The dialog will look different on Linux hosts, with an additional message regarding an additional step needed to enable the drivers for the debug probes.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-8.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+### Post Installation Step (Linux Only)
+
+If Code Composer Studio was installed as user, then it is necessary to run the driver install script after the installation is complete. 
+Run `<CCS_INSTALL_DIR>/ccs/install_scripts/install_drivers.sh` with sudo as instructed by the installer.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs_install-9.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+### Ubuntu 24.04
+<Info>
+The following steps are not required if the install_drivers.sh script is successfully executed.
+</Info>
+
+If Ubuntu 24.04 is being used, the following additional steps may be required:
+
+Browse to: `<CCS_INSTALL_DIR>/ccs/theia` and run the following commands:
+
+`sudo chown root chrome-sandbox`
+
+`sudo chmod 4755 chrome-sandbox`
+
+## Resource Explorer
+The Resource Explorer helps you find all the latest examples, libraries, demo applications, data sheets, and more for your chosen platform.
+
+The Resource Explorer can be opened by selecting Browse Software and examples under Start exploring in the Getting Started view or from the View → Open Resource Explorer menu item.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_css2.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+Filtering by device, or by TI LaunchPad Kit, the interface enables you to filter the content to only what is relevant to your chosen platform.
+
+Use the Select Board or Device filter field to search and select the device or TI LaunchPad Kit that you are using. For example, if you are using the LP-MSPM0L1306, you can start typing "L1306" in the search field to filter the list to easily find your LaunchPad:
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_css3.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+If you have a valid TI kit (such as a LaunchPad Development Kit) connected to your computer, Resource Explorer may be able to autodetect it. If autodetect is successful, you can select the USE MY BOARD option to specify your kit:
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_ccs4.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+Once your device or TI LaunchPad Kit is selected, the filter will be applied and only content relevant to your selection will be displayed. You can now browse through the displayed content to learn more about your device, board, relevant tools, and available software packages. Note the additional filters to display examples based on RTOS and compiler type.
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_css5.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+The best way to get going with software development on your target is to start with some existing examples for your target. Many examples are included with the software package which supports your device, and many of these software packages are accessible right from Resource Explorer.
+
+<Info>
+Not all devices are supported via Resource Explorer.
+</Info>
+
+## Creating a New Code Composer Studio Project
+
+Creating a new Code Composer Studio project purely from "scratch" is typically not recommended. Instead, it is strongly recommended to start with an existing SDK example. There is often a very minimal SDK example which often serves as a template for users wishing to start from "scratch".
+
+1) Go to menu File → Create New Project... or open the Getting Started view and select the Create a new project in Code Composer Studio option under the Start developing section of the Getting Started view. This will open the Project Wizard.
+2) In Project Wizard, specify the board or device under Select a board or device. Once a board or device is specified, a list of available projects appears.
+3) (Optional) Use the Filters and Categories fields to filter the list of available projects.
+4) Select the desired project to import. Most SDKs provide some sort of empty type example which serves as a basic template for new projects.
+5) (Optional) Under Configure selected project
+- Use the Project Name field to change the project name from the default.
+- Use the compiler and kernel fields below the project list to specify the compiler type and kernel to use. Note that not all projects have multiple options for these fields.
+6) Press Create to import the example project into the Code Composer Studio Explorer
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_css7.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+
+<Warning>
+The Project Wizard is based on Resource Explorer and will allow a user to select from a rich variety of device-specific templates from an available online SDK for the device in Resource Explorer. Internet access is required for full access to all the online templates/examples. If internet access is not available, then the user has the option to manually browse for examples from SDKs already installed locally (and detected by Code Composer Studio).
+</Warning>
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid_css8.avif" alt= "pcbcupid-gsense-1ch-mic" width="500"/>
+</div>
+

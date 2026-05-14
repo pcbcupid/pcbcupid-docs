@@ -1,0 +1,174 @@
+---
+description: The Glyph ESP32-C3 has many pins, ports, and features. This page takes you on a tour of the board!
+title: Glyph ESP32-C3 Pinouts  
+---
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_GLYPHC3-Pinout-whiteBG_result.avif" alt= "PCBCUPID_GLYPHC3-Pinout-whiteBG_result" width="800"/>
+
+</div>
+<br/>
+
+[CLICK HERE TO DOWNLOAD HD](https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_GLYPHC3_DEVKIT_Pinout_PNG.png)
+
+[CLICK HERE TO DOWNLOAD PDF](https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_C3_DEVKIT_Pinout.pdf)
+
+The Glyph-C3 has many pins, ports, and features. This page takes you on a tour on each of the pin on the board!
+
+<Warning title="Hardware Alert: Duplicate Pin Mapping">
+**Notice to Developers:** The Glyph-C3 Dev Kit features mirrored physical pins for specific GPIOs. The following physical pin pairs are electrically connected to the same internal trace on the ESP32-C3:
+
+| GPIO Label | Left Physical Pin | Right Physical Pin |
+| :--- | :--- | :--- |
+| **GPIO3** | Pin 6 | Pin 20 |
+| **GPIO2** | Pin 7 | Pin 19 |
+| **GPIO1** | Pin 8 | Pin 18 |
+| **GPIO0** | Pin 9 | Pin 17 |
+
+**IMPORTANT:** Do not connect separate electronic components to both pins in a pair simultaneously. Treating these as independent pins will cause signal conflicts and potential hardware damage to the microcontroller. Always choose only one physical pin from each pair for your circuit.
+</Warning>
+
+<Note title="Technical Detail: Strapping Pins">
+GPIO 8 and GPIO 9 are **Strapping Pins** used during the chip's power-on/reset sequence to determine the boot mode:
+- **GPIO 9**: Controls whether the chip boots from internal Flash (Default: High) or enters **Serial Download Mode** (Low). On your Glyph board, this pin is connected to the onboard **BOOT** button.
+- **GPIO 8**: Determines the boot behavior and log output. It should ideally be pulled High or left floating during reset for normal operation.
+Avoid connecting peripherals to these pins that might pull them to an unexpected state during startup.
+</Note>
+
+### Power Pins and Connections
+
+{/* ![adafruit_products_FeatherESP32C3_pinouts_Power.jpg](adafruit_products_FeatherESP32C3_pinouts_Power.jpg) */}
+
+- **GND**: This is the common ground for all power and logic.
+- **BAT**: This is the positive voltage to/from the Battery(+) Positive terminal (This pin is usual at voltage between 2.7v-4.2v)
+- **USB**: This is the positive voltage to/from the USB C jack, if USB is connected (This is usual at voltage 5v)
+- **EN**: This is the enable pin of esp32, you can pull down this using a external button or other controller to reset the board.
+- **3.3V**: These pins are the output from the 3.3V regulator, they can supply 600mA peak current.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_power_pins_result.avif" alt= "PCBCUPID_c3_power_pins_result" width="600"/>
+</div>
+
+- **Lipo Battery PADS**: 2 Pads behind the board to solder Lipo or li-ion batteries to power the Glyph board.
+- **MSR PADS**: Short this MSR pad to measure battery capacity using IO0 (Marked as A0 on board).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_rear_bat_pins_result.avif" alt= "PCBCUPID_c3_rear_bat_pins_result" width="600"/>
+</div>
+
+### Communication Pins
+
+{/* ![adafruit_products_FeatherESP32C3_pinouts_Logic_pins.jpg](adafruit_products_FeatherESP32C3_pinouts_Logic_pins.jpg) */}
+
+{/* ![adafruit_products_FeatherESP32C3_pinouts_back_logic_pins.jpg](adafruit_products_FeatherESP32C3_pinouts_back_logic_pins.jpg) */}
+
+#### I2C, SPI, and UART on ESP32-C3
+
+The ESP32-C3 is capable of handling I2C, SPI, and UART on many pins. However, to simplify things we have assigned few of the IO pins to make things simpler for users. 
+
+#### I2C Pins
+
+- I2C SCL: **SCL**, IO5
+- I2C SDA: **SDA**, IO4
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_i2c_result.avif" alt= "PCBCUPID_c3_i2c_result" width="600"/>
+
+</div>
+
+#### SPI Pins
+
+- SPI SCK : **SCK**, IO10
+- SPI MOSI: **MO** , IO6
+- SPI MISO: **MI** , IO7
+- SPI CS  : **ANY IO That's available**
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_spi_pins_result.avif" alt= "PCBCUPID_c3_spi_pins_result" width="600"/>
+</div>
+
+#### UART Pins
+
+- UART TX: **TX**, IO20
+- UART RX: **RX**, IO21
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_uart_pins_result.avif" alt= "PCBCUPID_c3_uart_pins_result" width="600"/>
+
+</div>
+
+### Addtional Ports / Pins
+
+#### GLYPH GLINK PORT
+
+This is a QWIIC / STEMMA compatible connector which makes it easy for users to connect to 100's of sensors and modules made by Adafruit & Sparkfun. 
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_glink_result.avif" alt= "PCBCUPID_c3_glink_result" width="600"/>
+
+</div>
+
+#### USB PINS
+This is used for power and data transfer. Connect to your computer via a USB C cable to update firmware and at the **USB** pin you would receive 5v 
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_all_ub_pins_result.avif" alt= "PCBCUPID_c3_all_ub_pins_result" width="600"/>
+</div>
+
+#### PWM PINS
+
+The ESP32-C3 supports PWM on all pins. However, it is not capable of PWM on all pins at the same time. There are multiple PWM channels, each with configurable frequency and duty cycle. The important thing to know is that you cannot use the same channel on different pins at the same time. Please refer to [ESP32C3 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_ESP32C3_DATASHEET.pdf)
+
+### Analog Pins
+
+The ESP32-C3 has four ADC channels. These pins are the only pins capable of handling analog (12-bit), and they can also do digital.
+
+- **A0/IO0**: ADC1 channel 0
+- **A1/IO1**: ADC1 channel 1
+- **A2/IO2**: ADC1 channel 2
+- **A3/IO3**: ADC1 channel 3
+- **SDA/IO4**: ADC1 channel 4
+- **SCL/IO5**: ADC2 channel 0
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_analog_pinouts_result.avif" alt= "PCBCUPID_c3_analog_pinouts_result" width="600"/>
+
+</div>
+
+### Digital Pins
+
+These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time.
+
+- **D0/GPIO0**: Digital I/O pin 0( GPIO0, ADC1_CH0, XTAL_32K_P).
+- **D1/GPIO1**: Digital I/O pin 1(GPIO1, ADC1_CH1, XTAL_32K_N).
+- **D2/GPIO2**: Digital I/O pin 2(GPIO2, ADC1_CH2, FSPIQ).
+- **D3/GPIO3**: Digital I/O pin 3(GPIO3, ADC1_CH3).
+- **SDA/GPIO4**: The main I2C1 data pin(GPIO4, ADC1_CH4, FSPIHD, MTMS).
+- **SCL/GPIO5**: The main I2C1 clock pin(GPIO5, ADC2_CH0, FSPIWP, MTDI).
+- **D8/GPIO8**: Digital I/O pin 8(GPIO8).
+- **D9/GPIO9**: Digital I/O pin 9(GPIO9).
+- **A0/GPIO0**: Analog I/O pin 0(GPIO0, ADC1_CH0, XTAL_32K_P).
+- **A1/GPIO1**: Analog I/O pin 1(GPIO1, ADC1_CH1, XTAL_32K_N).
+- **A2/GPIO2**: Analog I/O pin 2(GPIO2, ADC1_CH2, FSPIQ).
+- **A3/GPIO3**: Analog I/O pin 3(GPIO3, ADC1_CH3).
+- **D-/GPIO18**: Digital I/O pin 18(GPIO18, USB_D).
+- **D+/GPIO19**: Digital I/O pin 19(GPIO19, USB_D+).
+- **SCK/GPIO10**: The main SPI0 SCK(GPIO10, FSPICS0).
+- **MO/GPIO6**: The main SPI0 MOSI(GPIO6, FSPICLK, MTCK).
+- **MI/GPIO7**: The main SPI0 MISO(GPIO7, FSPID, MTDO).
+- **RX/GPIO20**: The main UART0 RX pin(GPIO20, U0RXD).
+- **TX/GPIO21**: The main UART0 TX pin(GPIO21, U0TXD).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/c3_pinouts/PCBCUPID_c3_digital_pinout_pins_result.avif" alt= "PCBCUPID_c3_digital_pinout_pins_result" width="600"/>
+
+</div>
+
+### Schematic Diagram For Glyph-C3
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/Glyph-C3-Schematic.avif" alt= "PCBCUPID_C3_schematic" width="600"/>
+</div>
+
+<br/>
+
+For better view you can download the schematic diagram from [here](https://files.pcbcupid.com/Documentation/Boards/glyph_c3/Glyph-C3-Schematic.pdf)

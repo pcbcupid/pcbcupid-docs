@@ -1,0 +1,159 @@
+---
+description: The Glyph ESP32-H2 has many pins, ports, and features. This page takes you on a tour of the board!
+title: Glyph ESP32-H2 Pinouts  
+---
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_GlyphH2-Pinout-whiteBG_result.avif" alt= "PCBCUPID_GlyphH2-Pinout-whiteBG_result" width="800"/>
+
+</div>
+<br/>
+
+[CLICK HERE TO DOWNLOAD HD](https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_GlyphH2_DEVKIT_Pinout_PNG.png)
+
+[CLICK HERE TO DOWNLOAD PDF](https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_H2_DEVKIT_Pinout.pdf)
+
+The Glyph ESP32-H2 board is packed with versatile pins and features. This guide will help you navigate the pinout details for efficient use.
+
+<Note title="Technical Detail: Strapping Pins">
+GPIO 8 and GPIO 9 are **Strapping Pins** used during the chip's power-on/reset sequence to determine the boot mode:
+- **GPIO 9**: Controls whether the chip boots from internal Flash (Default: High) or enters **Serial Download Mode** (Low). On your Glyph board, this pin is connected to the onboard **BOOT** button.
+- **GPIO 8**: Determines the boot behavior and log output. It should ideally be pulled High or left floating during reset for normal operation.
+Avoid connecting peripherals to these pins that might pull them to an unexpected state during startup.
+</Note>
+
+### Power Pins and Connections
+
+- **GND**: This is the common ground for all power and logic.
+- **BAT**: This is the positive voltage to/from the Battery(+) Positive terminal (This pin is usual at voltage between 2.7v-4.2v)
+- **USB**: This is the positive voltage to/from the USB C jack, if USB is connected (This is usual at voltage 5v)
+- **EN**: This is the enable pin of esp32, you can pull down this using a external button or other controller to reset the board.
+- **3.3V**: These pins are the output from the 3.3V regulator, they can supply 600mA peak current.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_power_pins_result.avif" alt= "PCBCUPID_h2_power_pins_result" width="600"/>
+
+</div>
+
+- **Lipo Battery PADS**: 2 Pads behind the board to solder Lipo or li-ion batteries to power the Glyph board.
+- **MSR PADS**: Short this MSR pad to measure battery capacity using IO1 (Marked as A1 on board).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_rear_bat_pins_result.avif" alt= "PCBCUPID_h2_rear_bat_pins_result" width="600"/>
+
+</div>
+
+### Communication Pins
+
+#### I2C, SPI, and UART on ESP32-H2
+
+The ESP32-H2 is capable of handling I2C, SPI, and UART on many pins. However, to simplify things we have assigned few of the IO pins to make things simpler for users.
+
+#### I2C Pins
+
+- I2C0 SCL: **SCL**, IO5
+- I2C0 SDA: **SDA**, IO4
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_i2c_pins_result.avif" alt= "PCBCUPID_h2_i2c_pins_result" width="600"/>
+
+</div>
+
+#### SPI Pins
+
+- SPI0 SCK : **SCK**, IO11
+- SPI0 MOSI: **MO** , IO22
+- SPI0 MISO: **MI** , IO25
+- SPI0 CS  : **ANY IO That's available**
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_spi_pins_result.avif" alt= "PCBCUPID_h2_spi_pins_result" width="600"/>
+
+</div>
+
+#### UART Pins
+
+- UART0 TX: **TX**, IO24
+- UART0 RX: **RX**, IO23
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_uart_pins_result.avif" alt= "PCBCUPID_h2_uart_pins_result" width="600"/>
+
+</div>
+
+### Addtional Ports / Pins
+
+#### GLYPH GLINK PORT
+
+This is a QWIIC / STEMMA compatible connector which makes it easy for users to connect to 100's of sensors and modules made by Adafruit & Sparkfun.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_glink_result.avif" alt= "PCBCUPID_h2_glink_result" width="600"/>
+
+</div>
+
+#### USB PINS
+
+This is used for power and data transfer. Connect to your computer via a USB C cable to update firmware and at the USB pin you would receive 5v
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_usb_pins_result.avif" alt= "PCBCUPID_h2_usb_pins_result" width="600"/>
+
+</div>
+
+#### PWM PINS
+
+The ESP32-H2 supports PWM on all pins. However, it is not capable of PWM on all pins at the same time. There are multiple PWM channels, each with configurable frequency and duty cycle. The important thing to know is that you cannot use the same channel on different pins at the same time. Please refer to [ESP32H2 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_ESP32H2_DATASHEET.pdf)
+
+### Analog Pins
+
+The ESP32-H2 has four ADC channels. These pins are the only pins capable of handling analog (12-bit), and they can also do digital.
+
+- **A1/IO1**: ADC1 channel 0
+- **A2/IO2**: ADC1 channel 1
+- **A3/IO3**: ADC1 channel 2
+- **SDA/IO4**: ADC1 channel 3
+- **SCL/IO5**: ADC2 channel 4
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_analog_pinout_result.avif" alt= "PCBCUPID_h2_analog_pinout_result" width="600"/>
+
+</div>
+
+### Digital Pins
+
+These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time.
+
+- **D0/GPIO0**: Digital I/O pin 0(GPIO0, FSPIQ).
+- **A1/GPIO1**: Analog I/O pin 1(GPIO1, FSPICS0, ADC1_CH0).
+- **A2/GPIO2**: Analog I/O pin 2(GPIO2, FSPIWP, ADC1_CH1, MTMS).
+- **A3/GPIO3**: Analog I/O pin 3(GPIO3, FSPIHD, ADC1_CH2, MTDO).
+- **SDA/GPIO4**: The main I2C1 data pin(GPIO4, FSPICLK, MTCK,ADC1_CH3).
+- **SCL/GPIO5**: The main I2C1 clock pin(GPIO5, FSPID,ADC1_CH4,MTDI).
+- **D8/GPIO08**: Digital I/O pin 8(GPIO8).
+- **D9/GPIO09**: Digital I/O pin 9(GPIO9).
+- **D10/GPIO10**: Digital I/O pin 10(GPIO10, ZCD0).
+- **SCK/GPIO11**: The main SPI0 SCK(GPIO11, ZCD1).
+- **D12/GPIO12**: Digital I/O pin 12(GPIO12).
+- **D13/GPIO13**: Digital I/O pin 13(GPIO13, XTAL_32K_P).
+- **D14/GPIO14**: Digital I/O pin 14(GPIO14, XTAL_32K_N).
+- **MO/GPIO22**: The main SPI0 MOSI(GPIO22).
+- **RX/GPIO23**: The main UART0 RX pin(FSPICS1, U0RXD).
+- **TX/GPIO24**: The main UART0 TX pin(GPIO23,FSPICS2, U0TXD).
+- **MI/GPIO25**: The main SPI0 MISO(GPIO24,I2C0 SDA, SPI0 CS).
+- **D-/GPIO26**: Digital I/O pin 26(GPIO26,FSPICS4,USB_D-).
+- **D+/GPIO27**: Digital I/O pin 27(GPIO27,FSPICS5,USB_D+).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_digital_pinouts_result.avif" alt= "PCBCUPID_h2_digital_pinouts_result" width="600"/>
+</div>
+
+### Schematic Diagram For Glyph-H2
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/Glyph-H2-Schematic.avif" alt= "PCBCUPID_h2_digital_pinouts_result" width="600"/>
+</div>
+
+<br/>
+
+For better view you can download the schematic diagram from [here](https://files.pcbcupid.com/Documentation/Boards/glyph_h2/Glyph-H2-Schematic.pdf)

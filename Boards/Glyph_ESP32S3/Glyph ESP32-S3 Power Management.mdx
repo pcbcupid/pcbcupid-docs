@@ -1,0 +1,52 @@
+---
+description: Glyph boards easy to power both when connected to a computer as well as via battery.
+title: Glyph ESP32-S3 Power Management  
+---
+
+## Power Management for Glyph ESP32-S3
+
+### Battery + USB Power
+
+We designed the Glyph ESP32-S3 to be easy to power both when connected to a computer and via a battery. Here are the ways to power your Glyph:
+
+1. **USB Power**: Connect with a USB cable to regulate the 5V USB down to 3.3V.
+2. **Battery Power**: Connect a 4.2/3.7V Lithium Polymer (LiPo/LiPo) or Lithium Ion (LiIon) battery to the JST jack for rechargeable battery power.
+
+When USB power is connected, it will automatically switch over to USB for power and start charging the battery (if attached). This hot-swap functionality allows you to keep the LiPo connected as a backup power source that will only be used when USB power is lost.
+
+<Danger>
+Install the LiPo / Li-ion batteries based on the polarity. Using wrong polarity batteries can destroy your Glyph. 
+</Danger>
+
+### Power Supplies
+
+The Glyph ESP32-S3 offers multiple power supply options:
+
+- **BAT Pin**: Connected to the battery pads (behind the board)
+- **USB Pin**: Provides +5V from USB if connected.
+- **3V Pin**: Provides output from the 3.3V regulator with a 600mA peak output.
+
+### Measuring Battery Voltage
+
+To monitor battery voltage, short the msr pads behind the board.
+
+### Alternative Power Options
+
+For powering the Glyph ESP32-S3:
+
+- **USB powered**: Use a 5V 1A USB wall adapter to plug in a USB cable for reliable power.
+- **Portable Use Without LiPo**: Use a USB battery pack(Power Bank).
+- **Higher Voltage Power Supply**: Use a 5V buck converter and wire it to a USB cable's 5V and GND input.
+
+<Danger>
+**What You Cannot Do**
+- Do not use alkaline or NiMH batteries and connect to the battery port, as it will destroy the LiPo charger.
+- Do not use anything >4.2v LiPo batteries on the battery port, as it will destroy the board.
+</Danger>
+
+### External Power Supplies
+
+The Glyph ESP32-S3 is not designed for external power supplies. If you must:
+
+- **Connect an external 3.3V power supply** to the 3V and GND pins
+- **Connect an external 5V power supply** to the USB and GND pins.

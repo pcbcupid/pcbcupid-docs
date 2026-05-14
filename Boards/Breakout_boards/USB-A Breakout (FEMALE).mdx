@@ -1,0 +1,56 @@
+---
+description: USB-A (Female) Breakout with its power and data pins exposed on a circuit board to build custom USB devices.
+title: USB-A [FEMALE]
+---
+
+A [USB-A FEMALE](https://shop.pcbcupid.com/product/gb004/) allows you to plug in USB devices or cables and access power or USB data lines for prototyping, testing, and custom circuit designs.
+
+export const USB_A_Female_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB-A-FEMALE/USB-A-Female%20(1)%20ILLUSTRATION.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB-A-FEMALE/USB-A-FEMALE.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/usb-a-female.glb";
+
+}
+
+{/*
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB-A-FEMALE/USB-A-FEMALE.avif" height= "500" width="600"/>
+</div>
+
+*/}
+
+## Pin Configuration
+ 
+- **VBUS / 5V** : Provides +5V to the USB device plugged in
+- **D-** : USB Data Negative
+- **D+** : USB Data Positive
+- **GND** : Ground	
+- **Shield/GND** : Metallic casing connected to ground (optional)
+
+## Key Features
+
+- Exposes standard **USB-A female pins** (VBUS, D+, D-, GND) to **easily solderable headers/pads**.
+- Provides access to power (5V) and USB data lines.
+- Compatible with any standard USB device or cable.
+- Breadboard-friendly and ideal for quick prototyping.
+- Durable socket suitable for repeated plug-and-play use
+
+## Applications
+
+- Test benches for USB device validation and diagnostics.
+- Production line fixtures requiring repeated USB plug-ins.
+- Adding USB access points in control panels or industrial enclosures.
+- Firmware flashing or field-updates for embedded industrial devices.
+- Used in building IIoT edge devices and gatewaysexperiments.
+
+<Warning title="⚠️  Precaution Note">
+
+- Ensure the USB device does not draw more current than the source USB port can supply.
+- Avoid shorting 5V and GND — it can damage both the breakout and the host system.
+- Keep D+ / D- wires short to prevent signal loss or communication issues.
+- Use proper mounting or strain relief to avoid connector damage during repeated insertions.
+
+</Warning>
+

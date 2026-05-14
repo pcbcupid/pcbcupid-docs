@@ -1,0 +1,159 @@
+---
+description: The Glyph ESP32-S3 has many pins, ports, and features. This page takes you on a tour of the board!
+title: Glyph ESP32-S3 Pinouts  
+---
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glyph%20S3%20Pinouts.avif" alt= "PCBCUPID_GlyphS3-Pinout-whiteBG_result" width="800"/>
+
+</div>
+<br/>
+
+[CLICK HERE TO DOWNLOAD HD](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glyph%20S3%20Pinouts.png)
+
+[CLICK HERE TO DOWNLOAD PDF](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/PCBCUPID_Glyph_S3_Pinouts.pdf)
+
+The Glyph ESP32-S3 has many pins, ports, and features. This page takes you on a tour on each of the pin on the board!
+
+### Power Pins and Connections
+
+- **GND**: This is the common ground for all power and logic.
+- **BAT**: This is the positive voltage to/from the Battery(+) Positive terminal (This pin is usual at voltage between 2.7v-4.2v)
+- **USB**: This is the positive voltage to/from the USB C jack, if USB is connected (This is usual at voltage 5v)
+- **EN**: This is the enable pin of esp32, you can pull down this using a external button or other controller to reset the board.
+- **3.3V**: These pins are the output from the 3.3V regulator, they can supply 900mA peak current.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Power%20pins.avif" alt= "PCBCUPID_S3_POWER_PINS_OPACITY_result" width="600"/>
+</div>
+
+- **Lipo Battery PADS**: 2 Pads behind the board to solder Lipo or li-ion batteries to power the Glyph board.
+- **MSR PADS**: Short this MSR pad to measure battery capacity using IO0 (Marked as A0 on board).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Battery%20pins.avif" alt= "PCBCUPID_S3_BAT_PINS_REAR_BOARD_C6_result" width="600"/>
+
+</div>
+
+### Communication Pins
+
+#### I2C, SPI, and UART on ESP32-S3
+
+The ESP32-S3 is capable of handling I2C, SPI, and UART on many pins. However, to simplify things we have assigned few of the IO pins to make things simpler for users.
+
+#### I2C Pins
+
+- I2C0 SCL: **SCL**, IO5
+- I2C0 SDA: **SDA**, IO4
+
+ESP32-S3 has two I2C controllers. A second I2C bus can be assigned to any available GPIO pair.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/I2C%20Pins.avif" alt= "PCBCUPID_S3_i2c_result" width="600"/>
+</div>
+
+#### SPI Pins
+
+- SPI0 SCK : **SCK**, IO35
+- SPI0 MOSI: **MO** , IO36
+- SPI0 MISO: **MI** , IO37
+- SPI0 CS  : **ANY IO That's available**
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/SPI%20Pins.avif" alt= "PCBCUPID_S3_SPI_PINS_result" width="600"/>
+
+</div>
+
+#### UART Pins
+
+- UART0 TX: **TX**, IO43
+- UART0 RX: **RX**, IO44
+- UART1 TX: **IO17**
+- UART1 RX: **IO18**
+
+ESP32-S3 has 3 UART controllers total. UART2 can be assigned to any GPIO via the GPIO matrix.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/UART%20Pins.avif" alt= "PCBCUPID_S3_UART_PINS_result" width="600"/>
+
+</div>
+
+### Addtional Ports / Pins
+#### GLYPH GLINK PORT
+
+This is a QWIIC / STEMMA compatible connector which makes it easy for users to connect to 100's of sensors and modules made by Adafruit & Sparkfun.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glink%20port.avif" alt= "PCBCUPID_S3_GLYPH_LINK_result" width="600"/>
+
+</div>
+
+#### USB PINS
+
+This is used for power and data transfer. Connect to your computer via a USB C cable to update firmware and at the USB pin you would receive 5v
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/USB.avif" alt= "PCBCUPID_S3_ALL_USB_PIB_result" width="600"/>
+
+</div>
+
+#### PWM PINS
+
+The ESP32-S3 supports PWM on all pins. However, it is not capable of PWM on all pins at the same time. There are multiple PWM channels, each with configurable frequency and duty cycle. The important thing to know is that you cannot use the same channel on different pins at the same time. Please refer to [ESP32S3 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/PCBCUPID_esp32-s3_datasheet.pdf)
+
+### Analog Pins
+
+The ESP32-S3 has two ADC units — ADC1 and ADC2 — with 10 channels each, totalling 20 ADC-capable pins on the chip. On the Glyph-S3 board, 9 ADC1 pins are exposed: IO1, IO2, IO4, IO5, IO6, IO7, IO8, IO9, IO10
+
+- **A1/IO1**: ADC1 channel 1
+- **A2/IO2**: ADC1 channel 2
+- **IO4**: ADC1 channel 3 (Can also function as ADC1_CH3 when not used for I2C)
+- **IO5**: ADC1 channel 4 (Can also function as ADC1_CH4 when not used for I2C)
+- **A6/IO6**: ADC1 channel 6
+- **A7/IO7**: ADC1 channel 7
+- **A8/IO8**: ADC1 channel 8
+- **A9/IO9**: ADC1 channel 9
+- **A10/IO10**: ADC1 channel 10
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Analog_pins%5B1%5D.avif" alt= "PCBCUPID_S3_cropped_analog_pins_" width="600"/>
+
+</div>
+
+### Digital Pins
+
+These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time.
+
+- **A1/GPIO1**: ADC1 channel 1
+- **A2/GPIO2**: ADC1 channel 2
+- **A6/GPIO6**: ADC1 channel 6
+- **A7/GPIO7**: ADC1 channel 7
+- **A8/GPIO8**: ADC1 channel 8
+- **A9/GPIO9**: ADC1 channel 9
+- **A10/GPIO10**: ADC1 channel 10
+- **SDA/GPIO4**: The main I2C1 data pin(GPIO4).
+- **SCL/GPIO5**: The main I2C1 clock pin(GPIO5).
+- **D13/GPIO13**: Digital I/O pin 13(GPIO13, FSPIIO7, SUBSPIQ, FSPIQ).
+- **D14/GPIO14**: Digital I/O pin 14(GPIO14, FSPIDQS,  SUBSPIWP, FSPIWP).
+- **D15/GPIO15**: Digital I/O pin 15(GPIO15, U0RTS).
+- **D16/GPIO16**: Digital I/O pin 16(GPIO16, U0CTS).
+- **D17/GPIO17**: Digital I/O pin 17( GPIO17, U1TXD).
+- **D18/GPIO18**: Digital I/O pin 18(GPIO18,  U1RXD,  CLK_OUT3).
+- **TX/GPIO43**: The main UART0 TX pin(U0TXD, GPIO43,  CLK_OUT1 ).
+- **RX/GPIO44**: The main UART0 RX pin(U0RXD, GPIO44, CLK_OUT2).
+- **SCK/GPIO35**: The main SPI0 SCK(GPIO35, SUBSPID, FSPID, SPIIO6).
+- **MO/GPIO36**: The main SPI0 MOSI(GPIO36, FSPICLK, SUBSPICLK,  SPIIO7).
+- **MI/GPIO37**: The main SPI0 MISO(GPIO37,  FSPIQ,  SUBSPIQ,  SPIDQS).
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Digital%20pins.avif" alt= "PCBCUPID_S3_digital_pinouts_pins" width="600"/>
+</div>
+
+### Schematic Diagram For Glyph-S3
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glyph_S3_Schematic-updated.avif" alt= "PCBCUPID_S3_digital_schematic" width="600"/>
+</div>
+
+<br/>
+
+For better view you can download the schematic diagram from [here](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/S3%20schematic.pdf)

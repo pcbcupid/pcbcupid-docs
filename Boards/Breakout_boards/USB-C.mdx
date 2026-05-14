@@ -1,0 +1,47 @@
+---
+description: USB-C Breakout with its power and data pins exposed on a circuit board to build custom USB devices.
+title: USB-C
+---
+
+A [USB-C](https://shop.pcbcupid.com/product/gb001/) breakout board provides easy access to the USB-C connector pins for power and data integration in embedded and prototyping projects. It simplifies development without directly soldering to a compact USB-C port.
+
+export const USB_C_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB%20type%20c/USB-C-ILLUSTRATION.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB%20type%20c/USB-C.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/usb_c_breakout.glb";
+
+}
+
+## Pin Configuration
+ 
+- **VBUS** : +5V power from USB-C
+- **CC1** : Configuration Channel 1 (used for cable orientation and power negotiation)
+- **CC2** : Configuration Channel 2 (used for cable orientation and power negotiation)
+- **D+** : USB 2.0 Data Positive
+- **D-** : USB 2.0 Data Negative
+- **GND** : Ground
+
+## Key Features
+
+- Breaks out USB-C pins to standard headers.
+- Supports power and data lines.
+- Compact and easy-to-integrate design.
+- Ideal for rapid prototyping.
+
+## Applications
+
+- Custom PCB development
+- USB-powered embedded systems
+- Charging and power delivery projects
+- Testing USB-C functionality
+
+<Warning title="⚠️  Precaution Note">
+
+- Ensure correct voltage and current ratings
+- Verify CC pin configuration for proper power negotiation
+- Avoid short circuits during prototyping
+  
+</Warning>
+

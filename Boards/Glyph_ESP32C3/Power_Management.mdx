@@ -1,0 +1,57 @@
+---
+description: Glyph boards easy to power both when connected to a computer as well as via battery.
+title: Glyph ESP32-C3 Power Management  
+---
+## Power Management for Glyph ESP32-C3
+
+{/* ![adafruit_products_52288007786_13ff00a433_o.jpg](adafruit_products_52288007786_13ff00a433_o.jpg) */}
+
+### Battery + USB Power
+
+We wanted to make our Glyph boards easy to power both when connected to a computer as well as via battery for portability!
+
+There's two ways to power a Glyph:
+
+1. **USB Power:** You can connect with a USB cable (just plug into the TYPE C Port) and the Glyph will regulate the 5V USB down to 3.3V and power the entire board and peripherals (if any connected). 
+2. **Battery Power:** You can also connect a 4.2/3.7V Lithium Polymer (LiPo/lipo) or Lithium Ion (LiIon) battery to Battery Pads. This will let the Glyph run on a rechargeable battery.
+
+When the USB power is powered, it will automatically switch over to USB for power, as well as start charging the battery (if attached). This happens 'hot-swap' style so you can always keep the lipo connected as a 'backup' power that will only get used when USB power is lost.
+
+<Danger>
+Install the LiPo / Li-ion batteries based on the polarity. Using wrong polarity batteries can destroy your Glyph. 
+</Danger>
+
+{/* ![adafruit_products_FeatherRP_pinouts_power_management.jpg](adafruit_products_FeatherRP_pinouts_power_management.jpg) */}
+
+### Power Supplies
+
+The Glyph ESP32-c3 offers multiple power supply options:
+
+- **BAT Pin**: Connected to the battery pads (behind the board)
+- **USB Pin**: Provides +5V from USB if connected.
+- **3V Pin**: Provides output from the 3.3V regulator with a 600mA peak output.
+
+### Measuring Battery Voltage
+
+To monitor battery voltage, short the MSR pads behind the board.
+
+### Alternative Power Options
+
+For powering the Glyph ESP32-c3:
+
+- **USB powered**: Use a 5V 1A USB wall adapter to plug in a USB cable for reliable power.
+- **Portable Use Without LiPo**: Use a USB battery pack(Power Bank).
+- **Higher Voltage Power Supply**: Use a 5V buck converter and wire it to a USB cable's 5V and GND input.
+
+<Danger>
+**What You Cannot Do**
+- Do not use alkaline or NiMH batteries and connect to the battery port, as it will destroy the LiPo charger.
+- Do not use anything >4.2v LiPo batteries on the battery port, as it will destroy the board.
+</Danger>
+
+### External Power Supplies
+
+The Glyph ESP32-c3 is not designed for external power supplies. If you must:
+
+- **Connect an external 3.3V power supply** to the 3V and GND pins
+- **Connect an external 5V power supply** to the USB and GND pins.

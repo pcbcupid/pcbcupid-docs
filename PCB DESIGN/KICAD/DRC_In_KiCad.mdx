@@ -1,0 +1,118 @@
+---
+description: In this article, let’s see how we can verify the design with design rule check and also add branding elements to your PCB
+title: KiCad Design Rule Checker
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_drc.avif
+---
+# KiCad Design Rule Checker
+
+![KiCad:How_To_Use_DRC_In_KiCad ](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_drc.avif)
+
+Now let’s see how we can verify the design with [Kicad’s](https://www.kicad.org/) design rule check and also add branding elements along with various graphics to the printed circuit board.
+
+If you remember from one of our [previous articles](https://learn.pcbcupid.com/pcb-design/kicad-tutorial/kicad-electrical-rule-checker), we performed ERC to check for errors and mistakes in the schematics with the help of [Kicad’s](https://www.kicad.org/) predefined rules.
+
+Similarly, here in the layout editor, there are a set of predefined rules along with the custom constraints that we set. Using this, we can perform a [DRC](https://pcbcupid.com/posts/basics/top-7-pcb-design-guidelines-professional-dont-share/) (design rule check) to see if our board design is within this set of rules.
+
+To perform DRC, click on the Show DRC button on the top toolbar.
+
+![PCBCUPID_KiCAD_intro](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_intro.avif)
+
+keep all the settings default for now and click on Run DRC.
+
+It seems like we have no errors but 3 warnings.So just to understand, let us introduce a few errors and see how to fix them.
+
+Okay, now let’s run the DRC again.
+
+We have 4 errors and multiple warnings. But we’ll just focus on errors for now; uncheck the warnings.
+
+![PCBCUPID_KiCAD_intro2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_intro2.avif)
+
+The first error we have is the Courtyards overlap. Let’s click on the error and see where it takes us.
+
+Here we can see the courtyard of 2 components overlapping each other. So, how will it affect the PCB? Let’s see this board in the 3D viewer.
+
+![PCBCUPID_KiCAD_intro3](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_intro3.avif)
+
+## Fixing Errors in Kicad’s Design Rule Check (DRC)
+
+The components are passing through each other, which would cause some serious assembly issues if this particular PCB is sent for manufacturing. Luckily, these are easy errors to fix. Always make sure to give proper clearance between the components, and also try to keep the components within the courtyard.
+
+Now that you are running the DRC again, you can see the previous error is gone.
+
+To see the remaining 2 errors, click on the unconnected items tab.
+
+In this tab, we’ll see all the unconnected networks between the components. Since our circuit is very simple, we have to manually delete a few connections to force this error. But when you are working on a complex circuit with 100’s of connections, this particular [DRC](https://pcbcupid.com/posts/basics/top-7-pcb-design-guidelines-professional-dont-share/) check will come in very handy to find the missing connection.
+
+![PCBCUPID_KiCAD_Fixing%20Errors](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Fixing%20Errors.avif)
+
+To see where the net is unconnected, just click on the error, and it will take us to the unconnected net on the PCB layout. Here we can see the arrow pointing at the unconnected network. so quickly use the track tool and complete the connection.
+
+We’ll quickly do the same for the other unconnected network and run the DRC again, we can see the errors are resolved.
+
+![PCBCUPID_KiCAD_Fixing%20Errors2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Fixing%20Errors2.avif)
+
+## Fixing Warnings in KiCad: Addressing footprint Issues
+
+Similarly, let’s try to resolve all the warnings.
+
+We have 3 warnings, but they’re less likely to affect the functionality of the PCB. So in some cases, it’s okay to ignore the warning and send the file for manufacturing, but it’s always good to clear up all the warnings because these warnings can quickly turn into errors when you work on the same PCB to improve the circuit or work on updating the features.
+
+Currently, the first 2 warnings are just telling us that KiCad cannot find the footprint that we are using in KiCad’s footprint library, but we know that’s not the case because we did use all the default footprints given by KiCad
+
+![PCBCUPID_KiCAD_Addressing%20footprint](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Addressing%20footprint.avif)
+
+These warnings can occur when Kicad’s library is not in sync with the footprint used on the PCB editor. We can easily fix this by selecting the footprint and then right-clicking. And click on the update footprint.
+
+Now on the pop-up window, make sure the updated footprint is selected and hit update.
+
+Running the DRC again, we’ll show that we fixed that warning. The next warning is very similar, so do the same by updating the footprint.
+
+![PCBCUPID_KiCAD_Addressing%20footprint2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Addressing%20footprint2.avif)
+
+Finally, we have one warning left. This warning is because of the constraint we set on board using the manufacturer’s capability list. Accordingly, the silkscreen item should have a clearance of 0.15mm, but if we click on this warning, you clearly see that’s not the case.
+
+So just move this slightly away from the footprint and run the DRC again. You can see we cleared up all the errors and warnings.
+
+![PCBCUPID_KiCAD_Addressing%20footprint3](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Addressing%20footprint3.avif)
+
+## Adding Logo & Graphics in Kicad
+
+This PCB design is perfect for manufacturing; it does the functions we need and also follows all the constraints that the fabrication plant needs. So,now we can add a logo and custom graphics to the PCB.
+
+Go to the project window and click on the image converter.This window will help us convert the logo or image into a footprint that we can place on the PCB. To load up the button, click on load source image and select the image that you want to convert.
+
+Make sure this height and width ratio is locked, so the logo won’t be distorted when we reduce the size. Here we need to enter the actual size of the logo that you want on the PCB and set it to 50mm.
+
+To see the output, go to the black-and-white picture tab. Since we can have only one color on the silk layer, Kicad will convert the image to black and white. And we can adjust the output using this slider.
+
+![PCBCUPID_KiCAD_Adding%20Logo](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Adding%20Logo.avif)
+
+The black part of the image will be drawn on the PCB, and the white part will be ignored. So if you like to switch, you can do that by using a negative check box.
+
+Once you are happy with the image, make sure you have selected the front silk screen and the footprint option under the output format.
+
+We can move this customized image to the board editor in 2 ways. Either we can save this using the “Export to file” and use the image in all other projects, or we can just copy the image to a clipboard and paste it on the PCB editor.
+
+Let’s go with the second option: copy the image to the clipboard and paste it on the PCB editor.
+
+We can verify how it would look on the physical PCB by going to the 3d viewer.
+
+![PCBCUPID_KiCAD_Adding%20Logo2](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Adding%20Logo2.avif)
+
+## Graphics Enhancement in Kicad
+
+So far, we are working on the front silk layer, but we have lots of empty space on the bottom. To fill that up, we’ll select the bottom silk layer and use this warped text tool to add more information about the board.
+
+This circuit is pretty much ready for manufacturing, but we can’t just send the KICAD file to the fabrication plant. This not only makes the process a little difficult for the manufacturer, but if this is a private design, you will be giving up your intellectual property where they can modify there requirements. So, in the next article we'll see how we can 
+
+![PCBCUPID_KiCAD_Graphics%20Enhancement](https://files.pcbcupid.com/Documentation/PCB_Designing/KiCAD/DRC_In_KiCad/PCBCUPID_KiCAD_Graphics%20Enhancement.avif)
+
+You can watch the complete video tutorial here:
+
+<div class="iframe-container">
+<iframe loading="lazy" title="#11 How To Use DRC In KiCad 7.0 | #PCBCupid" width="1204" height="515" data-src="https://www.youtube.com/embed/inAkpoFvr0U?list=PLn6004q9oeqGl91KifK6xHGuqvXGb374G" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+</div>
+
+This brings us to the end of the article, until then the next one keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/ "forum")

@@ -1,0 +1,147 @@
+---
+description: Glyph development board support Smowcode! A low core embedded programming IDE. This page covers getting your Smowcode IDE set up and work with GLYPH Platform.
+title: Smowcode IDE Setup 
+image: https://files.pcbcupid.com/Documentation/Boards/prerequisites/smowcode-ide.jpg
+---
+
+![smowcode_ide_logo](https://files.pcbcupid.com/Documentation/Boards/prerequisites/smowcode-ide.jpg)
+
+Smow code IDE is a user-friendly platform designed for creating firmware applications for microcontrollers. It supports the ESP32 microcontroller and other controller like Ti, NXP and Nordic are underdevelopment! Making it ideal for developing smart electronic solutions. The major difference using Smow code over Arudino IDE is the drag and drog user interface, which makes its intuitive for beginners to get started. 
+
+## Download and Installation
+
+Smowcode currently available both for offline and online version (demo only), But in this page we'll walk through only about the offline version of smowcode. 
+
+Start with [smowcode](https://smowcode.com/) official site and download the smowcode IDE. 
+
+![pcbcupid-smowcode-ide-download](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-ide-download.avif)
+
+Once you have the setup file, install the program just like any regular windows program : 
+
+**STEP 1 :** Run the Installer
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-window-setup.avif" alt= "pcbcupid-smowcode-window-setup" width="600"/>
+</div>
+<br/>
+
+**STEP 2 :** ESP32 Be the Default Controller
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-default-esp32.avif" alt= "pcbcupid-smowcode-default-esp32" width="600"/>
+</div>
+<br/>
+
+**STEP 3 :** Complete the installation
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-installation.avif" alt= "pcbcupid-smowcode-installation" width="600"/>
+</div>
+<br/>
+
+**STEP 4 :** Restart your computer
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-done-installation.avif" alt= "pcbcupid-pcbcupid-smowcode-done-installation" width="600"/>
+</div>
+<br/>
+
+To complete the installation, computer restart is required. So make sure to Select `Yes, restart the computer now` and click on `Finish` to complete the installation.
+
+## Setting Up Your First Project
+
+If the setup went through and the smowcode IDE installed successfully, this would be the first screen you would encounter with a login pop up, as soon as you open the smowcode application. 
+
+![pcbcupid-smowcode-ide-login](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-ide-login-popup.avif)
+
+As you finish the login (on a browser and redirect to the application) you should have complete access to the IDE. If you had worked on [node red](https://nodered.org/) before you should be familiar with the user interface and it's should be a breeze to get started. 
+
+![pcbcupid-smowcode-ide-window](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-ide-window.avif)
+
+Start with creating the first project. Click on the hamburger icon on the top right corner and navigate to `Project > New`
+
+![pcbcupid-smowcode-new-project](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-new-project.avif)
+
+On the popup you can select the desired board that you would like to use. If you are using Glyph board choose the following option appropriately based on your board
+
+* Glyph C3 - ESP32C3
+* Glyph C6 - ESP32C6
+* Glyph H2 - ESP32H2
+
+For this example I'm going with  ***ESP32C3*** as I'm using ***[Glyph C3 Board](https://shop.pcbcupid.com/product/gd001/)***
+
+![pcbcupid-smowcode-board-selection](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-board-selection.avif)
+
+Once the project setup is done click on `Create Project`
+
+![pcbcupid-smowcode-project-creation](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-project-creation.avif)
+
+## Creating the First Flow
+
+On the left you can see bunch of nodes, These is the key feature, sets Smowcode apart from Arduino IDE. This node based system makes running Microcontroller super easy without even using a single line of code!
+
+![pcbcupid-smowcode-node](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-node.avif)
+
+Let's try this with a example, just drag and drop the `on Interval` -> `Write` -> `delay` -> `Write` -> `delay` node onto the editor
+
+Here : 
+* On Interval -> This Node will run the other connected node every one second
+* Write -> This Node can write digital High or digital Low to the Microcontroller (In our case GLYPH C3)
+* Delay -> This Node will delay set amount of time (in seconds) before executing the next node. 
+
+![pcbcupid-smowcode-drag-drop-node](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-drag-drop-node.avif)
+
+Now connect the nodes one after the other using the **dot** on the node. 
+
+![pcbcupid-smowcode-node-connection](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-node-connection.avif)
+
+Once this setup is ready we can change the property of each node by double clicking on them. 
+
+So, let's change the property of **Write Node:**
+* Name (Act as a variable name) : LED
+* Pin No (Physical Pin no) : 1
+* Pin Level (Pin State High[1] or Low(0)) : 1
+
+Similarly I will change the property of other node to the following : 
+
+**Delay Node:**
+* Name : delay
+* Period (s) : 0.5
+
+**Write Node:**
+* Name : LED
+* Pin No : 1
+* Pin Level : 0
+
+**Delay Node 2:**
+* Name : delay
+* Period (s) : 0.5
+
+![pcbcupid-smowcode-node-editing](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-node-editing.avif)
+
+## Uploading to Glyph Board
+
+Once the nodes are setup, connect your board to your computer via USB-C and find the COM port under device manager in Windows. 
+You can do that by right click on `Windows Start -> Device Manager`
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-device-manager.avif" alt= "pcbcupid-smowcode-device-manager" width="600"/>
+</div>
+
+<br/>
+
+After figuring out the **COM PORT** set the `Device Port` in the smowcode IDE. In our case it's `COM 21`
+
+![pcbcupid-smowcode-device-selection](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-device-selection.avif)
+
+With the device port setup we can just hit the **upload** button on the top right corner
+
+![pcbcupid-smowcode-uploading-code](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-uploading-code.avif)
+
+And within couples of seconds the IDE should verify the code and upload them to GLYPH Board!
+
+![pcbcupid-smowcode-done-upoading](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-done-upoading.avif)
+
+## Result
+
+After the flow is uploaded the on-board (GPIO1) LED on [Glyph C3 Board](https://shop.pcbcupid.com/product/gd001/) starts blinking!
+
+![Glyph-smowcode-blinking-flow](https://files.pcbcupid.com/Documentation/Boards/prerequisites/pcbcupid-smowcode-blinking.avif)
+
+If you are not fan of low code, we have dedicate page for setting up [GLYPH BOARD](https://shop.pcbcupid.com/product-category/development-boards/) with [Arduino IDE](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup) and running [Blink Sketch](https://learn.pcbcupid.com/boards/examples/blink-led).

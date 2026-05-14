@@ -1,0 +1,155 @@
+---
+description: Interfacing G-Sense SHT45 High Accuracy Humidity & Temperature Sensor with Arduino, ESP32, and GLYPH-C3. Includes pinout, circuit diagram, and example code.
+title: SHT45
+---
+
+The **Gsense-SHT45** is a highly accurate temperature and humidity sensor from Sensirion, designed for precise environmental monitoring in a wide range of applications. It is an upgrade over previous models such as SHT31, offering even better accuracy and lower power consumption.
+
+export const SHT45_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/g-sense/sht45/SHT45-illustartion_result.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/g-sense/sht45/SHT45_result.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://example.com/model.glb";
+
+}
+
+{/* 
+![pcbcupid_sht45](https://files.pcbcupid.com/Documentation/Boards/modules/sht45/PCBCUPID_sht35_introimage.avif)
+*/}
+
+## Pin Configuration
+
+- **VCC (RED)** : 3.3V
+- **GND (BLACK)** : Ground
+- **SDA (YELLOW)** : GPIO (SDA)
+- **SCL (BLUE)** : GPIO (SCL)
+
+## Key Features of SHT45
+
+* Operating Voltage : 1.08 - 3.6v
+* Operating Current (AVG) : 0.4 µA
+* Temperature Accuracy: ±0.1°C
+* Humidity Accuracy: ±1.0% RH
+* Temperature Measurement Range: -40°C to +125°C
+* Humidity Measurement Range: 0% to 100% RH
+* Interface: I²C (address 0x44 or 0x45)
+* Response Time: RH (8s) °C (10s)
+* Low Power Consumption: Ideal for battery-powered devices.
+
+## Application
+
+* HVAC Systems: HVAC systems to monitor and control temperature and humidity, ensuring comfortable indoor environments. 
+* Weather Stations: These sensors are used in weather stations to measure temperature and humidity for weather forecasting. 
+* Industrial Monitoring: The SHT35 is used in various industrial settings to monitor temperature and humidity, which can affect production processes and equipment performance. 
+* Smart Agriculture:The SHT35 can be used in agriculture to monitor soil and air temperature and humidity, optimizing irrigation and crop management. 
+
+This guide will help you interface an SHT45 Temperature and Humidity sensor [GLYPH-C6](https://learn.pcbcupid.com/boards/glyph-c6/overview)(but any [GLYPH development board](https://shop.pcbcupid.com/product-category/development-boards/) from the ESP32 Series should work)
+
+## Step 1: Hardware Required
+
+1) GLYPH-C6 Board
+2) Gsense SHT45
+3) Breadboard
+
+## Step 2: Circuit Diagram
+
+You can use either the Gsense SHT35 Industrial or Hobby variant. The pinouts for both are shown in the figure along with the circuit connection
+
+*	Connect VCC  of the sensor to +3.3V of the GLYPH board
+*	Connect SDA of the sensor to the SDA(GPIO4) of the GLYPH board
+*	connect SCL of the sensor to the SCL(GPIO5) of the GLYPH board
+*	Connect GND of the sensor to GROUND of the GLYPH board 
+
+![Gsense-STH45-Circuit-Diagram](https://files.pcbcupid.com/Documentation/Boards/g-sense/sht45/Gsense-SHT45-Circuit_result.avif)
+
+## Step 3: Code Setup
+
+1. **Open Arduino IDE**
+2. **Install the Necessary  Libraries** <br/> 
+    We’ll use the [SHT45 library from Adafruit](https://github.com/adafruit/Adafruit_SHT4X)
+3. **Enter the following code into the Arduino IDE**
+
+```cpp
+#include <Wire.h>
+#include "Adafruit_SHT4x.h"
+
+#define SDA_PIN 4  // Define the SDA pin
+#define SCL_PIN 5  // Define the SCL pin
+
+Adafruit_SHT4x sht4 = Adafruit_SHT4x();  // Initialize the sensor object
+
+void setup() {
+    Serial.begin(115200);
+    while (!Serial) {
+        delay(10); // Wait for the serial connection
+    }
+
+    Serial.println("SHT45 Sensor Test");
+
+    // Initialize I2C with the custom SDA and SCL pins
+    Wire.begin(SDA_PIN, SCL_PIN);  // Initialize I2C on custom pins
+    Wire.setClock(100000);  // Set I2C clock to 100kHz for communication
+
+    // Initialize the SHT45 sensor
+    if (!sht4.begin()) {
+        Serial.println("Couldn't find SHT45 sensor!");
+        while (1); // Halt here if the sensor isn't found
+    }
+    Serial.println("SHT45 sensor found");
+}
+
+void loop() {
+    sensors_event_t humidity, temp;
+    sht4.getEvent(&humidity, &temp);  // Get temperature and humidity data
+
+    // Check if the sensor is returning valid data
+    if (isnan(temp.temperature) || isnan(humidity.relative_humidity)) {
+        Serial.println("Failed to read sensor data!");
+    } else {
+        // Print temperature and humidity with extra details
+        Serial.print("Temperature: ");
+        Serial.print(temp.temperature);
+        Serial.println(" *C");
+
+        Serial.print("Humidity: ");
+        Serial.print(humidity.relative_humidity);
+        Serial.println(" %");
+    }
+
+    delay(2000); // Wait for 2 seconds before next reading
+}
+```
+
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+   Do the following settings in your Arduino IDE,
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C6` 
+
+<Warning>
+   For the `Pcbcupid GLYPH C6 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater than or equal to 3.1.0.
+</Warning>
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+- Click the upload button (➡️ icon) or use the shortcut `CTRL + U` in Arduino IDE to upload the code to the board.
+
+## Step 5: Observe the Output
+
+The Serial Monitor should start displaying the Humidity, Temperature and Heat Index values of the surrounding air like this:
+
+![pcbcupid_sht45serialmon](https://files.pcbcupid.com/Documentation/Boards/modules/sht45/PCBCUPID_sht45_serialmon.avif)

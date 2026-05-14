@@ -1,0 +1,83 @@
+---
+description: To perform an LED Blink  test
+title: Blink LED 
+---
+
+## Blinking of On-Board LED
+
+Click here to know how to do the [initial setup](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup) for Arduino IDE.
+
+![pcbcupid_glyph_led_blinking](https://files.pcbcupid.com/Documentation/Boards/Examples/blink/PCBCUPID-onboard-led-blinking.avif)
+
+The **"Hello World!"** program of hardware world, the Blink Sketch! You can upload this sketch and it's a great way to make sure your board is working and you're uploading your sketch to the right glyph board and right configuration (after the Bare minimum sketch).
+
+You can either open the inbuilt example from arduino IDE by clicking through `File > Examples > 01.Basics > Blink` and modify based on your GLYPH Board.
+
+These are the inbuilt LED pin based on the type of GLYPH board you have :
+
+* GLYPH C3 On board LED is on GPIO1(A1)
+* GLYPH H2 On board LED is on GPIO0(D0)
+* GLYPH C6 On board LED is on GPIO14(D14)
+
+If not you can copy the below code and comment/uncomment the **led** initialization. 
+
+```cpp
+
+//Use this line if you are using GLYPH C3
+int led = 1;
+
+//uncomment this line for GLYPH H2
+// int led = 0; 
+
+//uncomment this line for GLYPH C6
+//int led = 14;
+
+void setup() 
+{
+  pinMode(led, OUTPUT);     // set LED to be an output pin
+}
+  void loop() 
+{
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                // wait for a one second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);                // wait for a one second
+}
+
+```
+Next begin by plugging in your board to your computer, and wait a moment for it to be recognized by the OS. It will create a COM/serial port that you can now select from the `Tools > Port` menu dropdown and upload the sketch.
+
+The LED should start blinking!
+
+![pcbcupid_glyph_led_blinking](https://files.pcbcupid.com/Documentation/Boards/Examples/blink/PCBCUPID-onboard-led-blinking.avif)
+
+## Blinking of External LED
+
+A similar process can be followed to blink an external LED, but do remember to change the led LED number in the code to the pin number where an external led is connected. 
+Below you can see an example code which should help 
+
+```cpp
+
+int led = A2;               // LED is connected to A2 pin 
+
+void setup() 
+{
+  pinMode(led, OUTPUT);     // set LED to be an output pin
+}
+  void loop() 
+{
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                // wait for a one second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);                // wait for a one second
+}
+
+```
+Next begin by plugging in your board to your computer, and wait a moment for it to be recognized by the OS. It will create a COM/serial port that you can now select from the `Tools > Port` menu dropdown and upload the sketch.
+
+![PCBUCPID-plugin-glyph-board](https://files.pcbcupid.com/Documentation/Boards/Examples/blink/PCBCUPID-Plugin-glyph-board.avif)
+
+Once complete, the LED on the glyph board will begin blinking once every second! Try changing up the `delay()` timing on the code to change the rate at which the LED blinks.
+
+![pcbcupid_glyph_led_blinking](https://files.pcbcupid.com/Documentation/Boards/Examples/blink/PCBUCPID-LED-Blink-Animated.avif)
+

@@ -1,0 +1,48 @@
+---
+description: Standardized USB 4-in-1 Breakout board description.
+title: USB 4-in-1
+---
+
+A [USB 4 in 1 Hub](https://shop.pcbcupid.com/product/gb001/) board designed for signal conversion and development purposes. It breaks out key USB signals—such as VBUS, D+, D-, and GND—into accessible headers, making it ideal for prototyping, testing, debugging, and custom USB interface development.
+
+export const USB_4_in_1_Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB_4in1/USB-4in1_illustration.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/Breakouts/USB_4in1/4-in-1%20USB%20hub.avif', label: 'BOARD VIEW', id: 'board' },
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/usb-4in1.glb";
+
+}
+
+## Pin Configuration
+ 
+- **VBUS / 5V** : Provides +5V to the USB device plugged in
+- **D-** : USB Data Negative
+- **D+** : USB Data Positive
+- **GND** : Ground	
+
+## Key Features
+
+- Converts one USB interface type to another (e.g., USB to header/pins/terminal).
+- Provides easy access to USB signals (VBUS, D+, D-, GND).
+- Simple plug-and-play connectivity.
+- Compact and lightweight design.
+- Ideal for prototyping, testing, and development purposes.
+- No active circuitry, purely signal breakout/conversion.
+
+## Applications
+
+- USB signal testing and debugging.
+- Prototyping USB-based embedded systems.
+- Connecting USB lines to development boards.
+- Custom cable development and modification.
+- USB power extraction (5V) for small projects.
+- Lab testing and hardware validation.
+
+<Warning title="⚠️ Precaution Note">
+
+- Avoid connecting multiple devices simultaneously to prevent overload.
+- Use a powered USB hub when devices draw higher current.
+- Keep cable lengths short to avoid communication delays or voltage drops.
+
+</Warning>

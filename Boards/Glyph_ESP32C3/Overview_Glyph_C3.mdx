@@ -1,0 +1,96 @@
+---
+description: Introducing the Glyph ESP32-C3, a powerful microcontroller packed with features for your next IoT project. With the robust capabilities of the ESP32-C3 chip, the Spark is designed to provide reliable performance and extensive connectivity options in a compact form factor.
+title: Glyph-C3 Overview  
+---
+
+Introducing the Glyph-C3, a super efficient microcontroller development board packed with features for your next IoT project! With the robust capabilities of the ESP32-C3 chip, the Glyph-C3 is designed to provide reliable performance and extensive connectivity options in a compact form factor.
+
+export const GlyphC3Carousel = () => {
+  const IMAGES = [
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_ESP32C3-Overview_result.avif', label: 'ILLUSTRATION VIEW',id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/glyph_c3/GLYPH-C3-FRONT%20VIEW.avif', label: 'BOARD VIEW', id: 'board' }
+  ];
+  const MODEL_URL = "https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/esp32c3.glb";
+
+}
+
+<GlyphC3Carousel />
+
+- **Dimensions**: Measures 50.8mm x 22.8mm x 1.6mm (without headers soldered)
+- **Processor**: ESP32-C3 32-bit RISC-V single-core processor running at 160 MHz @ 3.3V logic and power
+- **RAM**: 400 KB SRAM
+- **Flash Memory**: 4 MB SPI FLASH 
+- **GPIO**: 15 GPIO pins with the following capabilities:
+  - 12-bit ADCs
+  - I2C
+  - SPI
+  - UART
+  - USB Serial
+
+   All the important peripherals, labeled for easy access.
+
+- **Power Management**:
+  - USB Type C connector for power, programming, and serial port debugging
+  - 3.3V regulator with 600mA peak current output
+  - Built-in lipoly/li-ion charger with charging status indicator LED
+  - Auto Switch between Battery & USB Power
+  - Ability to Measure Battery Capacity 
+  - Ability to Turn off the battery with the onboard slide switch
+  - Reverse Voltage protection with Diode
+- **Additional Feature**:
+  - On-board LED (Connected to GPIO1)
+  - On-board GLINK connector for easy integration with QWIIC, STEMMA QT compatible sensors & modules. 
+  - High Quality Reset and Bootloader button for easy access
+  
+
+### Native Bootloader and Programming
+
+The Glyph-C3 features a built-in USB bootloader that makes programming new firmware easy and keeps the cost of the board down. On first time use, hold down the BOOT button while plugging it into USB, and it will appear as COM PORT in your device Manager. If you face any issue related to hardware not detecting on your system, please check out our troubleshooting guide [here](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup#hardware-not-detecting).
+
+### Connectivity
+
+The Glyph-C3 excels in connectivity with its built-in Wi-Fi and Bluetooth support. This makes it ideal for IoT applications, where reliable wireless communication is crucial.
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_c3_connectivty_updated_result.avif" alt= "PCBCUPID_c3_connectivty_updated_result" width="250"/>
+</div>
+
+<br/>
+
+<Info>
+The wireless module on GLYPH board is CE & FCC Certified
+</Info>
+
+### Development Support
+
+The ESP32-C3 Glyph is supported by a variety of development environments, including:
+
+- **Arduino**
+- **MicroPython**
+- **ESP-IDF (Espressif IoT Development Framework)**
+
+<div class="centerImg">
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt= "PCBCUPID_arduino_espressif_micropython_result" width="350"/>
+
+</div>
+
+With extensive library support and a large community, getting started with the Glyph-C3 is straightforward.
+
+### Memory and Storage
+
+While the Glyph ESP32-C3 has 400KB onboard SRAM, it also relies on an external flash chip for program storage. On this board, there is 4 MB of flash memory, which is shared between the code, file storage and OTA.
+
+{/* ![ESP32-C3 Spark Angle](your_image_link_here) */}
+
+### ESP32-C3 Chip Features
+
+- **BluFi**
+- **RF Coexistence**
+- **ESP-BLE-MESH**
+- **ESP-WIFI-MESH**
+
+You can read more about it in [ESP32C3 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph_c3/PCBCUPID_ESP32C3_DATASHEET.pdf) and [ESP32C3 OFFICIAL](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/get-started/index.html) documentation.
+
+{/* ![ESP32-C3 Spark Header](your_image_link_here) */}
+
+---

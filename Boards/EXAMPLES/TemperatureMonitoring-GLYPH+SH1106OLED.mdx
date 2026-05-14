@@ -1,0 +1,222 @@
+---
+description: This is an example of a GLYPH-REST API Integration with OpenWeatherMap.
+title: REST API + OLED
+---
+# Temperature monitoring using OpenWeatherMap & GLYPH
+This guide will help you to set up a Temperature Monitoring system with a [GLYPH-C3](https://shop.pcbcupid.com/product/gd001/) that fetches Weather data and retrieve the Current Temperature data for a specified location using the OpenWeatherMap API and display it on the SH1106-OLED-Display.
+
+**OpenWeatherMap** is a popular weather data service that provides a variety of weather information, including current weather, forecasts, historical data, and climate information. It offers APIs that developers can integrate into their applications to retrieve weather data for specific locations. There are some key points to be remembered, they are:
+
+* **API (Application Programming Interface)**: An API allows different software applications to communicate with each other. In the context of OpenWeatherMap, it lets developers access weather data programmatically.
+
+* **API Key**:  It is a unique identifier assigned to each user when they sign up for OpenWeatherMap's services. It acts as a password to authenticate requests to the API, ensuring that the user has permission to access the data.
+
+* **Endpoint**: An endpoint is a specific URL within the API that corresponds to a particular function or resource.
+
+Let us consider the example of detecting the Temperature of Bangalore city. The API key inserted in the code below will be different for each user. This API key is also  present in OpenWeatherMap. The specific location for which we want to detect the temperature is also selected in OpenWeatherMap.
+
+ SH1106 OLED Display:
+The SH1106 is also a driver used in OLED displays, mostly in larger 1.3-inch OLED screens. Like the SSD1306, it also supports 128x64 pixels of visible screen space and works over I2C or SPI.
+However, the SH1106 has a slightly different memory setup — it actually has 132 columns in its internal memory instead of 128. That means there's a small mismatch between its memory and the visible screen. Because of this, if you use the same SSD1306 libraries with an SH1106 screen, the image might appear shifted, cut off, or not show at all.
+To fix this, you should use libraries like U8g2 or SH1106Wire, which are made to handle this offset and map the pixels correctly.
+
+1)Microcontroller Sends Commands & Data
+You connect the display to a microcontroller like an ESP32, Arduino, or GLYPH board using I2C or SPI.
+You write code like display.print("Hello").
+That gets converted into commands and image data.
+The microcontroller sends this over I2C or SPI to the SH1106 chip.
+
+2️) SH1106 Stores Data in Internal RAM
+Inside the SH1106 chip is display memory (called GDDRAM) — a kind of pixel buffer.
+It stores 132 columns × 64 rows of pixel data (even though only 128 columns are visible).
+Each pixel on the display is controlled by a single bit in this memory:
+1 means the pixel is ON (white)
+0 means the pixel is OFF (black)
+So when you send an image or text, the SH1106 stores that information in its memory.
+
+3️) Pixel Data is Mapped to the Display
+Here’s where SH1106 is a bit different from SSD1306:
+The first 2 columns of memory (column 0 and 1) are not visible on screen.
+Display starts from column 2 to column 129 — these 128 columns are what you see.
+So any image you send must be shifted by 2 columns to be centered properly.
+
+4️) SH1106 Continuously Refreshes the Screen
+The chip refreshes the OLED pixels many times per second using the data in memory.
+You don’t need to manage the refresh — the SH1106 does it automatically.
+It uses electrical signals to light up the pixels row by row, column by column (like scanning).
+
+5️) Screen Shows Your Image or Text
+Finally, the OLED pixels light up based on the data in memory, and you see your message, graphics, or sensor values on screen.
+
+## Step 1: Hardware Required
+
+1. Glyph Board
+2. SH1106 OLED Display
+
+## Step 2: Circuit Diagram
+
+![pcbcupid_oled_circuitdiagram](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_oled_disp_circuitdiagram.avif)
+
+## Step 3: Code Setup
+
+1. **Open Arduino IDE.**
+
+2. **Install the U8g2 library by going to `Sketch > Include Library > Manage Libraries` and search for **U8g2** library by olikraus**
+
+3. **Copy and paste the following code into the Arduino IDE:**
+
+```cpp
+#include <Wire.h>
+#include <WiFi.h>
+#include <ArduinoJson.h>
+#include <U8g2lib.h>
+
+#define SDA_PIN 4  
+#define SCL_PIN 5  
+
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, SCL_PIN, SDA_PIN);
+
+const char* ssid = "1111";
+const char* password = "keerti1234";
+String APIKEY = "871cd481558344e66f35315c8d1b2f65";
+String CityID = "1277333";  // Replace with your city ID
+WiFiClient client;
+const char* servername = "api.openweathermap.org";
+
+void setup() {
+    Serial.begin(115200);
+    WiFi.begin(ssid, password);
+    
+    u8g2.begin();
+    u8g2.clearBuffer();
+    u8g2.setFont(u8g2_font_5x8_tr);  // Use an even smaller font
+    u8g2.drawStr(0, 10, "Connecting...");
+    u8g2.sendBuffer();
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("\nConnected!");
+}
+
+void loop() 
+{
+    if (WiFi.status() != WL_CONNECTED) 
+    {
+        Serial.println("WiFi Disconnected. Reconnecting...");
+        WiFi.begin(ssid, password);
+        return;
+    }
+
+    if (client.connect(servername, 80)) 
+    {
+        client.println("GET /data/2.5/weather?id=" + CityID + "&units=metric&appid=" + APIKEY + " HTTP/1.1");
+        client.println("Host: api.openweathermap.org");
+        client.println("Connection: close");
+        client.println();
+    } else 
+    {
+        Serial.println("Connection failed");
+        return;
+    }
+
+    // Read response
+    String result;
+    bool jsonStarted = false;
+    while (client.connected() || client.available()) 
+    {
+        char c = client.read();
+        if (c == '{') jsonStarted = true;  // Start when JSON begins
+        if (jsonStarted) result += c;
+    }
+    client.stop();
+
+    Serial.println("Received JSON:");
+    Serial.println(result);  // Print the JSON response
+
+    // Parse JSON
+    StaticJsonDocument<512> doc;
+    DeserializationError error = deserializeJson(doc, result);
+    if (error) 
+    {
+        Serial.print("JSON Parsing Failed: ");
+        Serial.println(error.c_str());
+        return;
+    }
+
+    // Extract temperature, humidity, latitude, longitude, and pressure
+    int temperature = doc["main"]["temp"];
+    int humidity = doc["main"]["humidity"];
+    float latitude = doc["coord"]["lat"];
+    float longitude = doc["coord"]["lon"];
+    float pressure = doc["main"]["pressure"];  // Pressure in hPa
+    
+    // Print to Serial Monitor
+    Serial.printf("Temperature: %d°C\n", temperature);
+    Serial.printf("Humidity: %d%%\n", humidity);
+    Serial.printf("Latitude: %.2f\n", latitude);
+    Serial.printf("Longitude: %.2f\n", longitude);
+    Serial.printf("Pressure: %.2f hPa\n", pressure);
+
+    // Display temperature, humidity, latitude, longitude, and pressure on OLED
+    u8g2.clearBuffer();
+
+    // Use even smaller font size for display
+    u8g2.setFont(u8g2_font_5x8_tr);  // Smaller font
+
+    u8g2.setCursor(0, 10);
+    u8g2.printf("Temp: %d°C", temperature);
+
+    u8g2.setCursor(0, 20);
+    u8g2.printf("Humidity: %d%%", humidity);
+
+    u8g2.setCursor(0, 30);
+    u8g2.printf("Lat: %.2f", latitude);
+
+    u8g2.setCursor(0, 40);
+    u8g2.printf("Lon: %.2f", longitude);
+
+    u8g2.setCursor(0, 50);
+    u8g2.printf("Pressure: %.2f hPa", pressure);  // Display pressure
+
+    u8g2.sendBuffer();
+
+    delay(60000);  // Update every minute
+}
+
+```
+
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+   Do the following settings in your Arduino IDE,
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3` 
+
+<Warning>
+   For the `Pcbcupid GLYPH C3 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater than or equal to 3.1.0.
+</Warning>
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+- Click the upload button (➡️ icon) or use the shortcut `CTRL + U` in Arduino IDE to upload the code to the board.
+
+## Step 5: Observe the Output on the SH1106 OLED Display
+
+The SH1106 OLED Display should now show the entire Weather Details from OpenWeatherMap like Temperature, Latitude etc.
+
+![Circuit_Connections](https://files.pcbcupid.com/Documentation/Boards/Examples/openweathermap_oled/PCBCUPID_sh1106_oled_openweathermapweatherdetail.avif)

@@ -1,0 +1,125 @@
+---
+description: Detect gases using MQ2 Gas Sensor with GLYPH-C6 board.
+title: MQ2 Gas Sensor with GLYPH Board
+---
+# Using MQ2 Gas Sensor with GLYPH-C6 Board
+
+The MQ2 gas sensor is widely used for detecting LPG, methane, hydrogen, carbon monoxide, alcohol, smoke, and propane. It provides an analog voltage output that varies depending on the concentration of detected gases.
+
+The MQ2 sensor consists of a heating element and a gas-sensitive material (usually SnO₂ – Tin Dioxide).
+
+- Wide Gas Detection Range – Detects multiple gases, including LPG, CO, CH4, and H2.
+- High Sensitivity & Fast Response – Quickly reacts to gas concentration changes.
+- Analog & Digital Output – Provides proportional voltage output and a digital HIGH/LOW threshold output.
+- Low Power Consumption – Ideal for battery-powered devices.
+
+**Working Principle:**
+
+- The heating element maintains a high temperature (~200-300°C) to activate the sensor.
+- When target gases are present, the surface of SnO₂ reacts with the gas molecules.
+- This changes the resistance (Rs) of the sensor based on gas concentration.
+- The sensor outputs a voltage signal, which can be read using an ESP32-C6 ADC pin.
+
+## Step 1: Hardware Required
+   
+1) GLYPH Board 
+
+2) MQ2 Gas Sensor Module
+
+3) Jumper Wires
+
+4) Breadboard
+
+## Step 2: Circuit Diagram 
+
+Connect the MQ2 sensor to the GLYPH-C6 as follows:
+- **VCC** → 5V (Recommended for the internal heater)
+- **A0** → GPIO 4 (Analog Output)
+- **D0** → GPIO 5 (Digital Threshold Output)
+- **GND** → Ground
+
+![pcbcupid_mqsensor_circuit](https://files.pcbcupid.com/Documentation/Boards/Examples/mqgassensor/mqgassensor%20circuit%20diagram/mqgassensor_circuit.jpg)
+
+## Step 3: Code Setup
+
+```cpp
+#define MQ2_PIN 4  // ADC1 channel (GPIO 4 on GLYPH-C6)
+
+float Ro = 10.0;  // Ro value (calibrated in clean air, update if needed)
+const float RL = 3.3; // Load resistance in kilo ohms
+
+// LPG: y = -0.45*log10(x) + 1.3
+float getPPM_LPG(float rs_ro) {
+  return pow(10, ((log10(rs_ro) - 1.3) / -0.45));
+}
+
+// CO: y = -0.38*log10(x) + 1.55
+float getPPM_CO(float rs_ro) {
+  return pow(10, ((log10(rs_ro) - 1.55) / -0.38));
+}
+
+// SMOKE: y = -0.42*log10(x) + 0.93
+float getPPM_Smoke(float rs_ro) {
+  return pow(10, ((log10(rs_ro) - 0.93) / -0.42));
+}
+
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12); // 12-bit ADC for ESP32
+}
+
+void loop() {
+  int adcValue = analogRead(MQ2_PIN);
+  float voltage = adcValue * 3.3 / 4095.0;
+  float Rs = ((3.3 - voltage) * RL) / voltage; // Sensor resistance
+  float rs_ro = Rs / Ro;
+
+  float ppmLPG = getPPM_LPG(rs_ro);
+  float ppmCO = getPPM_CO(rs_ro);
+  float ppmSmoke = getPPM_Smoke(rs_ro);
+
+  Serial.print("ADC: "); Serial.print(adcValue);
+  Serial.print(" | V: "); Serial.print(voltage, 2);
+  Serial.print(" V | Rs/Ro: "); Serial.print(rs_ro, 2);
+  Serial.print(" | LPG: "); Serial.print(ppmLPG, 0); Serial.print(" ppm");
+  Serial.print(" | CO: "); Serial.print(ppmCO, 0); Serial.print(" ppm");
+  Serial.print(" | Smoke: "); Serial.print(ppmSmoke, 0); Serial.println(" ppm");
+
+  delay(2000);
+}
+
+```
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Plug the GLYPH board into your computer using a USB cable.
+   
+2. **Select the Board and Port**
+
+Tools > Board > esp32 > Pcbcupid GLYPH C6 
+
+Tools > Port and select the connected port.
+
+Tools > USB CDC on Boot > Enabled 
+
+   For the `Pcbcupid GLYPH C6` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater than or equal to 3.1.0.
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` is not enabled, you won't see any serial data in the Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+Click the upload button (➡️ icon) or press CTRL + U to upload the code.
+
+## Step 5: Observe the Output on the Serial Monitor
+
+ When you open Serial Monitor, you can see the Carbon Monoxide & Smoke Concentration displayed in parts per million(ppm) along with the ADC readings and corresponding voltage levels.
+
+![pcbcupid_mqsensor_serialmon](https://files.pcbcupid.com/Documentation/Boards/Examples/mqgassensor/mqgassensor_serialmon.avif)
+
+The sensor's response changes based on the surrounding gas concentration.

@@ -1,0 +1,226 @@
+---
+description: To perform an OLED display test 
+title: OLED Display
+---
+
+# OLED Display Test for Glyph using SH1106 & SSD1306
+
+## 1. Using SH1106 OLED Display
+
+![pcbcupid_sh1106](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_sh1106_introimage.avif)
+
+The SH1106 is an OLED driver IC commonly used in 128x64 pixel monochrome OLED displays. It can communicate with microcontrollers via I2C, SPI, or parallel interfaces. While similar to the SSD1306, it has some differences, particularly in memory mapping and buffer size.
+ It's made by Sino Wealth and is often found in 0.96", 1.3", and similar small OLED modules used in electronics projects.
+
+## 2. Using SSD1306 OLED Display
+
+![pcbcupid_ssd1306](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_ssd1306_introimage.avif)
+
+This guide demonstrates how to use an OLED display with the GLYPH Boards,initializing the display, drawing shapes, and displaying text like PCB Cupid and Generating PCB Cupid's Logo on the display,assuming you are using [GLYPH-C3](https://learn.pcbcupid.com/boards/glyph-c3/overview) (but any [GLYPH development board](https://shop.pcbcupid.com/product-category/development-boards/) from the ESP32 Series should work).
+
+The SSD1306 is a display driver IC made by Solomon Systech. It’s used to control monochrome OLED displays — most commonly the 0.96-inch 128x64 pixel modules used in electronics projects.
+The SSD1306 isn’t the screen itself — it’s the chip inside the display module that handles communication and controls the screen.
+
+ 1) How SSD1306 & SH1106 Work – Step-by-Step
+Both SSD1306 and SH1106 operate in similar ways, with just a few internal differences. Let’s explain the general process first:
+
+ 1. Microcontroller Sends Data
+Your microcontroller (like ESP32, Arduino, GLYPH board) sends commands and pixel data to the display through I2C or SPI interface.
+ There are two types of data:
+Commands – for things like turning the display on/off, setting contrast, clearing the screen, etc.
+Display data – tells the display which pixels to light up (image, text, graphics).
+
+ 2. Driver IC Stores the Data in Display RAM
+Each chip (SSD1306 or SH1106) has internal Display RAM (called GDDRAM):
+SSD1306 → 128 x 64 bits = 1024 bytes
+SH1106 → 132 x 64 bits = 1056 bytes
+ Each bit in the memory = 1 pixel (since the displays are monochrome: black or white)
+So when you send data like display.print("Hello"), it gets translated into pixel positions and stored in this internal RAM.
+
+ 3. Data is Transferred to OLED Panel
+The driver IC then continuously refreshes the screen using the data in its RAM.
+It lights up each pixel based on the bit value stored (1 = ON, 0 = OFF).
+It scans through the rows and columns using multiplexing.
+Think of it like a movie projector: the driver IC shows what’s in its memory onto the screen over and over.
+
+ 4. Refresh Cycle Happens Rapidly
+The display is refreshed dozens of times per second (usually 60–100 Hz), which keeps the image stable and flicker-free.
+You don’t have to manage this refresh manually — the driver chip does it automatically.
+
+ Differences in How They Work Internally:
+Feature	SSD1306	SH1106
+Display RAM Size	128 x 64 = 1024 bytes	132 x 64 = 1056 bytes (extra columns!)
+Column Mapping	Direct: column 0 = pixel 0	Offset: pixel starts at column 2
+Library Handling	Works easily with Adafruit_SSD1306	Needs manual offset in some libraries
+Visible Pixels	128 x 64	128 x 64 (but extra 4 columns unused)
+ In SH1106, since it has 132 columns but only 128 visible, the pixel data needs to be offset by 2 columns — that’s why SSD1306 libraries don’t work perfectly on it.
+ 
+ Key Differences :
+Screen Size: SSD1306 is usually in 0.96-inch displays; SH1106 is in 1.3-inch displays.
+Internal Memory: SSD1306 has 128 columns; SH1106 has 132 columns (with a 2-column shift).
+Compatibility: SSD1306 works great with Adafruit libraries; SH1106 needs different libraries like U8g2.
+Issues: If you try to use an SSD1306 library on an SH1106 screen, the output might be offset or wrong.
+Usage: Both display text, graphics, sensor data, etc., but you must use the right library for each.
+
+## Step 1: Hardware Required
+1. Glyph Board
+2. Either SH1106 or SSD1306 OLED Display  
+
+## Step 2: Circuit Diagram
+
+![pcbcupid_oled_circuitdiagram](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_oled_disp_circuitdiagram.avif)
+
+## Step 3: Code Setup
+
+1. **Open Arduino IDE.**
+
+2. **Install the U8g2 library by going to `Sketch > Include Library > Manage Libraries` and search for **U8g2** library by olikraus**
+
+3. **Copy and paste the following code into the Arduino IDE:**
+
+### Code for SH1106 OLED Display 
+
+```cpp
+#include <Arduino.h>
+#include <U8g2lib.h>
+#include <Wire.h>
+//Initialize OLED (SH1106 128x64)
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
+
+// PCBCupid Logo (Replace with actual generated XBM data)- This bitmap is generated by uploading the Logo directly to the lopaka.app website, where you can edit the image features, add text to it etc.
+static const unsigned char image_PCB_Cupid_logo_Design_logo_JPG_300722_V1_bits[] = {
+    0xfc,0xff,0xff,0xff,0x3f,0xff,0xff,0xff,0xff,0x7f,0xff,0xff,0xff,0xff,0xff,
+    0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
+    0xff,0xff,0xff,0xc3,0xff,0x0f,0x00,0x7f,0x00,0xfe,0x0f,0x00,0x3e,0x00,0xfc,
+    0x0f,0x00,0x1c,0x00,0xf8,0x0f,0x3f,0x1c,0x7e,0xf8,0x0f,0x7f,0x08,0xff,0xf0,
+    0x0f,0x7f,0x08,0xff,0xff,0x0f,0x7f,0x88,0xff,0xff,0x0f,0x3f,0x8c,0xff,0xf9,
+    0x0f,0x00,0x8c,0x7f,0xe0,0x0f,0x00,0x0e,0x3f,0xe7,0x0f,0x00,0x0f,0x3f,0xcf,
+    0x0f,0xff,0x1f,0x3e,0xcf,0x0f,0xff,0x1f,0x10,0xe6,0x0f,0xff,0x3f,0x00,0xe0,
+    0x0f,0xff,0x7f,0x00,0xf8,0xff,0xff,0xff,0x83,0xff,0xff,0xff,0xff,0xff,0xff,
+    0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
+    0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xfe,0xff,0xff,0xff,0xff,
+    0x00,0x00,0x00,0x00,0xff,0x00,0x00,0x00,0x00,0xfe,0x00,0x00,0x00,0x00,0xfc,
+    0x00,0x00,0x00,0x00,0xf8,0x00,0x00,0x00,0x00,0xf0,0x00,0x00,0x00,0x00,0xe0,
+    0x00,0x00,0x00,0x00,0xc0,0x00,0x00,0x00,0x00,0x80
+};
+
+void setup() {
+    u8g2.begin();
+}
+
+void loop() 
+{
+    u8g2.clearBuffer();
+    u8g2.setFontMode(1);
+    u8g2.setBitmapMode(1);
+    u8g2.drawXBM(42, 6, 40, 38, image_PCB_Cupid_logo_Design_logo_JPG_300722_V1_bits);
+    u8g2.setDrawColor(2);
+    u8g2.setFont(u8g2_font_timR10_tr);
+    u8g2.drawStr(30, 56, "PCB Cupid");
+    u8g2.sendBuffer();
+}
+```
+3. Go to the website named [Lopaka](https://lopaka.app/sandbox). Then do as in these Images:
+
+Step 1: Under the **Library** drop down box, select **u8g2** and set **display** to **128x64**
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_1.avif" alt= "OLED Display BITMAPgen1"/>
+
+Step 2: Now, Click on **Add Image** as shown by the arrow in the image below
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_2.avif" alt= "OLED Display BITMAPgen2"/>
+
+Step 3: Next, click on **Browse Files** and Select your Picture/Logo to Upload
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_3.avif" alt= "OLED Display BITMAPgen3" />
+
+Step 4: Now, adjust your Width & Height Sizes, enable Grayscale & set appropriate Brightness and Contrast Levels till your uploaded image in Lopaka becomes Clear
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_4.avif" alt= "OLED Display BITMAPgen4"/>
+
+Step 5: Now, select your uploaded image from **Current Projects**.Then click on the Icon named **Aa(String)** and type any text that you want to display along with your image
+* ![OLED Display BITMAPgen5](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_5.gif)
+
+Step 6: Under the Code tab, you can see the code generated corresponding to the uploaded picture's bitmap.Copy that code
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_6.avif" alt= "OLED Display BITMAPgen6" />
+
+Step 7: Paste the Code in your Arduino IDE as shown below
+* <img src="https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_lopaka_step_7.avif" alt= "OLED Display BITMAPgen7"/>
+
+### Code for SSD1306 OLED Display 
+
+1. **Install the **Adafruit SD1306** & **Adafruit GFX** Libraries by Adafruit by going to `Sketch > Include Library > Manage Libraries` and searching for these libraries**
+
+2. **Copy and paste the following code into the Arduino IDE:**
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+void setup() 
+{
+  Serial.begin(115200);
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;);
+  }
+
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(10, 10);
+  display.print("PCBCUPID");
+
+  // Set brightness level (0x00 = dim, 0xFF = bright)
+  display.ssd1306_command(SSD1306_SETCONTRAST);
+  display.ssd1306_command(0xFF); // Adjust this value (0x00 - 0xFF)
+
+  display.display();
+}
+
+void loop() 
+{
+  // Nothing needed here
+}
+```
+
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+   Do the following settings in your Arduino IDE,
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3` 
+
+<Warning>
+   For the `Pcbcupid GLYPH C3 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater than or equal to 3.1.0.
+</Warning>
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+- Click the upload button (➡️ icon) or use the shortcut `CTRL + U` in Arduino IDE to upload the code to the board.
+
+## Step 5: Observe Output on your OLED Display
+
+After uploading the code for SH1106 OLED Display to the GlyphC3 board, the SH1106 OLED displays the Logo of PCB CUPID along with the text **PCBCUPID**, both centrally aligned, like this:
+
+![pcbcupid_logo_display](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_sh1106_oled_pcbcupidlogo.avif)
+
+After uploading the code for SSD1306 OLED Display to the GlyphC3 board, the SSD1306 OLED displays the text **PCBCUPID**.
+
+![pcbcupid_sh1106](https://files.pcbcupid.com/Documentation/Boards/Examples/oled_display_test/PCBCUPID_ssd1306_introimage.avif)
+

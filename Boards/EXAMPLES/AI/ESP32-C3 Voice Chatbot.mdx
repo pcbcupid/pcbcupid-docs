@@ -1,0 +1,1080 @@
+---
+description: Build your own mini AI voice assistant using ESP32-C3, Deepgram, n8n, and Groq.
+title: ESP32-C3 Voice Chatbot
+---
+
+# ESP32 Voice Chatbot
+
+Think of this as your own **mini Alexa/Google Assistant**, but built by you. You press a button, speak something, and the AI replies back through the speaker.
+
+## How it Works? (The Simple Version)
+
+Even though it’s small, your ESP32 is performing a complex workflow:
+1. **ESP32** records your voice when you press the button.
+2. That audio is sent to **Deepgram** → converts speech to text.
+3. The text is sent to **n8n** → acts like a middleman.
+4. **n8n** sends it to **Groq AI** → generates a reply.
+5. The reply is sent back to **Deepgram** → converted into audio.
+6. **ESP32** receives the audio and plays it through the speaker.
+
+---
+
+## What You Need
+
+Before starting, make sure you have everything ready.
+
+### Hardware Required
+- **ESP32-C3 board** (your main device).
+- **I2S microphone** (to capture your voice).
+- **Small speaker** (to hear responses).
+- **USB cable** (for power + uploading code).
+
+![Circuit Diagram](https://files.pcbcupid.com/Documentation/Boards/Examples/AI/ESP32_Voice_Chatbot/ESP32_Voice_Chatbot_cktdiag.avif)
+
+<Tip>
+Basically: input (mic) → processing (ESP32) → output (speaker)
+</Tip>
+
+### Software
+- **VS Code** with **PlatformIO** extension.
+- **Node.js** (v18 or v20).
+- **n8n**: Workflow automation.
+- **Deepgram Accounts**: For voice (speech ↔ text).
+- **Groq Accounts**: For AI responses.
+
+<Warning>
+Keep your API keys safe! Without them, your device won’t “understand” or “talk”.
+</Warning>
+
+---
+
+## Software Setup
+
+### Step 1: Install Everything
+Take this step slow — this is your foundation.
+1. **Install VS Code**: This is where everything will happen.
+2. **Install PlatformIO**: Open VS Code → go to Extensions → Search **PlatformIO** and install it.
+3. **Install Node.js (v18 or v20)**: Required to run n8n.
+4. **Install n8n**: Open your terminal and run:
+   ```bash
+   npm install -g n8n
+   ```
+
+### Step 2: Get API Keys
+Now you’re connecting your project to real services.
+1. Go to **Deepgram** → create account → copy API key.
+2. Go to **Groq** → create account → copy API key.
+
+<Note>
+Think of API keys like passwords that allow your device to use these services.
+</Note>
+
+### Step 3: Setup n8n (The Brain)
+n8n is what connects everything together.
+
+1. **Start n8n**: Run this in your terminal:
+   ```bash
+   n8n start
+   ```
+   Open in browser: `http://localhost:5678`
+
+2. **Import Workflow**: 
+   - Go to **Workflows** → Click **Import**.
+   - Copy the JSON code below and paste it into the import box.
+   - Click **Save** and turn it **Active (ON)**.
+
+<details>
+<summary><b>Click to see n8n Workflow JSON</b></summary>
+
+```json
+{
+  "name": "ESP32 Voice Chatbot v12",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "esp32-voice",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [180, 300],
+      "webhookId": "esp32-voice-v11"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconsole.log('[N8N] received:', JSON.stringify(item.json).substring(0, 300));\nconst body = item.json?.body || item.json || {};\nconst query = body.query || item.json?.query || 'Hello';\nconsole.log('[N8N] query:', query);\nreturn [{ json: { transcript: String(query).trim() } }];"
+      },
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "Get Transcript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.1-8b-instant\",\n  \"temperature\": 0.7,\n  \"max_tokens\": 50,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a voice assistant. You MUST always reply in exactly ONE short sentence of 10 words or less. For jokes give the punchline only. No markdown, no lists, no long answers. Never say you cannot answer.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.transcript }}\"\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "33333333-3333-3333-3333-333333333333",
+      "name": "Groq LLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [620, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\nlet reply = '';\ntry {\n  reply = r.choices[0].message.content.trim();\n} catch(e) {\n  reply = 'I am not sure about that.';\n}\n\n// Hard truncate to 100 chars max to keep TTS fast\nif (reply.length > 100) {\n  reply = reply.substring(0, 100).trim();\n  // cut at last space to avoid mid-word cut\n  const lastSpace = reply.lastIndexOf(' ');\n  if (lastSpace > 50) reply = reply.substring(0, lastSpace);\n}\n\nif (!reply) reply = 'I am not sure about that.';\n\nconst transcript = $('Get Transcript').first().json.transcript;\nconsole.log('[Reply] transcript:', transcript);\nconsole.log('[Reply] reply:', reply);\nconsole.log('[Reply] reply length:', reply.length);\nreturn [{ json: { transcript: String(transcript), reply: String(reply) } }];"
+      },
+      "id": "44444444-4444-4444-4444-444444444444",
+      "name": "Get Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepgram.com/v1/speak?model=aura-asteria-en&encoding=linear16&sample_rate=16000&container=wav",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token 8e7808778ccb81f5b512ec63ff0cc745791a2b08"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.reply }}\"\n}",
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "audioData"
+            }
+          }
+        }
+      },
+      "id": "55555555-5555-5555-5555-555555555555",
+      "name": "Deepgram TTS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1060, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const tts = $input.first();\nconst reply = $('Get Reply').first().json.reply;\nconst transcript = $('Get Reply').first().json.transcript;\nconst audio = tts.binary?.audioData;\nif (!audio) {\n  console.error('[Build] No audio binary from TTS! TTS response:', JSON.stringify(tts.json).substring(0,200));\n  throw new Error('No audio from Deepgram TTS — check API key and reply length');\n}\nconsole.log('[Build] audio mime:', audio.mimeType, 'size:', audio.fileSize);\nreturn [{\n  json: { transcript: String(transcript), reply: String(reply) },\n  binary: { audioData: audio }\n}];"
+      },
+      "id": "66666666-6666-6666-6666-666666666666",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1280, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "firstIncomingItem",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "audio/wav"
+              },
+              {
+                "name": "X-Transcript",
+                "value": "={{ $json.transcript }}"
+              },
+              {
+                "name": "X-Reply",
+                "value": "={{ $json.reply }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "77777777-7777-7777-7777-777777777777",
+      "name": "Send Audio",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1500, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Get Transcript", "type": "main", "index": 0 }]]
+    },
+    "Get Transcript": {
+      "main": [[{ "node": "Groq LLM", "type": "main", "index": 0 }]]
+    },
+    "Groq LLM": {
+      "main": [[{ "node": "Get Reply", "type": "main", "index": 0 }]]
+    },
+    "Get Reply": {
+      "main": [[{ "node": "Deepgram TTS", "type": "main", "index": 0 }]]
+    },
+    "Deepgram TTS": {
+      "main": [[{ "node": "Build Response", "type": "main", "index": 0 }]]
+    },
+    "Build Response": {
+      "main": [[{ "node": "Send Audio", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "versionId": "12"
+}
+
+```
+</details>
+
+![Workflow](https://files.pcbcupid.com/Documentation/Boards/Examples/AI/ESP32_Voice_Chatbot/Voice_chatbot_workflow.avif)
+
+3. **Add Your API Keys**:
+   - Open **Groq node** → Replace the existing key with yours.
+   - Open **Deepgram node** → Replace with your key.
+
+4. **Test It (curl command)**:
+   Run this command in your terminal:
+   ```bash
+   curl -X POST http://YOUR_IP:5678/webhook/esp32-voice -d '{"query":"Hello"}'
+   ```
+   - **If you get audio** → everything is working!
+
+### Step 4: Setup ESP32 Code
+Now we move to the device itself.
+
+1. **Create Project Structure**:
+   Your folder should look like this:
+   ```text
+   voice-chatbot/
+   ├── lib/
+   │   └── PCBCUPID_NAU8325/   <-- Add the library here
+   ├── src/
+   │   └── main.cpp            <-- Your Arduino code
+   └── platformio.ini          <-- Settings file
+   ```
+
+2. **Configure platformio.ini**:
+   ```ini
+   [env:esp32-c3-devkitm-1]
+   platform = espressif32
+   board = esp32-c3-devkitm-1
+   framework = arduino
+   monitor_speed = 115200
+   ```
+
+2. **Add Required Library**:
+   Download the **NAU8325 library** and place it inside `lib/`. Without this, your speaker won’t work.
+
+3. **Full Arduino Source Code**:
+   Copy the code below into your `main.cpp` file.
+
+<details>
+<summary><b>Click to see full Arduino Code (C++)</b></summary>
+
+```cpp
+/*
+ * ESP32-C3 Voice Chatbot — PCBCupid Glyph-C3  v25
+ *
+ * v25 CHANGES from v24:
+ *   - VOL_BOOST reduced to 6 (cleaner, less distortion)
+ *   - Single speaker: LEFT channel has audio, RIGHT is silent
+ */
+
+#include <Arduino.h>
+#include <Wire.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
+#include <driver/i2s.h>
+#include <math.h>
+#include "PCBCUPID_NAU8325.h"
+
+// ─── YOUR SETTINGS ────────────────────────────────────────────
+const char* WIFI_SSID         = "kbjg";
+const char* WIFI_PASSWORD     = "33322kbjg";
+const char* N8N_HOST          = "192.168.0.100";
+const int   N8N_PORT          = 5678;
+const char* N8N_PATH          = "/webhook/esp32-voice";
+const char* DEEPGRAM_API_KEY  = "8e7808778ccb81f5b512ec63ff0cc745791a2b08";
+const char* DEEPGRAM_STT_HOST = "api.deepgram.com";
+// ──────────────────────────────────────────────────────────────
+
+// ─── PIN MAP ──────────────────────────────────────────────────
+#define MIC_SCK_GPIO    6
+#define MIC_WS_GPIO     7
+#define MIC_SD_GPIO     0
+#define SPK_BCK_GPIO   10
+#define SPK_DAT_GPIO   21
+#define SPK_LRCK_GPIO   3
+#define SPK_MCLK_GPIO   2
+#define I2C_SDA_GPIO    4
+#define I2C_SCL_GPIO    5
+#define BUTTON_GPIO     9
+// ──────────────────────────────────────────────────────────────
+
+// ─── AUDIO ────────────────────────────────────────────────────
+static const uint32_t SAMPLE_RATE = 16000;
+static const uint32_t MCLK_FREQ   = 256 * SAMPLE_RATE;
+#define MAX_REC_BYTES   64000
+#define WAV_HDR_SIZE    44
+#define VOL_BOOST       6
+#define STREAM_BUF      4096
+#define CHUNK_SIZE      1024
+#define FORCE_SHIFT     0
+#define TARGET_PEAK_MAX 26000
+// ──────────────────────────────────────────────────────────────
+
+i2s_channel_fmt_t micChannel = I2S_CHANNEL_FMT_ONLY_RIGHT;
+int               micShift   = 14;
+
+TwoWire          I2Cbus(0);
+PCBCUPID_NAU8325 nau(I2Cbus);
+bool             nauOK = false;
+
+uint8_t* streamBuf = nullptr;
+uint8_t* stereoBuf = nullptr;
+
+String serialInput = "";
+
+// ═══════════════════════════════════════════════════════════════
+//  MONO → SINGLE SPEAKER + BOOST
+//  LEFT  = audio, RIGHT = silent
+//  (swap if your board drives the other channel)
+// ═══════════════════════════════════════════════════════════════
+static size_t monoToStereoBoost(const uint8_t* mono, size_t monoBytes,
+                                 uint8_t* out) {
+  const int16_t* src = (const int16_t*)mono;
+  int16_t*       dst = (int16_t*)out;
+  size_t samples = monoBytes / 2;
+  for (size_t i = 0; i < samples; i++) {
+    int32_t v = (int32_t)src[i] * VOL_BOOST;
+    if (v >  32767) v =  32767;
+    if (v < -32768) v = -32768;
+    dst[i*2]   = (int16_t)v;  // LEFT  — audio
+    dst[i*2+1] = 0;            // RIGHT — silent
+  }
+  return monoBytes * 2;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  I2S
+// ═══════════════════════════════════════════════════════════════
+static void i2sUninstall() {
+  i2s_zero_dma_buffer(I2S_NUM_0);
+  i2s_driver_uninstall(I2S_NUM_0);
+}
+
+static void i2sInitMic(i2s_channel_fmt_t ch) {
+  i2s_config_t cfg = {
+    .mode                 = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
+    .sample_rate          = SAMPLE_RATE,
+    .bits_per_sample      = I2S_BITS_PER_SAMPLE_32BIT,
+    .channel_format       = ch,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .intr_alloc_flags     = ESP_INTR_FLAG_LEVEL1,
+    .dma_buf_count        = 4,
+    .dma_buf_len          = 256,
+    .use_apll             = false,
+    .tx_desc_auto_clear   = false,
+    .fixed_mclk           = 0
+  };
+  i2s_pin_config_t pins = {
+    .mck_io_num   = I2S_PIN_NO_CHANGE,
+    .bck_io_num   = MIC_SCK_GPIO,
+    .ws_io_num    = MIC_WS_GPIO,
+    .data_out_num = I2S_PIN_NO_CHANGE,
+    .data_in_num  = MIC_SD_GPIO
+  };
+  i2s_driver_install(I2S_NUM_0, &cfg, 0, NULL);
+  i2s_set_pin(I2S_NUM_0, &pins);
+  i2s_zero_dma_buffer(I2S_NUM_0);
+  delay(80);
+}
+
+static void i2sInitSpeaker() {
+  i2s_config_t cfg = {
+    .mode                 = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
+    .sample_rate          = SAMPLE_RATE,
+    .bits_per_sample      = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format       = I2S_CHANNEL_FMT_RIGHT_LEFT,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .intr_alloc_flags     = ESP_INTR_FLAG_LEVEL1,
+    .dma_buf_count        = 8,
+    .dma_buf_len          = 512,
+    .use_apll             = false,
+    .tx_desc_auto_clear   = true,
+    .fixed_mclk           = (int)MCLK_FREQ
+  };
+  i2s_pin_config_t pins = {
+    .mck_io_num   = SPK_MCLK_GPIO,
+    .bck_io_num   = SPK_BCK_GPIO,
+    .ws_io_num    = SPK_LRCK_GPIO,
+    .data_out_num = SPK_DAT_GPIO,
+    .data_in_num  = I2S_PIN_NO_CHANGE
+  };
+  i2s_driver_install(I2S_NUM_0, &cfg, 0, NULL);
+  i2s_set_pin(I2S_NUM_0, &pins);
+  i2s_zero_dma_buffer(I2S_NUM_0);
+  Serial.println("[SPK]  I2S speaker ready");
+}
+
+static void spkSilence(uint32_t ms) {
+  int16_t buf[256]; memset(buf, 0, sizeof(buf));
+  uint32_t end = millis() + ms;
+  while (millis() < end) {
+    size_t wr = 0;
+    i2s_write(I2S_NUM_0, buf, sizeof(buf), &wr, portMAX_DELAY);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  NAU8325
+// ═══════════════════════════════════════════════════════════════
+static bool nauBegin() {
+  I2Cbus.end(); delay(20);
+  I2Cbus.begin(I2C_SDA_GPIO, I2C_SCL_GPIO);
+  I2Cbus.setClock(100000);
+  delay(30);
+  return nau.begin(SAMPLE_RATE, 16, 256);
+}
+
+static void nauFullInit() {
+  for (int attempt = 1; attempt <= 5; attempt++) {
+    Serial.printf("[NAU]  Attempt %d...\n", attempt);
+    if (nauBegin()) {
+      nau.powerOn();             delay(300);
+      nau.setVolume(0xFF, 0xFF); delay(30);
+      nau.softMute(false);       delay(200);
+      nauOK = true;
+      Serial.println("[NAU]  OK vol=0xFF");
+      return;
+    }
+    delay(200);
+  }
+  Serial.println("[NAU]  FAILED");
+}
+
+static void nauRearm() {
+  Serial.println("[NAU]  Rearming...");
+  if (nauBegin()) {
+    nau.powerOn();             delay(300);
+    nau.setVolume(0xFF, 0xFF); delay(30);
+    nau.softMute(false);       delay(200);
+    nauOK = true;
+    Serial.println("[NAU]  OK");
+  } else {
+    Serial.println("[NAU]  Rearm FAILED");
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════
+static void buildWavHeader(uint8_t* h, uint32_t pcmBytes) {
+  uint32_t fileSize = pcmBytes + 36;
+  uint32_t byteRate = SAMPLE_RATE * 2;
+  uint16_t align=2, bits=16, ch=1, fmt=1;
+  uint32_t fmtSz=16;
+  memcpy(h,    "RIFF",4); memcpy(h+4,  &fileSize,   4);
+  memcpy(h+8,  "WAVE",4); memcpy(h+12, "fmt ",       4);
+  memcpy(h+16, &fmtSz,4); memcpy(h+20, &fmt,         2);
+  memcpy(h+22, &ch,   2); memcpy(h+24, &SAMPLE_RATE, 4);
+  memcpy(h+28, &byteRate,4); memcpy(h+32,&align,     2);
+  memcpy(h+34, &bits, 2); memcpy(h+36, "data",       4);
+  memcpy(h+40, &pcmBytes,4);
+}
+
+static uint32_t wavGetRate(const uint8_t* h) {
+  uint32_t r=0; memcpy(&r, h+24, 4); return r;
+}
+
+static void printSummary(uint8_t* pcm, uint32_t bytes,
+                         int32_t maxPeak, int shift, uint32_t ms) {
+  Serial.println("\n+--------------------------------------+");
+  Serial.printf( "|  Duration : %u ms  PCM: %u bytes\n", ms, bytes);
+  Serial.printf( "|  Peak     : %d (%.1f%%)  shift=%d\n",
+                 maxPeak, (maxPeak/32767.0f)*100.0f, shift);
+  Serial.print(  "|  Waveform : |");
+  const int bars=36;
+  int spb=max(1,(int)(bytes/2)/bars);
+  int16_t* p=(int16_t*)pcm;
+  for (int b=0;b<bars;b++) {
+    int32_t bp=0;
+    for (int s=0;s<spb;s++) {
+      int32_t a=abs((int32_t)p[b*spb+s]);
+      if(a>bp) bp=a;
+    }
+    Serial.print(" .:;+=xX"[min(7,(int)((bp*8)/32767))]);
+  }
+  Serial.println("|");
+  Serial.println("+--------------------------------------+");
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MIC CALIBRATION
+// ═══════════════════════════════════════════════════════════════
+void calibrateMic() {
+  if (FORCE_SHIFT > 0) {
+    micShift=FORCE_SHIFT; micChannel=I2S_CHANNEL_FMT_ONLY_RIGHT;
+    Serial.printf("[MIC]  Forced shift=%d\n", micShift); return;
+  }
+
+  int32_t* dma=(int32_t*)malloc(256*4);
+  if (!dma) { Serial.println("[MIC]  malloc failed"); return; }
+
+  i2sUninstall();
+
+  i2s_channel_fmt_t bestCh=I2S_CHANNEL_FMT_ONLY_RIGHT;
+  int32_t bestPeak=0;
+  i2s_channel_fmt_t chs[]={I2S_CHANNEL_FMT_ONLY_LEFT,
+                            I2S_CHANNEL_FMT_ONLY_RIGHT};
+  const char* chNames[]={"LEFT","RIGHT"};
+
+  Serial.println("[MIC]  Detecting channel...");
+  for (int c=0;c<2;c++) {
+    i2sInitMic(chs[c]);
+    int32_t peak=0;
+    for (int r=0;r<10;r++) {
+      size_t rd=0;
+      i2s_read(I2S_NUM_0,dma,256*4,&rd,portMAX_DELAY);
+      for (int i=0;i<(int)(rd/4);i++) {
+        int32_t a=abs((int32_t)((int16_t)(dma[i]>>11)));
+        if(a>peak) peak=a;
+      }
+    }
+    Serial.printf("[MIC]  %s peak=%d\n",chNames[c],peak);
+    i2sUninstall(); delay(30);
+    if (peak>bestPeak) { bestPeak=peak; bestCh=chs[c]; }
+  }
+  micChannel=bestCh;
+
+  Serial.println("[MIC]  >>> SPEAK NOW for gain calibration <<<");
+  delay(500);
+  for (int sh=11;sh<=22;sh++) {
+    i2sInitMic(micChannel);
+    int32_t peak=0;
+    for (int r=0;r<30;r++) {
+      size_t rd=0;
+      i2s_read(I2S_NUM_0,dma,256*4,&rd,portMAX_DELAY);
+      for (int i=0;i<(int)(rd/4);i++) {
+        int32_t a=abs((int32_t)((int16_t)(dma[i]>>sh)));
+        if(a>peak) peak=a;
+      }
+    }
+    i2sUninstall(); delay(20);
+    Serial.printf("[MIC]  shift=%d peak=%d\n",sh,peak);
+    if (peak<=TARGET_PEAK_MAX) { micShift=sh; break; }
+  }
+  free(dma);
+  Serial.printf("[MIC]  Final: ch=%s shift=%d\n",
+    micChannel==I2S_CHANNEL_FMT_ONLY_LEFT?"LEFT":"RIGHT",micShift);
+
+  i2sInitSpeaker();
+  nauRearm();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TONE TEST
+// ═══════════════════════════════════════════════════════════════
+void playToneTest() {
+  spkSilence(50);
+  int16_t buf[512];
+  for (int i=0;i<256;i++) {
+    int16_t s=(int16_t)(28000*sin(2.0*PI*1000.0*i/16000.0));
+    buf[i*2]   = s;   // LEFT only
+    buf[i*2+1] = 0;   // RIGHT silent
+  }
+  Serial.println("[TEST] Tone...");
+  uint32_t end=millis()+2000;
+  while (millis()<end) {
+    size_t wr=0;
+    i2s_write(I2S_NUM_0,buf,sizeof(buf),&wr,portMAX_DELAY);
+  }
+  spkSilence(50);
+  Serial.println("[TEST] Done");
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HTTP HEADERS
+// ═══════════════════════════════════════════════════════════════
+void readHeadersAndPrint(WiFiClient& client,
+                         String& outT, String& outR) {
+  outT=""; outR="";
+  while (client.connected()||client.available()) {
+    String line=client.readStringUntil('\n'); line.trim();
+    Serial.println("[HDR] "+line);
+    String lo=line; lo.toLowerCase();
+    if (lo.startsWith("x-transcript:")) outT=line.substring(line.indexOf(':')+1);
+    if (lo.startsWith("x-reply:"))      outR=line.substring(line.indexOf(':')+1);
+    if (line.length()==0) break;
+  }
+  outT.trim(); outR.trim();
+  Serial.println(">>> YOU  : "+outT);
+  Serial.println(">>> REPLY: "+outR);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PLAY AUDIO FROM WiFiClient
+// ═══════════════════════════════════════════════════════════════
+void playFromClient(WiFiClient& client) {
+  uint32_t timeout=millis()+10000;
+  while (!client.available()&&millis()<timeout) { delay(2); yield(); }
+  if (!client.available()) { Serial.println("[PLAY] No data"); return; }
+
+  spkSilence(50);
+
+  uint32_t totalPCM=0;
+  bool headerDone=false;
+  uint8_t hdrBuf[WAV_HDR_SIZE];
+  uint32_t hdrGot=0;
+  timeout=millis()+30000;
+
+  while (millis()<timeout) {
+    uint32_t tw=millis()+8000;
+    while (!client.available()&&millis()<tw) {
+      if (!client.connected()&&!client.available()) goto play_done;
+      delay(2); yield();
+    }
+    if (!client.available()) break;
+
+    String sl=client.readStringUntil('\n'); sl.trim();
+    if (sl.length()==0) continue;
+    uint32_t cLen=strtoul(sl.c_str(),nullptr,16);
+    Serial.printf("[CHK]  %u bytes\n",cLen);
+    if (cLen==0) break;
+
+    uint32_t rem=cLen; uint32_t t2=millis();
+    while (rem>0&&millis()-t2<15000) {
+      if (!client.available()) {
+        if (!client.connected()) goto play_done;
+        delay(1); yield(); continue;
+      }
+      size_t want=min((size_t)rem,(size_t)STREAM_BUF);
+      size_t rd=client.readBytes((char*)streamBuf,want);
+      if (!rd) { delay(1); yield(); continue; }
+      rem-=rd; t2=millis(); timeout=millis()+30000;
+
+      if (!headerDone) {
+        size_t need=WAV_HDR_SIZE-hdrGot;
+        size_t take=min(need,rd);
+        memcpy(hdrBuf+hdrGot,streamBuf,take);
+        hdrGot+=take;
+        if (hdrGot<WAV_HDR_SIZE) continue;
+        if (hdrBuf[0]!='R'||hdrBuf[1]!='I'||
+            hdrBuf[2]!='F'||hdrBuf[3]!='F') {
+          Serial.println("[PLAY] Bad header"); goto play_done;
+        }
+        uint32_t rate=wavGetRate(hdrBuf);
+        Serial.printf("[PLAY] WAV %u Hz\n",rate);
+        if (rate&&rate!=SAMPLE_RATE) i2s_set_sample_rates(I2S_NUM_0,rate);
+        headerDone=true;
+        if (rd>take) {
+          size_t sb=monoToStereoBoost(streamBuf+take,rd-take,stereoBuf);
+          size_t wr=0;
+          i2s_write(I2S_NUM_0,stereoBuf,sb,&wr,portMAX_DELAY);
+          totalPCM+=wr;
+        }
+        continue;
+      }
+      size_t sb=monoToStereoBoost(streamBuf,rd,stereoBuf);
+      size_t wr=0;
+      i2s_write(I2S_NUM_0,stereoBuf,sb,&wr,portMAX_DELAY);
+      totalPCM+=wr;
+    }
+    client.readStringUntil('\n');
+  }
+
+  play_done:
+  spkSilence(80);
+  i2s_set_sample_rates(I2S_NUM_0,SAMPLE_RATE);
+  Serial.printf("[PLAY] Done %u bytes\n",totalPCM);
+  Serial.printf("[MEM]  heap=%u\n",ESP.getFreeHeap());
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DEEPGRAM STT
+// ═══════════════════════════════════════════════════════════════
+String transcribeAudio(uint8_t* pcmBuf, uint32_t pcmLen) {
+  if (!pcmLen) return "";
+  uint8_t hdr[WAV_HDR_SIZE]; buildWavHeader(hdr,pcmLen);
+  uint32_t wavLen=WAV_HDR_SIZE+pcmLen;
+
+  WiFiClientSecure ssl; ssl.setInsecure(); ssl.setTimeout(30);
+  if (!ssl.connect(DEEPGRAM_STT_HOST,443)) {
+    Serial.println("[STT]  Connect FAILED"); return "";
+  }
+  ssl.printf(
+    "POST /v1/listen?model=nova-2&language=en&punctuate=true HTTP/1.1\r\n"
+    "Host: %s\r\nAuthorization: Token %s\r\n"
+    "Content-Type: audio/wav\r\nContent-Length: %u\r\nConnection: close\r\n\r\n",
+    DEEPGRAM_STT_HOST,DEEPGRAM_API_KEY,wavLen);
+  ssl.write(hdr,WAV_HDR_SIZE);
+  for (uint32_t s=0;s<pcmLen;) {
+    uint32_t n=min((uint32_t)CHUNK_SIZE,pcmLen-s);
+    ssl.write(pcmBuf+s,n); s+=n; yield();
+  }
+  Serial.printf("[STT]  Sent %u bytes\n",wavLen);
+
+  uint32_t t=millis()+20000;
+  while (!ssl.available()&&millis()<t) { delay(10); yield(); }
+  if (!ssl.available()) { ssl.stop(); return ""; }
+
+  String status=ssl.readStringUntil('\n'); status.trim();
+  Serial.println("[STT]  "+status);
+  if (status.indexOf("200")<0) { ssl.stop(); return ""; }
+
+  bool chunked=false; int clen=-1;
+  while (ssl.connected()||ssl.available()) {
+    String line=ssl.readStringUntil('\n'); line.trim();
+    if (!line.length()) break;
+    String lo=line; lo.toLowerCase();
+    if (lo.indexOf("transfer-encoding: chunked")>=0) chunked=true;
+    if (lo.startsWith("content-length:")) clen=lo.substring(15).toInt();
+  }
+
+  String body=""; body.reserve(2048);
+  if (chunked) {
+    uint32_t tout=millis()+20000;
+    while (millis()<tout) {
+      while (!ssl.available()&&millis()<tout) {
+        if (!ssl.connected()) goto stt_done; delay(2); yield();
+      }
+      String sz=ssl.readStringUntil('\n'); sz.trim();
+      if (!sz.length()) continue;
+      uint32_t cl=strtoul(sz.c_str(),nullptr,16); if (!cl) break;
+      for (uint32_t rem=cl;rem>0;) {
+        while (!ssl.available()) { delay(1); yield(); }
+        uint8_t tmp[256];
+        size_t rd=ssl.readBytes((char*)tmp,min((uint32_t)256,rem));
+        for (size_t i=0;i<rd;i++) body+=(char)tmp[i];
+        rem-=rd;
+      }
+      ssl.readStringUntil('\n'); tout=millis()+10000;
+    }
+  } else {
+    uint32_t lim=millis()+20000;
+    while (millis()<lim) {
+      while (ssl.available()) {
+        uint8_t tmp[256];
+        size_t rd=ssl.readBytes((char*)tmp,sizeof(tmp));
+        for (size_t i=0;i<rd;i++) body+=(char)tmp[i];
+        if (clen>0&&(int)body.length()>=clen) goto stt_done;
+      }
+      if (!ssl.connected()&&!ssl.available()) break;
+      delay(5); yield();
+    }
+  }
+  stt_done:
+  ssl.stop();
+  Serial.println("[STT]  "+body.substring(0,120));
+
+  const String key="\"transcript\":\"";
+  int idx=body.indexOf(key); if (idx<0) return "";
+  idx+=key.length();
+  String tr="";
+  for (int i=idx;i<(int)body.length();i++) {
+    char c=body[i];
+    if (c=='\\'&&i+1<(int)body.length()) {
+      char n=body[++i];
+      if (n=='"') tr+='"'; else if (n=='n') tr+=' '; else tr+=n;
+      continue;
+    }
+    if (c=='"') break; tr+=c;
+  }
+  tr.trim();
+  Serial.println("[STT]  >> "+tr);
+  return tr;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  WiFi
+// ═══════════════════════════════════════════════════════════════
+bool ensureWiFi() {
+  if (WiFi.status()==WL_CONNECTED) return true;
+  WiFi.disconnect(); delay(100);
+  WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
+  for (int i=0;i<40;i++) {
+    if (WiFi.status()==WL_CONNECTED) return true;
+    delay(500); Serial.print(".");
+  }
+  Serial.println(); return false;
+}
+
+void connectWiFi() {
+  Serial.printf("[WiFi] Connecting to %s",WIFI_SSID);
+  WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
+  for (int t=0;WiFi.status()!=WL_CONNECTED&&t<30;t++) {
+    delay(500); Serial.print(".");
+  }
+  if (WiFi.status()==WL_CONNECTED)
+    Serial.printf("\n[WiFi] IP: %s\n",WiFi.localIP().toString().c_str());
+  else Serial.println("\n[WiFi] FAILED");
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SEND → n8n → PLAY
+// ═══════════════════════════════════════════════════════════════
+bool sendTextToN8N(const String& text) {
+  if (!ensureWiFi()) return false;
+  WiFiClient client; client.setTimeout(30);
+  if (!client.connect(N8N_HOST,N8N_PORT)) {
+    Serial.println("[N8N]  Connect failed"); return false;
+  }
+  String safe=text; safe.replace("\"","\\\"");
+  String body="{\"query\":\""+safe+"\"}";
+  client.printf(
+    "POST %s HTTP/1.1\r\nHost: %s:%d\r\n"
+    "Content-Type: application/json\r\nContent-Length: %u\r\nConnection: close\r\n\r\n",
+    N8N_PATH,N8N_HOST,N8N_PORT,body.length());
+  client.print(body);
+  Serial.printf("[N8N]  >> %s\n",text.c_str());
+
+  uint32_t t=millis()+20000;
+  while (!client.available()&&millis()<t) { delay(10); yield(); }
+  if (!client.available()) { client.stop(); return false; }
+
+  String sl=client.readStringUntil('\n'); sl.trim();
+  Serial.println("[N8N]  "+sl);
+  if (sl.indexOf("200")<0) { client.stop(); return false; }
+
+  String tr,rp;
+  readHeadersAndPrint(client,tr,rp);
+  nauRearm();
+  playFromClient(client);
+  client.stop();
+  return true;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RECORD → STT → PLAY
+// ═══════════════════════════════════════════════════════════════
+bool recordTranscribeAndPlay() {
+  if (!ensureWiFi()) return false;
+
+  uint8_t* pcmBuf=(uint8_t*)malloc(MAX_REC_BYTES);
+  if (!pcmBuf) {
+    Serial.printf("[REC]  malloc failed heap=%u\n",ESP.getFreeHeap());
+    return false;
+  }
+
+  Serial.println("[REC]  Recording — release to stop");
+  i2sUninstall();
+  i2sInitMic(micChannel);
+
+  int32_t* dma=(int32_t*)malloc(256*4);
+  if (!dma) {
+    free(pcmBuf);
+    i2sUninstall(); i2sInitSpeaker(); nauRearm();
+    return false;
+  }
+
+  uint32_t written=0; int32_t maxPeak=0;
+  uint32_t recStart=millis(); int dots=0;
+
+  while (digitalRead(BUTTON_GPIO)==LOW && written+512<=MAX_REC_BYTES) {
+    size_t rd=0;
+    i2s_read(I2S_NUM_0,dma,256*4,&rd,portMAX_DELAY);
+    for (int i=0;i<(int)(rd/4)&&written+2<=MAX_REC_BYTES;i++) {
+      int16_t s=(int16_t)(dma[i]>>micShift);
+      memcpy(pcmBuf+written,&s,2); written+=2;
+      int32_t a=abs((int32_t)s); if(a>maxPeak) maxPeak=a;
+    }
+    if (++dots%4==0) Serial.print('.');
+    yield();
+  }
+  Serial.println(" [done]");
+  free(dma);
+
+  uint32_t dur=millis()-recStart;
+
+  // Restore speaker + rearm NAU immediately
+  // (~530ms settles during STT network call below)
+  i2sUninstall();
+  i2sInitSpeaker();
+  nauRearm();
+
+  if (written<3200) {
+    Serial.println("[REC]  Too short");
+    free(pcmBuf); return false;
+  }
+
+  printSummary(pcmBuf,written,maxPeak,micShift,dur);
+  Serial.printf("[MEM]  heap=%u\n",ESP.getFreeHeap());
+
+  String transcript=transcribeAudio(pcmBuf,written);
+  free(pcmBuf);
+
+  if (!transcript.length()) {
+    Serial.println("[STT]  Empty"); return false;
+  }
+  Serial.println(">> YOU: "+transcript);
+
+  return sendTextToN8N(transcript);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SETUP
+// ═══════════════════════════════════════════════════════════════
+void setup() {
+  Serial.begin(115200);
+  delay(300);
+  Serial.println("\n=== ESP32-C3 Voice Chatbot v25 ===");
+  Serial.printf("[MEM]  heap=%u\n",ESP.getFreeHeap());
+
+  streamBuf=(uint8_t*)malloc(STREAM_BUF);
+  stereoBuf=(uint8_t*)malloc(STREAM_BUF*2);
+  if (!streamBuf||!stereoBuf) {
+    Serial.println("[ERR]  Buffer alloc failed"); while(1);
+  }
+  Serial.printf("[MEM]  Buffers OK heap=%u\n",ESP.getFreeHeap());
+
+  pinMode(BUTTON_GPIO,INPUT_PULLUP);
+
+  i2sInitSpeaker();
+  nauFullInit();
+
+  Serial.println("[MIC]  >>> SPEAK for calibration <<<");
+  delay(800);
+  calibrateMic();
+
+  connectWiFi();
+
+  Serial.println("[TEST] Tone...");
+  playToneTest();
+  Serial.println("\n[READY] Hold BOOT to speak\n");
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LOOP
+// ═══════════════════════════════════════════════════════════════
+void loop() {
+  while (Serial.available()) {
+    char c=Serial.read();
+    if (c=='\n'||c=='\r') {
+      serialInput.trim();
+      if (serialInput.length()) {
+        sendTextToN8N(serialInput);
+        serialInput="";
+        Serial.println("[READY]");
+      }
+    } else serialInput+=c;
+  }
+
+  if (digitalRead(BUTTON_GPIO)==LOW) {
+    delay(30);
+    if (digitalRead(BUTTON_GPIO)==LOW) {
+      recordTranscribeAndPlay();
+      while (digitalRead(BUTTON_GPIO)==LOW) delay(10);
+      Serial.println("[READY]");
+    }
+  }
+
+  if (WiFi.status()!=WL_CONNECTED) connectWiFi();
+  delay(10);
+}
+```
+</details>
+
+4. **Update Your Settings**:
+   Inside `main.cpp`, update:
+   ```cpp
+   const char* WIFI_SSID = "YOUR_WIFI";
+   const char* WIFI_PASSWORD = "YOUR_PASSWORD";
+   const char* N8N_HOST = "YOUR_SERVER_IP";
+   const int N8N_PORT = 5678;
+   const char* DEEPGRAM_API_KEY = "YOUR_KEY";
+   ```
+
+### Step 5: Upload Code to ESP32
+Now bring your device to life.
+1. Connect ESP32 using USB.
+2. Open project in VS Code.
+3. Click **Upload** (or run `pio run --target upload`).
+
+### Step 6: First Boot & Monitor
+Open the **Serial Monitor** (115200 baud). You should see:
+`[READY] Hold BOOT to speak`
+
+👉 **This means WiFi is connected and the AI is ready to listen!**
+
+### Step 7: How to Use
+
+#### Voice Mode (Main Feature)
+1. **Hold** the BOOT button.
+2. **Speak** clearly into the microphone.
+3. **Release** the button.
+4. **Wait** a second for the AI response.
+
+<Tip>
+Keep your voice commands short (1–2 seconds) for the fastest response!
+</Tip>
+
+#### Text Mode (Testing)
+Type your message in the **Serial Monitor** and press **Enter**.
+
+![Result](https://files.pcbcupid.com/Documentation/Boards/Examples/AI/ESP32_Voice_Chatbot/Voice_chatbot_result_1.avif)
+
+![Result](https://files.pcbcupid.com/Documentation/Boards/Examples/AI/ESP32_Voice_Chatbot/Voice_chatbot_result_2.avif)
+
+---
+
+## ❗ Common Issues (Quick Fixes)
+
+| Issue | Check |
+| :--- | :--- |
+| **No Sound** | Check speaker wiring & amplifier logs. |
+| **No Response** | Ensure n8n is running & WiFi is connected. |
+| **Not Understanding** | Speak louder, hold button longer, check Deepgram API key. |
+| **Server Not Opening** | Check `http://YOUR_IP:5678` - fix server first. |
+
+---
+
+## Customization (Make It Yours)
+
+### Change AI Personality
+Inside n8n, update the prompt:
+`"You are a smart assistant. Reply in one short sentence."`
+
+### Adjust Volume
+Inside your code, locate and change:
+```cpp
+#define VOL_BOOST 6
+```
+
+Have fun with your mini AI Assistant!
