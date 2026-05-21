@@ -742,5 +742,37 @@
   ],
   "thumbnails": {
     "appearance": "dark"
+  },
+  "navbar": {
+    "links": [
+      {
+        "href": "https://spell.pcbcupid.com/",
+        "label": "Circuit Spell"
+      },
+      {
+        "href": "https://shop.pcbcupid.com/",
+        "label": "Shop"
+      },
+      {
+        "href": "https://learn.pcbcupid.com/",
+        "label": "Learn"
+      },
+      {
+        "href": "https://pcbcupid.com/articles",
+        "label": "Articles"
+      },
+      {
+        "href": "https://forum.pcbcupid.com/",
+        "label": "Forum"
+      },
+      {
+        "href": "https://pcbcupid.com/tools",
+        "label": "Tools "
+      },
+      {
+        "href": "https://events.pcbcupid.com/",
+        "label": "Events"
+      }
+    ]
   }
 }
