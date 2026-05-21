@@ -6,6 +6,18 @@
   "colors": {
     "primary": "#0D9373"
   },
+  "contextual": {
+    "options": [
+      "copy",
+      "chatgpt",
+      "claude",
+      "windsurf",
+      "mcp",
+      "cursor",
+      "vscode"
+    ],
+    "display": "toc"
+  },
   "navigation": {
     "tabs": [
       {
