@@ -1,0 +1,194 @@
+---
+description: "Read temperature and humidity from a DHT11 or DHT22 sensor on Glyph ESP32 boards using the One-Wire protocol with example Arduino code."
+title: "DHT Sensor One-Wire Communication"
+---
+# One Wire Communication using DHT22 & GLYPH
+
+One-wire communication is a serial communication protocol that enables data transfer between devices using a single data wire (along with ground). It allows bidirectional data exchange without requiring additional clock or synchronization lines, making it highly efficient for low-speed, low-power applications such as sensor interfacing.
+
+How One-Wire Communication Works:
+
+The communication follows a sequence of steps between a master (e.g., microcontroller) and slave (e.g., sensor).
+
+1. Initialization Phase
+The master device pulls the data line LOW for a specific duration (e.g., 480µs in DHT22).
+This signals the slave device to get ready for communication.
+
+2. Presence Response
+The slave device detects the start signal.
+It responds by pulling the data line LOW for a short time (e.g., 80µs) and then releases it back to HIGH.
+This indicates that the slave is ready to communicate.
+
+3. Data Transmission (Bit Encoding)
+Data is sent bit by bit using pulse width modulation (PWM):
+Bit ‘0’ → A long LOW pulse (~80µs)
+Bit ‘1’ → A short LOW pulse (~26µs)
+
+4. The receiver measures the duration of the LOW pulse to determine whether the bit is 0 or 1.
+The receiver reads the incoming bits, assembles them into bytes, and then processes the data accordingly.
+
+5. End of Communication
+Once all data is transmitted, the line is released to HIGH (idle state).
+
+![DHT22 Intro2](https://files.pcbcupid.com/Documentation/Boards/Examples/dht/PCBCUPID_dht22_side.avif)
+
+This guide will help you interface a DHT22 Sensor Module with a GLYPH board to read and display Humidity, Temperature and Heat Index of the surrounding air, assuming you are using [GLYPH-C3](https://learn.pcbcupid.com/boards/glyph-c3/overview/) (but any [GLYPH development board](https://shop.pcbcupid.com/product-category/development-boards/) from the ESP32 Series should work)
+
+The DHT22 sensor is a Digital sensor that measures Humidity values in Percentage in **Relative Humidity(20 to 90%)** and **Temperature values in degree Celsius(0 to 50°C)**. 
+
+**Relative humidity** is the ratio of water vapor in the air to the maximum amount of water vapor the air can hold.
+
+**Heat Index** is a calculated value that combines Air Temperature and Relative Humidity to estimate how hot it actually feels in a given location.
+
+DHT11/DHT22 uses a Capacitive Humidity sensor and a Thermistor to measure the air around it and outputs a Digital signal on the Data pin. It requires a power supply of 3 to 5.5 Volts DC.
+
+<Info>
+DHT22 is overall better in terms of performance & accuracy compared to DHT11
+</Info>
+
+## Step 1: Hardware Required
+
+1) GLYPH-C3 Board
+
+2) DHT22 Sensor
+
+3) 4.7k / 10k Ohm Resistor(Optional)
+ 
+4) Breadboard
+
+5) Jumper Wires
+
+## Step 2: Circuit Diagram
+
+You can use either the DHT22 Sensor or it’s Module.In the present example, we use the DHT22 Sensor.The Circuit diagram with DHT22 Sensor is given below:
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/Examples/dht/PCBCUPID_dht22_circuit%20diagram.avif" alt= "pcbcupid-dht22-circuit" width="600"/>
+</div>
+<br/>
+
+As shown in the figure, If you are using just the DHT22 Sensor, then it will have 4 pins, unlike the modules which expose only 3-pin.
+
+*	Connect pin 1 (on the left) of the sensor to +3.3V of the GLYPH board
+*	Connect pin 2 of the sensor to the DHTPIN D0 of the GLYPH board
+*	Pin 3 is a No-Connect (NC) Pin. So, no need to use that pin. This pin is not present in the DHT11 Sensor Module
+*	Connect pin 4 (on the right) of the sensor to GROUND of the GLYPH board (This is Pin 3 of the Module)
+
+* (Optional) Connect a 10K or a 4.7K Ohm **pull-up resistor** from pin 2 (data) to pin 1 (VCC or power pin) of the sensor - You require a pull-up resistor between the data wire and VCC because the DHT11 uses a **Bidirectional Communication system on a Single Wire**. When neither end is communicating, both ends of the link will be in **high impedance** mode - i.e., **input mode**. In that case, the signal will be **floating** and needs the pull-up to keep it in a **known state**. This is not needed if you are using a Sensor Module, as the Module already has an in-built pull-up resistor.
+
+## Step 3: Code Setup
+
+1. **Open Arduino IDE**
+2. **Install the Necessary  Libraries**
+
+To read from the DHT sensor, we’ll use the [DHT library from Adafruit](https://github.com/adafruit/DHT-sensor-library). To use this library you also need to install the [Adafruit Unified Sensor library](https://github.com/adafruit/Adafruit_Sensor). Follow these steps to install those libraries:
+
+- Open your Arduino IDE and go to `Sketch > Include Library > Manage Libraries`. The Library Manager should open.
+- Search for **Adafruit DHT** on the Search box and install the **DHT sensor library** by **Adafruit**.
+- After installing the Adafruit DHT library, search for **Adafruit Unified Sensor** library and install it.
+- After installing the libraries, restart your Arduino IDE.
+
+3. **Enter the following code into the Arduino IDE**
+
+```cpp
+// Importing the DHT Library of Adafruit
+#include "DHT.h"
+
+// ‘#define’ is a preprocessor directive and is a useful C++ component that allows the programmer to give a name to a constant value before the program is compiled. The compiler will replace references to these constants with the defined value at compile time and they don’t take up any program memory on the chip, unlike constants defined through variables (ie. const int variable_name = value)
+#define DHTPIN 9  // Defines the Digital pin that the DHT Sensor Data Pin is connected to. Here, it is connected to GPIO9, which is the Digital Pin D9. So, all instances of ‘DHTPIN’ are replaced by the value 9. If it doesn't work on D9, please try other GPIO Pins also
+
+#define DHTTYPE DHT22 // Defines DHT22 as the type of the DHT Sensor you are using and replaces all instances of ‘DHTTYPE’ with DHT22
+// #define DHTTYPE DHT11 // Defines DHT11 as the type of the DHT Sensor you are using and replaces all instances of ‘DHTTYPE’ with DHT11.If you are using a DHT11 Sensor, uncomment this line and replace this with the above line.
+
+DHT dht(DHTPIN, DHTTYPE);  // Creates a DHT Object using the defined DHTPIN and DHTTYPE
+
+void setup()
+{
+// Initialize the Serial Monitor Baud Rate as 9600 (you can also set it to 115200 if you need more number of serial printings per second)
+Serial.begin(9600);
+
+// Initializing the DHT sensor
+dht.begin(); // Initializing the defined DHT Object. This function is executed when the GLYPH C3 starts
+}
+
+void loop() 
+{
+// Wait a few seconds between measurements  
+delay(2000);
+
+// Reading temperature or humidity with DHT11 takes about 250 milliseconds.
+// Sensor readings may also be up to 2 seconds 'old', as DHT11 has a slow Sampling Rate
+
+float h = dht.readHumidity();  // Calling the function readHumidity() via the created DHT Object to read the Relative Humidity. This function returns a float value that represents the Relative Humidity as a percentage.
+
+// Read the Temperature as Celsius (the default)
+float t = dht.readTemperature();
+  
+//The function readTemperature() reads the Temperature and returns temperature in Celsius by default, but the parameter ‘true’ is passed as an argument to get the corresponding temperature in Fahrenheit also.
+float f = dht.readTemperature(true);
+
+  // The function isnan(x) is used to check if the value obtained from the DHT11 sensor is a NaN (Not a Number) value or not. The NaN values are used to identify undefined or non-representable values for floating-point elements, such as the square root of negative numbers or the result of 0/0.
+  // The parameter x for this function is always a floating-point value. isnan(x) returns a non-zero value (true) if x is a NaN value; and zero (false) otherwise. If the DHT11 sensor gives a NaN value, it can cause your code to malfunction.So, the condition if (isnan(h) || isnan(t) || isnan(f)) checks if any of the h, t or f values are a NaN(Meaning any of the reads Failed), then quickly exit and try the reads again.
+  if (isnan(h) || isnan(t) || isnan(f))
+  {
+   // F() is a macro that instructs the compiler to store the String that is passed as a parameter to the GLYPH C3’s Flash Memory, instead of the SRAM.This is a method for minimizing the amount of RAM that a sketch needs.Remember that GLYPH C3 has a Flash Memory of 4 MB, but only 320 KB of SRAM. 
+   Serial.println(F("Failed to read from DHT sensor!"));  // Printing that the read Failed to the Serial Monitor
+
+   return;  // return statement is used to exit the loop() function and return back to the hidden main() function that called it. The main() function then calls loop() again- so round and round it goes.
+  }
+
+// Computes the Heat Index in Fahrenheit (the default)
+float hif = dht.computeHeatIndex(f, h);
+// Computes Heat Index in Celsius by passing the parameter ‘false’ as an argument
+float hic = dht.computeHeatIndex(t, h, false);
+
+// Printing the Humidity, Temperature and Heat Index values onto the Serial Monitor
+Serial.print(F("Humidity: "));
+Serial.print(h);
+Serial.print(F("%  Temperature: "));
+Serial.print(t);
+Serial.print(F("°C "));
+Serial.print(f);
+Serial.print(F("°F  Heat index: "));
+Serial.print(hic);
+Serial.print(F("°C "));
+Serial.print(hif);
+Serial.println(F("°F"));
+}
+
+```
+
+## Step 4: Upload the Code
+
+1. **Connect the Board**
+
+*	Connect your GLYPH board to your computer
+   
+2. **Select the Board and Port**
+
+   Do the following settings in your Arduino IDE,
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3` 
+
+<Warning>
+   For the `Pcbcupid GLYPH C3 ` to appear under `Tools > Board > esp32`, the esp32 board version installed in the Arduino IDE should be greater or equal to 3.1.0.
+</Warning>
+
+   - `Tools > Port` and select the port connected to your GLYPH.
+   - `Tools > USB CDC on Boot >` ***Enabled*** 
+
+<Warning>
+ If `USB CDC on BOOT` not enabled, you won't be seeing any serial data on Arduino IDE. 
+</Warning>
+
+3. **Upload the Code**
+
+- Click the upload button (➡️ icon) or use the shortcut `CTRL + U` in Arduino IDE to upload the code to the board.
+
+## Step 5: Observe the Output on the Serial Monitor
+
+The Serial Monitor should start displaying the Humidity, Temperature and Heat Index values of the surrounding air like this:
+
+![pcbcupid_glyphled_dht_tempserialmon](https://files.pcbcupid.com/Documentation/Boards/Examples/dht/PCBCUPID_dht22-serialmon.avif)
+
+If you place your finger on the DHT11 sensor or blow some air onto the sensor (or even light a Flame Lighter and hold it near the DHT11 sensor), then you will see the readings change appropriately.

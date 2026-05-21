@@ -1,0 +1,113 @@
+---
+description: "Learn to assign existing footprints and create custom footprints in EasyEDA, linking schematic symbols to physical land patterns ready for PCB layout."
+title: "Assigning Footprints in EasyEDA"
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_4.webp
+---
+
+import { YouTubeEmbed } from "/snippets/YouTubeEmbed.jsx";
+
+
+# Assigning Footprints in EasyEDA
+
+![Assigning_Footprints_in_EasyEDA](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_4.webp)
+
+We know how to create custom symbols for components that aren’t found within [EasyEDA](https://easyeda.com/ "EasyEDA"). However, these symbols lack default footprints, which are essential for building any PCBs. So, now we’ll learn how to assign footprints to these symbols, along with creating your custom footprints using datasheets.
+
+let’s start by figuring out the default footprints assigned by [EasyEDA](https://easyeda.com/ "EasyEDA") for these symbols. This will help us understand the shape and size of the component, along with it’s placement on a PCB.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_intro%20img%201.avif)
+
+To do this, navigate to Tools > Footprint Manager and click on Footprint Manager, or use the shortcut Alt+F.
+
+In the pop-up window, we’ll see all the components used in the schematic, along with their default footprints. And if you look close enough, most of the components are based on the 0603 package, which is incredibly small! let’s first understand how the Footprint Manager works and how we can utilize it to make the PCB development process much easier.
+
+On the left pane, there is a list of all the components used in the schematic editor. The top and bottom panes illustrate how the symbol and the footprint are linked. Finally, the rightmost pane provides options to search for footprints within [EasyEDA](https://easyeda.com/ "EasyEDA") or those contributed by other users.
+
+To assign a footprint to a symbol, simply select the component and double-click on the desired footprint. It’s that simple!
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_footprint%20manage.avif)
+
+## EasyEDA: Datasheet Guidance and Custom Creation
+
+but what if you want to use a custom footprint that you’ve created? Well, that’s easy too!
+
+Close the current window and navigate to File > New > Footprint. This will open a new tab with tools for building a custom footprint.
+
+The first step in building any footprint is to check the datasheet and understand the type of component package we’ll be using, along with its dimensions and shape.
+
+In this case, if you open the IP5306IC datasheet, the first page reveals that the IC is based on the eSOP8L package. A quick Google search will lead us to the IC package wiki, which explains the difference between SOP and other available IC packages.
+
+You can dig deeper to better understand why these packages are used and their standard dimensions. However, these values are not standardized and can vary from one manufacturer to another. That’s why we have the eSOP instead of SOP. Therefore, it is always recommended to check the datasheet instead of blindly selecting a footprint for your IC.
+
+## Determining Footprint Dimensions from IC Datasheets
+
+Now, returning to the datasheet and scrolling down, we’ll find the package dimensions suitable for our IC. But this is the dimension of the IC, not the dimension of the footprint. Not all datasheets provide the dimension for the footprint, so we have to slightly modify this dimension to make a good footprint that has enough space to solder as well as place the component.
+
+Let’s start with the pad where the components will be soldered, and then build the rest of the footprint. So, to build the pad, we need to know the component lead dimension and In this particular datasheet, the lead dimension is separately marked as section B, with the dimensions ‘b’ and ‘c’.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_package%20info.avif)
+
+These represent the minimum and maximum variations in the size of the lead during manufacturing. As is known, this is the component dimension and not the footprint dimension. If we strictly stick to these values, we may end up with insufficient space for soldering. So, as a rule of thumb, we can multiply the maximum value by 1.5 to get the pad dimension.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_calculation.avif)
+
+## EasyEDA: Precision Pad Placement and Silk Layering
+
+let’s return to the footprint editor.
+
+To create the pad, use the pad tool and place the pad at the center of the document. This is crucial because all measurements will be relative to the center of the document as we work through the footprint.
+
+In the object panel, you can adjust the parameters of the pad as needed for our footprint. Let’s start with the layer. Since this is going to be an SMD component, set the layer to TopLayer only. This ensures that the pad will only reside on the top layer and won’t affect any other layer on the footprint.
+
+Next, set the number to ‘1’ as this will be our first pin. Then select the shape to match the component lead. In this case, let’s change the shape to a rectangle. And finally, here we can enter the width multiplied by 1.5 that we got from the table.
+
+To determine the height, return to the datasheet and check how long the pad needs to be. This is marked as ‘L’ in the datasheet. Multiply this value by 1.5 and enter the result in the object panel.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_pad%20placeent.avif)
+
+Once we have one pad, we can quickly replicate this for the rest of the pads by copying and pasting them at a distance ‘e’ marked on the datasheet. In our case, it’s 1.27mm. Here, we don’t need to multiply by 1.5, as these measurements are taken from the center of the lead.
+
+To ensure the accuracy of the placement, you can always use the object panel to set the precise distance between the leads.
+
+We have successfully built four pads on one side. Now, we just need to replicate this on the other side.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_replicating.avif)
+
+To determine the Y-axis distance, return to the datasheet and look at the ‘E’ value, which indicates the distance between the leads vertically. Let’s reduce the E value slightly, at least by half the L value, because EasyEDA calculates the distance from the center of the object.
+
+This completes the eight pads needed for the footprint. There’s just one final GND pad left to complete. To determine this value, return to the datasheet and use the ‘E2’ and ‘D’ values, multiplied by 1.5, to create the pad. Also, ensure the pad is centered.
+
+Once the footprint is done, let’s use the measurement tool to double check all the placement of the components, which is highly recommended.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_width%20measure.avif)
+
+We can stop the footprint at this point, but to make placement of the component during assembly easier, we can use the silk layer to draw the outline of the component. Also, draw a small notch using the circle tool near pad 1 to indicate the first pin.
+
+This process of silk layering is just for aesthetics and does not play any major role in the electrical properties of the PCB, so it’s up to you to design it however you like.
+
+![](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/Footprints/PCBCUPID_EASYEDA_final%20footprint.avif)
+
+## Comparing Custom and Default Footprints in EasyEDA
+
+Just like the symbol editor, the footprint is saved globally and is not visible under the project folder. To access that, we need to go back to the fooptrint editor and use the footprint assignment window.
+
+Now let’s see what the difference is between the custom footprint we built and the footprint that was defaulted within [EasyEDA](https://easyeda.com/ "EasyEDA").
+
+As you can see, they look very similar, but with slight variation in the size of the pad because we took the multiplication factor 1.5 arbitrarily and also because the silk layer looks much better with a notch on the default footprint.
+
+You can follow the same process not just to build an IC but also to build any type of component you would like using the [EasyEDA](https://easyeda.com/ "EasyEDA") footprint editor.
+
+You can watch the complete video tutorial here:
+
+
+This brings us to the end of the article. In the next article, we will discuss more about how we can convert all these connections and the assigned footprints on the schematic into a printed circuit board.
+
+keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/ "here")
+
+
+
+## Video Tutorial
+
+<YouTubeEmbed src="https://www.youtube.com/embed/zpE4JauUsGI" title="Custom Footprint in EasyEDA" />

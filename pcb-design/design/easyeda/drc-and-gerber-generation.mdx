@@ -1,0 +1,114 @@
+---
+description: "Run design rule checks in EasyEDA and export your PCB as Gerber files ready for manufacturing, including drill files and pick-and-place outputs."
+title: "EasyEDA DRC and Gerber Export"
+image: https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_6.webp
+---
+
+import { YouTubeEmbed } from "/snippets/YouTubeEmbed.jsx";
+
+
+# Performing DRC & Gerber Generation
+
+![Performing_DRC_&_Gerber_Generation](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_6.webp)
+
+We’ve successfully built a fantastic PCB using EasyEDA, but there are a few more steps before we can send it off for manufacturing. Now let’s see the steps for using DRC to identify and correct design errors and generate a Gerber file that can be used by any fabrication plant worldwide.
+
+Design rule checking (DRC) is an essential part of PCB development Its default design rules are configured to suit many popular manufacturers, so if you’ve followed the generic design guidelines for most of your routing and placement, you should have few to no errors when you run the DRC.
+
+Let’s see how many errors we encounter for this particular circuit
+
+Go to the toolbar and click on DRC. [EasyEDA ](https://easyeda.com/ "EasyEDA ")will then check for any mistakes made during the PCB design process and display the results in the right pane. As you can see, no errors are currently showing up here for me, but that might not be the case for you. So, let me first show you where the design rules are set and why they are set that way. Then we’ll look at how to fix those errors that we might face if we make changes to the design rules.
+
+![PCBCUPID_EASYEDA_drc](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_drc%20error%20check.avif)
+
+## Understanding Design Rules in EasyEDA for PCB Manufacturing
+
+To view the predefined design rules, go to the Design dropdown on the toolbar and click on Design Rules.
+
+This will open a popup with the default design rules and all the connections where these rules are applied.
+
+The values here might seem arbitrary, but they’re determined by the PCB fabrication plant and its capability to produce PCB. Since [EasyEDA](https://easyeda.com/ "EasyEDA") is owned by JLCPCB, we can check their capability list on their official page.
+
+Firstly, let’s look at the minimum trace width, which is 0.127mm. If we cross-reference this with [EasyEDA](https://easyeda.com/ "EasyEDA"), we have more clearance than required, i.e., 0.254 mm, which is excellent. Just because JLCPCB supports 0.127mm doesn’t mean every other manufacturer can handle the same clearance value. So it’s better to set the clearance a little higher than required.
+
+[img here]
+
+Similarly, if we compare the values for total clearance, via diameter, and via drill diameter, everything stands at a good value and more than the minimum requirement, which is excellent.
+
+Now if we go back to the design rule, we have an option called Track Length. This isn’t something defined by a fabrication house; rather, it’s a track length that we need to set for our tracks. Most of us won’t be using this until we’re working with circuits where we need to match impedances. So for now, let’s not worry about this.
+
+So far, this default design rule has been applied to all tracks on the circuit. But there might be situations where you want different design rules for different tracks and connections.
+
+![PCBCUPID_EASYEDA_design](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_design%20rules.avif)
+
+![PCBCUPID_EASYEDA_measures](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_measures%20alter.avif)
+
+## Creating and Applying Custom Design Rules in EasyEDA
+
+Luckily, we can do that as well; just click on the add button here to create a new empty rule. Let’s start by giving it a name; let’s name it ‘power’, so we can use these design rules for all power tracks. Then let’s set a minimum track width, clearance value, via diameter, and via drill diameter.
+
+We’ve added a new design rule called ‘power’, but this rule hasn’t been applied to any of our connections yet. To apply this rule to a connection, go to the scroll window and select the connection name that you’d like to change. Since we named it ‘power’, let us use the VCC connection as an example of how to apply this rule. Here, under ‘the’set rule’ dropdown, select ‘power’ and hit apply. This will apply the ‘power’ rule to VCC.
+
+![PCBCUPID_EASYEDA_new](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_new%20measures.avif)
+
+## Navigating Design Rule Creation and Error Fixing in EasyEDA
+
+Now we understand the design rules and how to create custom ones for your PCB within [EasyEDA](https://easyeda.com/ "EasyEDA"). Now, to test this new rule, simply click on settings and run the DRC. You’ll notice a lot of errors popping up just by adding an additional rule.
+
+Fixing these errors without disrupting the layout or routing can be challenging. So, for now, let’s remove this additional design rule, as our circuit is simple and we don’t need to complicate it with an additional design rule. However, let’s see how to fix errors that can occur during DRC.
+
+Let’s keep the changes made to the default design rule and hit the settings button at the bottom.
+
+Now, when we run the DRC, we have a few errors. Two of them are related to the spacing between the track and pad, and another one is related to the track and via.
+
+![PCBCUPID_EASYEDA_issue](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_issue%20solved.avif)
+
+## Streamlining PCB Manufacturing with EasyEDA’s Tools
+
+We can also see what the minimum spacing should be and what the current spacing is, so you can fix them.
+
+Just for demonstration purposes, instead of rerouting or adjusting the track, let’s simply reduce the track width from 0.5mm to 0.3mm. And you can see that the error is automatically fixed.
+
+Now let’s do that for the track as well.
+
+One important thing to remember when reworking tracks that already have a copper pour is that you need to rebuild the copper area after each change you make so that the copper pour is updated with the latest changes.
+
+After tinkering with it for a while, we will be able to eliminate all the errors.
+
+So, our board is now ready for manufacturing.
+
+The best part about using [EasyEDA](https://easyeda.com/ "EasyEDA") is how easy it is to place an order for manufacturing your design. Just click on the Gerber Fabrication Icon.
+
+This not only allows you to generate a Gerber file but also gives you a cost estimate for manufacturing your PCB. You can play around with this and see how changing the color of your solder mask or the quantity of PCBs affects the cost.
+
+But if you don’t want to use EasyEDA’s default service, you can just click on ‘generate Gerber’ and it will download a Gerber zip file that you can send to other manufacturers.
+
+![PCBCUPID_EASYEDA_gerber](https://files.pcbcupid.com/Documentation/PCB_Designing/EasyEDA/DRC_&_Gerber/PCBCUPID_EASYEDA_gerber%20generation.avif)
+
+## Ordering PCBs Made Simple
+
+We’ve completed our PCB, so let’s see how we can quickly place orders for it. Just click on the ‘order PCB’ button at the bottom.
+
+This will take you to JLCPCB’s website, where you can place your order for manufacturing your PCB.
+
+Here, things can get complicated very quickly because of all these options. But you only need to focus on a few things that will affect the cost of your PCB. This applies not just to this particular website but also to other PCB manufacturing websites as well. So make sure you understand which options and settings affect cost.
+
+Firstly, consider the number of PCBs. If you’re in a country with high import taxes on PCBs, I would suggest placing an order for a larger quantity to offset this cost; otherwise, it’s not worth paying twice as much in customs by ordering in small quantities.
+
+The next factor is different designs; since we’re not panelizing our board, we don’t have to worry too much about this either.
+
+Instead, check out the color option. This will affect both the cost and time it takes to manufacture your PCB, so select the default option if you’re looking for a cheaper and faster turnaround time.
+
+Then you can leave most of these options at their default settings and move on to the next order item: stencils. But getting a stencil for just one PCB would be very cost-inefficient. That’s why, in our next video, we’ll look at how we can panelize PCBs for more efficient manufacturing. But if you’re just sending it out for a few prototypes, go ahead and place your order for this PCB.
+
+You can watch the complete video tutorial here:
+
+
+Don't forget to Keep learning and keep creating!
+
+If you have any queries, please drop them [here](https://forum.pcbcupid.com/ "pcbcupid forum")
+
+
+## Video Tutorial
+
+<YouTubeEmbed src="https://www.youtube.com/embed/KfrlHHtZh7I" title="DRC and Gerber Generation" />

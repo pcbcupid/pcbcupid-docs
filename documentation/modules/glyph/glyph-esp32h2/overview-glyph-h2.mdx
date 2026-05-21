@@ -1,0 +1,141 @@
+---
+description: "Overview of the Glyph H2 development board: a RISC-V microcontroller with Bluetooth LE, Zigbee, and Thread for low-power mesh networking."
+title: "Glyph H2 Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+
+
+<ShopHeader title="Glyph H2 Overview" url="https://shop.pcbcupid.com/product/gd003/" />
+<ImgGallery modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/esp32h2.glb" images={[{url: "https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_esp32h2-overview_result.avif", label: "ILLUSTRATION VIEW", id: "illustration"}, {url: "https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pcbcupid-H2-board%20view.avif", label: "BOARD VIEW", id: "board"}]} />
+
+
+
+Introducing the Glyph H2, a super efficient microcontroller development board packed with features for your next IoT project! With the robust capabilities of the H2 chip, the Glyph H2 is designed to provide reliable performance and extensive connectivity options in a compact form factor.
+
+- **Dimensions**: Measures 50.8mm x 22.8mm x 1.6mm (without headers soldered)
+
+- **Processor**: 32-bit RISC-V single-core processor running at 96 MHz @ 3.3V logic and power
+
+- **RAM**: 320 KB SRAM
+
+- **Flash Memory**: 4 MB SPI FLASH
+
+- **GPIO**: 19 GPIO pins with the following capabilities:
+
+  - 12-bit ADCs
+  - I2C
+  - SPI
+  - UART
+  - USB Serial
+
+  All the important peripherals, labeled for easy access.
+
+- **Power Management**:
+
+  - USB Type C connector for power, programming, and serial port debugging
+  - 3.3V regulator with 600mA peak current output
+  - Built-in lipoly/li-ion charger with charging status indicator LED
+  - Auto Switch between Battery & USB Power
+  - Ability to Measure Battery Capacity
+  - Ability to Turn off the battery with the onboard slide switch
+  - Reverse Voltage protection with Diode
+
+**Additional Feature**:
+
+  - On-board LED (Connected to GPIO0)
+  - On-board GLINK connector for easy integration with QWIIC, STEMMA QT compatible sensors & modules.
+  - High Quality Reset and Bootloader button for easy access
+
+### Native Bootloader and Programming
+
+The Glyph H2 features a built-in USB bootloader that makes programming new firmware easy and keeps the cost of the board down. On first time use, hold down the BOOT button while plugging it into USB, and it will appear as COM PORT in your device Manager. If you face any issue related to hardware not detecting on your system, please check out our troubleshooting guide [here](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup#hardware-not-detecting).
+
+### Connectivity
+
+The Glyph H2 excels in connectivity with its built-in Bluetooth, Thread, Zigbee support. This makes it ideal for IoT applications, where reliable wireless communication is crucial.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_H2_CONNECTIVITY_result.avif" alt= "PCBCUPID_H2_CONNECTIVITY_result" width="300"/>
+
+</div>
+<br/>
+
+<Info>
+The wireless module on GLYPH board is CE & FCC Certified
+</Info>
+
+### Development Support
+
+The Glyph H2 is supported by a variety of development environments, including:
+
+- **Arduino**.
+- **MicroPython**.
+- **ESP-IDF (Espressif IoT Development Framework)**.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt= "PCBCUPID_arduino_espressif_micropython_result" width="350"/>
+
+</div>
+
+With extensive library support and a large community, getting started with the Glyph H2 is straightforward.
+
+### Memory and Storage
+
+While the Glyph H2 has 320KB onboard SRAM, it also relies on an external flash chip for program storage. On this board, there is 4 MB of flash memory, which is shared between the code, file storage and OTA.
+
+### ESP32-H2 Chip Features
+
+- **BluFi**
+- **RF Coexistence**
+- **ESP-BLE-MESH**
+- **ESP-WIFI-MESH**
+
+You can read more about it in [ESP32H2 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph_h2/PCBCUPID_ESP32H2_DATASHEET.pdf) and [ESP32H2 OFFICIAL](https://docs.espressif.com/projects/esp-idf/en/v5.3.1/esp32h2/get-started/index.html) documentation.

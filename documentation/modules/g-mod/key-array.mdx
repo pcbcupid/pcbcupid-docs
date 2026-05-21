@@ -1,0 +1,255 @@
+---
+description: 1×3 and 1×6 Push Button Module is a compact board with three independent tactile switches for providing digital input to microcontrollers.
+title: "Key Array"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <h1 style={{ margin: 0 }}>{title}</h1>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="1x3 Key Array Module" url="https://shop.pcbcupid.com/product/gm021/" />
+
+<ImgGallery modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/dev-anurag/GLB/gmod%20-1x3_push_button_array-.glb" images={[
+  { url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1x3_keyarray_illustration.avif", label: "ILLUSTRATION VIEW", id: "illustration" },
+  { url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1X3-pushbutton.avif", label: "BOARD VIEW", id: "board" }
+]} />
+
+The **1×3 Push Button Module** is a simple input device that combines three tactile switches on a single board. It allows users to give manual digital inputs (ON/OFF signals) to a microcontroller. Each button works independently, making the module suitable for menu navigation, mode selection, or basic control functions in embedded projects.
+
+### Pins Configuration
+
+- VCC – Power supply (3.3V or 5V).
+- GND – Ground.
+- OUT1 – Digital signal from Button 1.
+- OUT2 – Digital signal from Button 2.
+- OUT3 – Digital signal from Button 3.
+
+### Key Features
+
+- Three independent push buttons on a single module.
+- Designed with clear labeling for Button 1, Button 2, Button 3.
+- Each button typically connected with a pull-down/pull-up resistor (depending on design).
+- Standard 4-pin/5-pin header for easy interfacing.
+
+### Applications
+
+- Menu navigation (Up/Down/Select).
+- Multi-option input control.
+- Mode/Function selector in DIY electronics.
+- Robotics control panels.
+- Educational and prototyping projects.
+
+### Step 1: Hardware Required
+1) Glyph Boards
+2) 1×3 Push Button Module
+
+### Step 2: Circuit Diagram
+![Key Array Operation](https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1x3_Key_array_circuit-diagram.avif)
+
+### Step 3: Code Setup
+
+1. **Open Arduino IDE.**
+2. **Make sure to install the  library**
+3. **Copy and paste the following code into the Arduino IDE:**
+
+```cpp
+// Define pins (each button shares the same pin as its LED)
+int ledButton1 = 6;
+int ledButton2 = 10;
+int ledButton3 = 7;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  // --- Button 1 ---
+  pinMode(ledButton1, INPUT);
+  int state1 = digitalRead(ledButton1);
+  if (state1 == HIGH) {
+    Serial.println("Button 1 pressed → LED1 ON");
+    pinMode(ledButton1, OUTPUT);
+    digitalWrite(ledButton1, HIGH);
+  } else {
+    Serial.println("Button 1 not pressed → LED1 OFF");
+    pinMode(ledButton1, OUTPUT);
+    digitalWrite(ledButton1, LOW);
+  }
+
+  // --- Button 2 ---
+  pinMode(ledButton2, INPUT);
+  int state2 = digitalRead(ledButton2);
+  if (state2 == HIGH) {
+    Serial.println("Button 2 pressed → LED2 ON");
+    pinMode(ledButton2, OUTPUT);
+    digitalWrite(ledButton2, HIGH);
+  } else {
+    Serial.println("Button 2 not pressed → LED2 OFF");
+    pinMode(ledButton2, OUTPUT);
+    digitalWrite(ledButton2, LOW);
+  }
+
+  // --- Button 3 ---
+  pinMode(ledButton3, INPUT);
+  int state3 = digitalRead(ledButton3);
+  if (state3 == HIGH) {
+    Serial.println("Button 3 pressed → LED3 ON");
+    pinMode(ledButton3, OUTPUT);
+    digitalWrite(ledButton3, HIGH);
+  } else {
+    Serial.println("Button 3 not pressed → LED3 OFF");
+    pinMode(ledButton3, OUTPUT);
+    digitalWrite(ledButton3, LOW);
+  }
+
+  delay(100);
+}
+```
+
+### Step 4: Upload the Code
+
+1. **Connect the Board**
+   - Connect your GLYPH board to your computer
+2. **Select the Board and Port**
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3`
+3. **Upload the Code**
+   - Click the upload button (➡️ icon) or use the shortcut `CRTL + U` in Arduino IDE to upload the code to the board.
+
+### Step 5: Observe the Output
+
+---
+
+<ShopHeader title="1x6 Key Array Module" url="https://shop.pcbcupid.com/product/gm005/" />
+
+<ImgGallery modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/dev-anurag/GLB/gmod_1x6_push_button_array.glb" images={[
+  { url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1X6-pushbutton-illustration.avif", label: "ILLUSTRATION VIEW", id: "illustration" },
+  { url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1X6-pushbutton.avif", label: "BOARD VIEW", id: "board" }
+]} />
+
+The **1×6 Key Array Module** is a compact input device that integrates six tactile switches on a single board. Unlike individual digital buttons, this module uses a resistor network to generate distinct analog voltage levels for each key. When a button is pressed, the microcontroller reads a specific analog value, allowing it to identify which key was selected through a single analog input pin. This makes the module efficient for menu navigation, option selection, and multi-button control in embedded systems while minimizing the number of GPIO pins required.
+
+### Pins Configuration
+
+- VCC - Power supply (3.3V / 5V)
+- GND - Ground
+- KEY (Analog Output) – Analog signal representing the pressed button
+
+### Key Features
+
+- Six tactile switches on a single board
+- Single analog output (KEY pin) for detecting all buttons
+- Resistor ladder network design reduces GPIO usage
+- Compatible with 3.3V and 5V microcontrollers
+- Compact and easy-to-interface module
+- Cost-effective solution for multi-button input systems
+
+### Applications
+
+- Menu navigation systems
+- Mode selection in embedded devices
+- Human–Machine Interface (HMI) controls
+- IoT device configuration panels
+- DIY electronics and prototyping projects
+- Educational learning kits for ADC-based input handling
+
+### Step 1: Hardware Required
+1) Glyph Boards
+2) 1×6 Push Button Module
+
+### Step 2: Circuit Diagram
+
+![Key Array Operation](https://files.pcbcupid.com/Documentation/Boards/g-mod/Key_array/1x6_Key_array_circuit-diagram.avif)
+
+### Step 3: Code Setup
+
+1. **Open Arduino IDE.**
+2. **Make sure to install the  library**
+3. **Copy and paste the following code into the Arduino IDE:**
+
+```cpp
+#define KEY_PIN A2   // Analog pin
+
+void setup() {
+  Serial.begin(115200);
+}
+
+// Detect button from ADC value
+int getButtonFromAnalog(int val) {
+  if (val > 4000) return -1;          // No button pressed
+  else if (val < 200) return 1;       // K1 (around 20)
+  else if (val < 2700) return 2;      // K2 (around 2269)
+  else if (val < 3200) return 3;      // K3 (around 3034)
+  else if (val < 3600) return 4;      // K4 (around 3440)
+  else if (val < 3800) return 5;      // K5 (around 3704)
+  else return 6;                      // K6 (around 3880)
+}
+
+void loop() {
+  int analogValue = analogRead(KEY_PIN);
+  int button = getButtonFromAnalog(analogValue);
+
+  if (button != -1) {
+    Serial.print("Button ");
+    Serial.print(button);
+    Serial.println(" pressed");
+    delay(300);  // debounce
+  }
+}
+```
+
+### Step 4: Upload the Code
+
+1. **Connect the Board**
+   - Connect your GLYPH board to your computer
+2. **Select the Board and Port**
+   Do the following settings in your Arduino IDE,
+   - `Tools > Board > esp32 > Pcbcupid GLYPH C3`
+3. **Upload the Code**
+   - Click the upload button (➡️ icon) or use the shortcut `CRTL + U` in Arduino IDE to upload the code to the board.
+
+### Step 5: Observe the Output
