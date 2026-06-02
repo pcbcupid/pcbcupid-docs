@@ -1,5 +1,7 @@
 {
-  "pages": ["index"],
+  "pages": [
+    "index"
+  ],
   "name": "PCB Cupid",
   "favicon": "/images/favicon_PCBcupid.png",
   "theme": "mint",
@@ -113,6 +115,12 @@
                 ]
               },
               {
+                "group": "G-Kit",
+                "pages": [
+                  "documentation/modules/g-kit/soundbox"
+                ]
+              },
+              {
                 "group": "Breakout Boards",
                 "pages": [
                   "documentation/modules/breakout-boards/qwiic-2-in-1",
@@ -122,10 +130,6 @@
                   "documentation/modules/breakout-boards/usb-a-breakout-male",
                   "documentation/modules/breakout-boards/usb-c"
                 ]
-              },
-              {
-                "group": "G-Kit",
-                "pages": ["documentation/modules/g-kit/soundbox"]
               }
             ]
           },
@@ -138,7 +142,7 @@
         ]
       },
       {
-        "tab": "Guides",
+        "tab": "Examples",
         "pages": [
           {
             "group": "Basic",
@@ -179,7 +183,9 @@
           },
           {
             "group": "Bluetooth",
-            "pages": ["guides/bluetooth/bluetoothglyph"]
+            "pages": [
+              "guides/bluetooth/bluetoothglyph"
+            ]
           },
           {
             "group": "WiFi",
@@ -190,7 +196,9 @@
           },
           {
             "group": "Zigbee",
-            "pages": ["guides/zigbee/arduino-zigbee-blink"]
+            "pages": [
+              "guides/zigbee/arduino-zigbee-blink"
+            ]
           }
         ]
       },
@@ -236,7 +244,9 @@
           },
           {
             "group": "PCB Orders",
-            "pages": ["pcb-design/orders/ordering-from-lioncircuits-website"]
+            "pages": [
+              "pcb-design/orders/ordering-from-lioncircuits-website"
+            ]
           }
         ]
       }
