@@ -1,0 +1,85 @@
+---
+description: "Overview of the Glyph Mini RP2040 development board: a compact and high-performance microcontroller powered by the Raspberry Pi RP2040 chip."
+title: "Overview"
+sidebarTitle: "Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+<ShopHeader title="Glyph Mini RP2040 Overview" url="https://shop.pcbcupid.com/product/gdm001" />
+
+<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/glyph-mini-2040.avif" alt="Glyph Mini RP2040" />
+
+Introducing the Glyph Mini RP2040, a compact and high-performance microcontroller development board powered by the powerful RP2040 chip. Ideal for IoT projects, robotics, sensors, and advanced embedded systems, the Glyph Mini offers flexibility, speed, and modern connectivity—making it a perfect platform for innovation and rapid prototyping.
+
+### Features
+
+- **Dimensions**: Measures 18mm x 23.5mm without headers soldered in
+- **Processor**: Raspberry Pi RP2040 32-bit dual-core ARM Cortex-M0+ processor running up to 133 MHz @ 3.3V logic and power
+- **RAM**: 264 KB on-chip SRAM
+- **Flash Memory**: 8 MB on-board SPI Flash
+- **GPIO**: 20 multi-function GPIO pins
+
+All the important peripherals, labeled for easy access.
+
+### Power Management
+
+- **USB Type-C Connector** for power, programming, and serial debugging
+- **LDO Regulator** with up to 800mA peak output current
+
+<Note>
+This board lacks on-board battery protection, charging circuitry, or hot-swap logic. Battery connection requires external protection/switching.
+</Note>
+
+### Additional Features
+
+- **On-board Status LED** (Connected to GPIO16)
+- **BOOT and RESET buttons** for easy firmware access and programming
+
+### Bootloader and Programming
+
+The Glyph Mini RP2040 comes with a built-in USB UF2 bootloader, making firmware uploads simple and hassle-free. For first-time use, hold down the BOOT button while connecting the board to your computer via USB (or press RESET while holding BOOT). It will appear as a removable mass storage device, allowing you to drag and drop your `.uf2` firmware file.
+
+### Connectivity
+
+The RP2040 is a powerful microcontroller ideal for high-speed local processing and I/O. For wireless applications, it easily supports external modules such as:
+
+- **Bluetooth**: HC-05 / HC-06
+- **Wi-Fi**: ESP8266 / ESP32 (AT commands or co-processor)
+- **Long Range**: nRF24L01, LoRa, or XBee
+
+With multiple SPI, I2C, and UART interfaces, integrating these modules is straightforward and efficient.
+
+### Development Support
+
+The Glyph Mini RP2040 is supported by a robust ecosystem of development environments:
+
+- **MicroPython** (Official RP2040 support)
+- **CircuitPython** (Official Adafruit support)
+- **Arduino IDE**
+- **C/C++ (Pico SDK)** (Full support via VSCode)
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt="Development Environments" width="350"/>
+</div>
+
+With extensive library support, strong community backing, and rich documentation, getting started with the Glyph Mini RP2040 is simple and efficient for both beginners and advanced developers.
+
+### Memory and Storage
+
+The RP2040 features 264 KB of on-chip SRAM for fast data processing. In addition, it includes 8 MB of on-board SPI Flash shared between code, file storage (LittleFS), and application data.
+
+### RP2040 Chip Features
+
+- **Dual-core ARM Cortex-M0+**: Deterministic and high-performance processing.
+- **Up to 133 MHz**: Flexible PLL allows for overclocking if needed.
+- **Programmable I/O (PIO)**: Dedicated state machines for custom peripheral protocol handling.
+- **Low Power Modes**: Capable of achieving sleep currents around 2 mA.
+
+You can read more about it in [RP2040 DATASHEET](https://files.waveshare.com/upload/f/fd/Rp2040_datasheet.pdf)

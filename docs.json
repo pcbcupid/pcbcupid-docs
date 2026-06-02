@@ -87,6 +87,17 @@
                 ]
               },
               {
+                "group": "Glyph Mini",
+                "pages": [
+                  {
+                    "group": "Glyph Mini 2040",
+                    "pages": [
+                      "documentation/modules/glyph-mini/glyph-mini-2040/overview"
+                    ]
+                  }
+                ]
+              },
+              {
                 "group": "G-Mod",
                 "pages": [
                   "documentation/modules/g-mod/1-ch-relay",
