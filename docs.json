@@ -37,7 +37,8 @@
                   "documentation/welcome/prerequisites/cc-studio",
                   "documentation/welcome/prerequisites/glink"
                 ]
-              }
+              },
+              "documentation/welcome/tests"
             ]
           },
           {
