@@ -49,7 +49,7 @@
                 "group": "Glyph",
                 "pages": [
                   {
-                    "group": "GD001",
+                    "group": "Glyph C3",
                     "pages": [
                       "documentation/modules/glyph/glyph-esp32c3/overview-glyph-c3",
                       "documentation/modules/glyph/glyph-esp32c3/pinouts",
