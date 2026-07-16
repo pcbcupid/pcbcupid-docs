@@ -37,7 +37,8 @@
                   "documentation/welcome/prerequisites/esp-idf",
                   "documentation/welcome/prerequisites/smowcode-ide-setup",
                   "documentation/welcome/prerequisites/cc-studio",
-                  "documentation/welcome/prerequisites/glink"
+                  "documentation/welcome/prerequisites/glink",
+                  "documentation/welcome/prerequisites/setting-up-codex"
                 ]
               }
             ]
