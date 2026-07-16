@@ -1,0 +1,55 @@
+---
+description: "This guide walks you through setting up the PCB Cupid Model Context Protocol (MCP) server for Claude Code and Codex."
+title: "Setting Up MCP"
+---
+
+The **Model Context Protocol (MCP)** enables AI assistants to seamlessly connect to external data sources and tools. This guide will walk you through adding the **PCB Cupid Docs MCP server** to your workspace using either **Claude Code** or **Codex**.
+
+---
+
+## Setting Up MCP in Claude Code
+
+Follow these steps to integrate the PCB Cupid Docs MCP server with Claude Code:
+
+### Step 1: Open Your Terminal
+Launch your command line interface where Claude Code is configured.
+
+![Open Terminal for Claude](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/claude_code_adding-mcp.avif)
+
+### Step 2: Run the Add Command
+Execute the following command to add the server using HTTP transport:
+
+```bash
+claude mcp add --transport http pcbcupid-docs https://learn.pcbcupid.com/mcp
+```
+
+### Step 3: Verify the Connection
+Confirm that the server is successfully connected and that Claude has access to the tools.
+
+![Verify Claude Connection](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/claude_code_verify-connection.avif)
+
+![Example of Claude Code and MCP](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/claude_code_example.avif)
+---
+
+## Setting Up MCP in Codex
+
+Follow these steps to integrate the PCB Cupid Docs MCP server with Codex:
+
+### Step 1: Open Your Terminal
+Launch your command line interface where Codex is configured.
+
+![Open Terminal for Codex](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/codex_adding-mcp_1.avif)
+
+### Step 2: Run the Add Command
+Execute the following command to register the MCP server URL:
+
+```bash
+codex mcp add pcbcupid-docs --url https://learn.pcbcupid.com/mcp
+```
+
+### Step 3: Verify the Connection
+Confirm that Codex has successfully loaded the MCP toolset.
+
+![Verify Codex Connection](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/codex_verify-connection.avif)
+
+![Example of Codex and MCP](https://files.pcbcupid.com/Documentation/Boards/prerequisites/setting_up_mcp/codex_example.avif)
