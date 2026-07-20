@@ -24,10 +24,9 @@
       "copy",
       "chatgpt",
       "claude",
-      "windsurf",
-      "mcp",
       "cursor",
-      "vscode"
+      "vscode",
+      "mcp"
     ],
     "display": "toc"
   },
