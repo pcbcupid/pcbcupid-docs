@@ -271,10 +271,6 @@
     "family": "Space Grotesk",
     "weight": 400
   },
-  "banner": {
-    "content": "Our new documentation has been freshly fabricated and assembled with ❤️. We'd love to hear feedback.",
-    "dismissible": true
-  },
   "background": {
     "decoration": "gradient"
   },
