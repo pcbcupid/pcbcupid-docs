@@ -8,6 +8,17 @@
   "colors": {
     "primary": "#0D9373"
   },
+  "navbar": {
+    "links": [
+      { "label": "Circuit Spell", "href": "https://spell.pcbcupid.com" },
+      { "label": "Shop", "href": "https://shop.pcbcupid.com" },
+      { "label": "Learn", "href": "/" },
+      { "label": "Events", "href": "https://events.pcbcupid.com" },
+      { "label": "Forum", "href": "https://forum.pcbcupid.com" },
+      { "label": "Articles", "href": "https://pcbcupid.com/articles" },
+      { "label": "Tools", "href": "https://pcbcupid.com/tools" }
+    ]
+  },
   "contextual": {
     "options": [
       "copy",
