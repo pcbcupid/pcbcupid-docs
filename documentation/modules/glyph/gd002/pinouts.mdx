@@ -1,0 +1,48 @@
+# Pinout Diagram
+
+The Glyph-C6 features 28 through-hole pins arranged in two rows. The pin numbering and functions are as follows:
+
+## Top Row (Pins 1–16)
+
+| Pin | Name       | Type        | Description                          |
+|-----|------------|-------------|--------------------------------------|
+| 1   | RESET      | Bidirectional | Reset pin (active low)              |
+| 2   | +3.3V      | Power       | 3.3V power output                   |
+| 3   | +3.3V      | Power       | 3.3V power output                   |
+| 4   | GND        | Power       | Ground                               |
+| 5   | GPIO_9     | Bidirectional | General-purpose I/O                 |
+| 6   | GPIO_14    | Bidirectional | General-purpose I/O                 |
+| 7   | GPIO_15    | Bidirectional | General-purpose I/O                 |
+| 8   | GPIO_18    | Bidirectional | General-purpose I/O                 |
+| 9   | GPIO_19    | Bidirectional | General-purpose I/O                 |
+| 10  | GPIO_20    | Bidirectional | General-purpose I/O                 |
+| 11  | SCK        | Bidirectional | SPI clock                           |
+| 12  | MOSI       | Bidirectional | SPI master-out, slave-in            |
+| 13  | MISO       | Bidirectional | SPI master-in, slave-out            |
+| 14  | uRx        | Bidirectional | UART receive                        |
+| 15  | uTx        | Bidirectional | UART transmit                       |
+| 16  | GND        | Power       | Ground                               |
+
+## Bottom Row (Pins 17–28)
+
+| Pin | Name       | Type        | Description                          |
+|-----|------------|-------------|--------------------------------------|
+| 17  | +BATT      | Power       | Battery positive terminal            |
+| 18  | RESET      | Bidirectional | Reset pin (active low)              |
+| 19  | VBUS       | Power       | USB VBUS (5V input)                 |
+| 20  | GPIO_8     | Bidirectional | General-purpose I/O                 |
+| 21  | GPIO_7     | Bidirectional | General-purpose I/O                 |
+| 22  | GPIO_6     | Bidirectional | General-purpose I/O                 |
+| 23  | BATT_MSR   | Analog      | Battery voltage measurement (ADC)   |
+| 24  | GPIO_1     | Bidirectional | General-purpose I/O                 |
+| 25  | GPIO_2     | Bidirectional | General-purpose I/O                 |
+| 26  | GPIO_3     | Bidirectional | General-purpose I/O                 |
+| 27  | SDA        | Bidirectional | I²C data line                       |
+| 28  | SCL        | Bidirectional | I²C clock line                      |
+
+## Schematic Notes
+
+- **Power Pins:** Two +3.3V and two GND pins are provided for convenience. All power pins are internally connected.
+- **Reset Pins:** Two RESET pins (pins 1 and 18) are available; either can be used to reset the ESP32-C6.
+- **Battery Measurement:** The BATT_MSR pin connects to an ADC input on the ESP32-C6 for monitoring battery voltage.
+- **USB VBUS:** The VBUS pin provides 5V when the board is powered via USB.
