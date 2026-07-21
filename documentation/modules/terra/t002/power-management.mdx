@@ -1,0 +1,77 @@
+# T002 TerraLink A7672S EK - Power Management
+
+## Power Supply Options
+
+The board can be powered via two methods:
+
+### 1. USB Power (Default)
+- **Connector**: Micro-USB (5V input).
+- **On-board Regulator**: Converts 5V to module VBAT (3.4V – 4.2V).
+- **Current Capability**: Up to 2A (module peak current ~1.5A during transmission).
+- **Protection**: Overcurrent and reverse polarity protection (via fuse/diode).
+
+### 2. External Battery Power
+- **Input Voltage**: 3.4V – 4.2V (directly to module VBAT).
+- **Connection**: Through header pin 3 (GND) and a dedicated VBAT pin (not broken out on header, but available on module pads).
+- **Battery Type**: Single-cell Li-Po or Li-ion (3.7V nominal).
+- **Charging**: No on-board charger; use external charging circuit.
+
+## Power Supplies on Board
+
+| Supply | Voltage | Max Current | Source |
+|--------|---------|-------------|--------|
+| **VBAT** | 3.4V – 4.2V | 2A | USB regulator or external battery |
+| **VDD_EXT** | 1.8V | 100mA | Module internal LDO (for GPIO) |
+| **VDD_IO** | 1.8V | 50mA | Module internal (for UART/SPI/I2C) |
+
+> **Note**: All I/O pins are 1.8V logic (module VDD_IO). Level shifting required for 3.3V/5V microcontrollers.
+
+## Measuring Battery Voltage
+
+The module provides an internal ADC for battery monitoring (not broken out on this board). For external measurement:
+- Use a voltage divider (e.g., 100k/100k) on VBAT to an ADC pin of your host microcontroller.
+- Ensure divider output ≤ 3.3V (or 1.8V if using module GPIO).
+
+## Alternative Power Configurations
+
+### Low-Power Mode
+- Disable USB regulator when using battery.
+- Use module PSM (Power Saving Mode) via AT command.
+- Typical sleep current: < 1 mA.
+
+### Backup Power
+- Add a supercapacitor (1F – 10F) across VBAT and GND for short-term backup.
+- Use a Schottky diode to isolate USB and battery inputs.
+
+## Warnings
+
+1. **Voltage Limits**: Do not exceed 4.2V on VBAT. Higher voltage will damage the module.
+2. **Reverse Polarity**: Ensure correct polarity when connecting external battery. Reverse connection may destroy the board.
+3. **Current Spikes**: During LTE transmission, current can spike to 1.5A. Ensure power supply can handle this.
+4. **ESD Sensitivity**: The module is ESD-sensitive. Handle with care and use ESD protection.
+5. **Thermal**: The module can get hot during continuous transmission. Ensure adequate ventilation.
+6. **Antenna**: Never operate without an antenna connected. This can damage the RF front-end.
+
+## Power-On Sequence
+
+1. Apply power (USB or battery).
+2. Wait for VBAT to stabilize (> 3.4V).
+3. Pull PWRKEY low for > 1 second to start module.
+4. Monitor NETLIGHT for network registration (blinking pattern).
+5. Module is ready for AT commands.
+
+## Power-Off Sequence
+
+1. Send AT+CPOWD=1 to gracefully power down.
+2. Wait for NETLIGHT to turn off.
+3. Remove power.
+
+---
+
+## Downloads
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0">
+<a href="/api/download/footprint/T002-terralink-a7672s-ek" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/T002-terralink-a7672s-ek" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/T002-terralink-a7672s-ek/T002-terralink-a7672s-ek.step" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
