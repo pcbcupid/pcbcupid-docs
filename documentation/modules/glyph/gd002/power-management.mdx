@@ -1,0 +1,57 @@
+# Power Management
+
+The Glyph-C6 supports multiple power sources and includes an integrated battery charger for Li-Po batteries.
+
+## Power Sources
+
+### USB Power (VBUS)
+
+- **Voltage:** 5V DC from USB-C connector
+- **Current:** Up to 500 mA (USB 2.0 standard)
+- **Usage:** Powers the board and charges the battery simultaneously.
+
+### Battery Power (+BATT)
+
+- **Battery Type:** Single-cell Li-Po or Li-Ion (3.7V nominal)
+- **Charging IC:** MCP73831-2-OT
+- **Charge Voltage:** 4.20V (fixed)
+- **Charge Current:** Set by external resistor on PROG pin (default ~500 mA)
+- **Protection:** The charger includes thermal regulation and safety timers.
+
+## Power Supplies on Board
+
+| Supply | Voltage | Source          | Notes                          |
+|--------|---------|-----------------|--------------------------------|
+| VBUS   | 5V      | USB-C           | Direct from USB connector      |
+| +3.3V  | 3.3V    | On-board regulator | Powers ESP32-C6 and GPIOs    |
+| +BATT  | 3.7V    | Battery         | Direct battery connection      |
+
+## Measuring Battery Voltage
+
+The **BATT_MSR** pin (pin 23) provides a scaled voltage proportional to the battery voltage. This pin can be connected to an ADC input on the ESP32-C6 for battery monitoring.
+
+- **Scaling:** The voltage on BATT_MSR is typically 1/2 of the battery voltage (check schematic for exact divider).
+- **ADC Range:** ESP32-C6 ADC range is 0–3.3V. Ensure the divided voltage stays within this range.
+
+## Alternative Power Options
+
+- **External 3.3V:** The +3.3V pins can be used to supply the board directly (e.g., from a regulated 3.3V source). Do not exceed 3.6V.
+- **External 5V:** The VBUS pin can accept 5V from an external source (e.g., a power bank) even without USB data connection.
+
+## Warnings
+
+- **Reverse Polarity:** Do not reverse the battery connection. The +BATT pin is positive; GND is negative.
+- **Overvoltage:** Do not apply more than 5.5V to VBUS or more than 4.5V to +BATT.
+- **Short Circuits:** Avoid shorting +3.3V to GND. This can damage the voltage regulator.
+- **Battery Charging:** Only charge single-cell Li-Po/Li-Ion batteries with the built-in charger. Do not charge other battery chemistries.
+- **Heat:** The MCP73831 may get warm during charging. Ensure adequate ventilation.
+
+## Downloads
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0">
+<a href="https://spell-files.pcbcupid.com/pc-module/footprint/GD002-Glyph-C6/GD002-Glyph-C6.kicad_mod" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/symbol/GD002-Glyph-C6/GD002-Glyph-C6.kicad_sym" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GD002-Glyph-C6/GD002-Glyph-C6.step" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/wrl/GD002-Glyph-C6/GD002-Glyph-C6.wrl" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (VRML)</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD002-Glyph-C6/GD002-Glyph-C6.glb" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (GLB)</a>
+</div>
