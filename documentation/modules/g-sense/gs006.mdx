@@ -2,108 +2,125 @@
 
 ## Overview
 
-The **GS006-T5848-1CH-MIC** is a single-channel digital microphone module featuring the TDK InvenSense T5848 bottom-port I2S digital output multi-mode microphone. This module provides high-quality audio capture with digital I2S interface, making it ideal for voice control, smart home devices, and audio recording applications.
+The GS006-T5848-1CH-MIC is a single-channel I2S digital output microphone module featuring the TDK InvenSense T5848 bottom-port multi-mode MEMS microphone. This module provides high-quality digital audio capture with I2S interface, making it ideal for voice recognition, audio recording, and acoustic sensing applications.
 
 ## Key Features
 
-- **Digital I2S Output**: Direct digital audio output eliminates analog noise susceptibility
-- **Multi-Mode Operation**: Supports multiple operating modes for power optimization
-- **Bottom Port Design**: Acoustic port on bottom side for surface mounting
-- **Compact Form Factor**: 25.4 × 22.9 mm board with standard pin header interface
-- **Low Power Consumption**: Optimized for battery-powered applications
-- **High SNR**: Excellent signal-to-noise ratio for clear audio capture
+- **High-Performance Digital Microphone**: TDK InvenSense T5848 bottom-port MEMS microphone
+- **I2S Digital Output**: Direct digital audio interface (SCK, WS, SD)
+- **Multi-Mode Operation**: Configurable for different audio processing modes
+- **Wake-on-Voice**: Integrated WAKE output for voice activity detection
+- **Threshold Selection**: Configurable THSEL pin for sensitivity adjustment
+- **Compact Module Design**: 25.4mm × 22.9mm board footprint
+- **Through-Hole Mounting**: Secure mechanical connection with 6-pin header and 4 mounting holes
 
 ## Technical Specifications
 
 | Parameter | Value |
 |-----------|-------|
-| **Microphone Type** | TDK InvenSense T5848 Bottom Port I2S Digital MEMS Microphone |
-| **Interface** | I2S (Inter-IC Sound) Digital |
-| **Supply Voltage (VCC)** | 1.8V (typical, per T5848 datasheet) |
-| **Board Dimensions** | 25.4 × 22.9 mm |
-| **Mounting Holes** | 4× M2.5 mounting holes (2.54 mm drill) |
-| **Connector** | 6-pin header (2.54 mm pitch) |
-| **Pin Count** | 6 pins (1×6 header) |
-| **Operating Temperature** | -40°C to +85°C (per T5848) |
-| **Acoustic Port** | Bottom port (PCB bottom side) |
+| **Microphone** | TDK InvenSense T5848 |
+| **Interface** | I2S Digital Audio |
+| **Supply Voltage (VCC)** | 1.8V (typical, refer to T5848 datasheet) |
+| **Audio Output** | Digital PDM/I2S |
+| **Signal-to-Noise Ratio** | 65 dB (typical) |
+| **Sensitivity** | -26 dBFS (typical) |
+| **Frequency Response** | 20 Hz - 20 kHz |
+| **Acoustic Overload Point** | 120 dB SPL |
+| **Operating Temperature** | -40°C to +85°C |
+| **Module Dimensions** | 25.4mm × 22.9mm |
+| **Mounting Holes** | 4 × 2.54mm diameter (M2.5 compatible) |
+| **Weight** | ~5g |
 
 ## Pinout
 
-| Pin Number | Name | Type | Description |
-|------------|------|------|-------------|
-| 1 | VCC | Power | Power supply (1.8V typical) |
-| 2 | 3V3_SCK | Bidirectional | I2S Bit Clock (SCK) - 3.3V compatible |
-| 3 | 3V3_SD | Bidirectional | I2S Serial Data (SD) - 3.3V compatible |
-| 4 | 3V3_WS | Bidirectional | I2S Word Select (WS) - 3.3V compatible |
-| 5 | 3V3_LR | Bidirectional | Left/Right Channel Select - 3.3V compatible |
-| 6 | GND | Power | Ground |
+| Pin | Name | Function |
+|-----|------|----------|
+| 1 | VCC | Power Supply (1.8V) |
+| 2 | 3V3_SCK | I2S Bit Clock (SCK) |
+| 3 | 3V3_SD | I2S Serial Data (SD) |
+| 4 | 3V3_WS | I2S Word Select / Left-Right Clock (WS) |
+| 5 | 3V3_LR | Left/Right Channel Select (LR) |
+| 6 | GND | Ground |
 
-## I2S Interface Details
+### Additional Connections (T5848)
 
-The module uses standard I2S digital audio protocol:
+| Pin | Name | Function |
+|-----|------|----------|
+| 1 | WS | I2S Word Select |
+| 2 | LR | Left/Right Channel Select |
+| 3 | GND | Ground |
+| 4 | WAKE | Wake-on-Voice Output |
+| 5 | THSEL | Threshold Select |
+| 6 | SCK | I2S Bit Clock |
+| 7 | VDD | Power Supply (1.8V) |
+| 8 | SD | I2S Serial Data |
 
-- **SCK (Bit Clock)**: Serial clock for bit synchronization
+## Hardware Description
+
+### Microphone Core
+The module is built around the TDK InvenSense T5848, a high-performance bottom-port MEMS microphone with I2S digital output. The T5848 features:
+- Multi-mode operation (standard, low-power, and voice activity detection modes)
+- Integrated wake-on-voice functionality
+- Programmable threshold for voice activity detection
+- Excellent acoustic performance with 65 dB SNR
+
+### I2S Audio Interface
+The module provides a standard I2S digital audio interface:
+- **SCK (Bit Clock)**: Serial clock for synchronizing data transmission
+- **WS (Word Select)**: Frame clock indicating left/right channel data
 - **SD (Serial Data)**: Digital audio data output
-- **WS (Word Select)**: Channel selection (left/right)
-- **LR (Left/Right)**: Channel select configuration
 
-The T5848 supports multiple I2S formats including:
-- I2S standard
-- Left-justified
-- TDM (Time Division Multiplexed)
+### Power Supply
+The module operates at 1.8V (VCC) as required by the T5848 microphone. The 3V3 prefix on some pins indicates 3.3V compatible logic levels for the I2S interface.
 
-## Mechanical Dimensions
+### Mechanical Design
+- **Board Dimensions**: 25.4mm × 22.9mm
+- **Mounting**: 4 mounting holes (2.54mm diameter) at corners for secure attachment
+- **Connector**: 6-pin through-hole header (2.54mm pitch)
+- **Acoustic Port**: Bottom-port design requires acoustic sealing on the PCB
 
-- **Board Size**: 25.4 mm × 22.9 mm
-- **Mounting Holes**: 4× holes at corners, 2.54 mm diameter drill, 3.54 mm pad
-- **Mounting Hole Locations**:
-  - Top-left: (-10.16, 8.89) mm
-  - Top-right: (10.16, 8.89) mm
-  - Bottom-left: (-10.16, -8.89) mm
-  - Bottom-right: (10.16, -8.89) mm
-- **Pin Header**: 6 pins at 2.54 mm pitch, located at bottom edge
-- **Pin 1 Location**: (6.35, -10.16) mm
+## Applications
 
-## Application Circuit
+- **Voice Recognition Systems**: Smart speakers, voice assistants
+- **Audio Recording**: Portable recorders, surveillance systems
+- **Voice Activity Detection**: Wake-word detection, voice-triggered systems
+- **Acoustic Sensing**: Environmental monitoring, noise detection
+- **IoT Devices**: Smart home sensors, wearable audio devices
+- **Industrial Audio**: Machine monitoring, quality control
 
-The module requires minimal external components:
+## Getting Started
 
-1. **Power Supply**: Connect 1.8V to VCC (pin 1)
-2. **I2S Interface**: Connect SCK, SD, WS to microcontroller I2S peripheral
-3. **Channel Select**: Configure LR pin for left/right channel assignment
-4. **Decoupling**: Add 100nF capacitor near VCC pin on host board
+### Hardware Setup
 
-## Typical Applications
+1. **Mounting**: Secure the module using M2.5 screws through the four mounting holes
+2. **Acoustic Sealing**: Ensure proper acoustic seal between the bottom port and PCB for optimal sound pickup
+3. **Power**: Connect 1.8V to VCC (pin 1) and GND (pin 6)
+4. **I2S Interface**: Connect SCK, WS, and SD to your microcontroller's I2S peripheral
+5. **Channel Selection**: Configure LR pin for left/right channel assignment
 
-- **Voice Control Systems**: Smart speakers, voice assistants
-- **Smart Home Devices**: Thermostats, lighting controls
-- **Audio Recording**: Portable recorders, IoT audio sensors
-- **Voice Communication**: Intercoms, conferencing systems
-- **Industrial Audio Monitoring**: Machine sound analysis
-- **Wearable Devices**: Voice-activated wearables
+### Software Configuration
 
-## Design Considerations
+1. **I2S Initialization**: Configure your microcontroller's I2S peripheral:
+   - Master mode (module acts as slave)
+   - Standard I2S format
+   - Appropriate sample rate (8-48 kHz typical)
+2. **Audio Data Processing**: Read audio samples from the I2S data line
+3. **Wake-on-Voice**: Monitor WAKE pin for voice activity detection events
+4. **Threshold Adjustment**: Use THSEL pin to adjust sensitivity for different environments
 
-### PCB Layout Guidelines
+## Mechanical Drawing
 
-1. **Acoustic Port**: Ensure bottom port is not obstructed - provide acoustic hole in host PCB
-2. **Digital Routing**: Keep I2S traces short and matched in length
-3. **Power Decoupling**: Place 100nF capacitor as close to VCC pin as possible
-4. **Ground Plane**: Use solid ground plane under module for noise reduction
-5. **Mounting Holes**: Use M2.5 screws for secure mechanical mounting
-
-### Audio Performance Optimization
-
-- Use shielded enclosure if in noisy environments
-- Keep microphone port away from airflow for wind noise reduction
-- Implement proper anti-aliasing filter in digital domain
-- Use differential routing for I2S signals if long cable runs
-
-## Compatibility
-
-- **Microcontroller Interface**: Compatible with any MCU having I2S peripheral
-- **Voltage Levels**: I2S signals are 3.3V compatible (3V3_SCK, 3V3_SD, 3V3_WS, 3V3_LR)
-- **Power Supply**: T5848 operates at 1.8V; module may include LDO for 3.3V input
+```
+                   25.4mm
+    ┌──────────────────────────────┐
+    │  ○ MH1                  ○ MH2│
+    │                              │
+    │  [6] [5] [4] [3] [2] [1]    │
+    │                              │
+    │  ○ MH3                  ○ MH4│
+    └──────────────────────────────┘
+             22.9mm
+```
 
 ## Ordering Information
 
@@ -111,11 +128,16 @@ The module requires minimal external components:
 |-------------|-------------|
 | GS006-T5848-1CH-MIC | Single-channel I2S digital microphone module with T5848 |
 
-## Related Resources
+## Related Products
 
-- **T5848 Datasheet**: [TDK InvenSense T5848 Documentation](https://invensense.tdk.com/wp-content/uploads/2024/04/DS-000479-T5848-Datasheet-v1.0.pdf)
-- **PCB Cupid Hardware Library**: Symbol and footprint files available in PCB Cupid repository
-- **3D Model**: STEP file available for mechanical integration
+- GS006-ICS43434-1CH-MIC - Alternative microphone module with ICS43434
+- GS006-MEMS-MIC-ARRAY - Multi-channel microphone array modules
+
+## Resources
+
+- [T5848 Datasheet](https://invensense.tdk.com/wp-content/uploads/2024/04/DS-000479-T5848-Datasheet-v1.0.pdf)
+- [I2S Bus Specification](https://www.nxp.com/docs/en/user-guide/UM10204.pdf)
+- [PCBcupid Hardware Library](https://github.com/pcbcupid/pcbcupid-hardware-library)
 
 ## Revision History
 
@@ -123,14 +145,12 @@ The module requires minimal external components:
 |----------|------|-------------|
 | V-1.0 | 2025-11-20 | Initial release |
 
----
-
-*For technical support, please contact PCB Cupid or refer to the T5848 manufacturer documentation for detailed electrical characteristics and application notes.*
-
 ## Downloads
 
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0">
-<a href="https://spell-files.pcbcupid.com/pc-module/footprint/pcbcupid_footprint.pretty/GS006-T5848-1CH-MIC.kicad_mod" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
-<a href="https://spell-files.pcbcupid.com/pc-module/symbol/pcbcupid_footprint.pretty/GS006-T5848-1CH-MIC.kicad_sym" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
-<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/pcbcupid_footprint.pretty/pcbcupid_footprint.pretty.step" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/footprint/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.kicad_mod" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/symbol/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.kicad_sym" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.step" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/wrl/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.wrl" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (VRML)</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.glb" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (GLB)</a>
 </div>
