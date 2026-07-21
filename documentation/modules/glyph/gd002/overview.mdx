@@ -1,0 +1,32 @@
+# GD002-Glyph-C6
+
+The **Glyph-C6** is a compact, open-source development board designed by **PCBCUPID**, built around the **ESP32-C6** microcontroller. It is engineered for low-power IoT applications, offering a rich set of GPIOs, native USB-C connectivity, and an integrated Li-Po battery charger. The board’s 50.8 x 22.9 mm form factor makes it ideal for space-constrained projects.
+
+## Key Features
+
+- **Processor:** ESP32-C6 (RISC-V 32-bit single-core, up to 160 MHz)
+- **Wireless:** 2.4 GHz Wi-Fi 6 (802.11ax) and Bluetooth 5 (LE)
+- **USB Connectivity:** USB Type-C connector for power, programming, and serial communication
+- **Power Management:** Integrated MCP73831 Li-Po battery charger with charge status output
+- **GPIO:** 28 through-hole pins, including digital I/O, analog inputs, and dedicated communication interfaces
+- **Communication Interfaces:** SPI (SCK, MOSI, MISO), I²C (SDA, SCL), UART (uRx, uTx)
+- **Power Supply:** 3.3V operating voltage, with battery and USB power options
+- **Board Dimensions:** 50.8 x 22.9 mm
+
+## Development Support
+
+The Glyph-C6 is fully supported by the **Arduino IDE** and **ESP-IDF** framework. Programming is performed via the USB-C port, which provides both power and serial communication. The board includes a reset pin for easy debugging and flashing.
+
+## Pinout Overview
+
+The board exposes 28 pins in two rows of 14, with a 2.54 mm pitch. The pinout includes:
+
+- **Power:** +3.3V (2 pins), GND (2 pins), VBUS, +BATT
+- **Digital I/O:** GPIO_1, GPIO_2, GPIO_3, GPIO_6, GPIO_7, GPIO_8, GPIO_9, GPIO_14, GPIO_15, GPIO_18, GPIO_19, GPIO_20
+- **Analog:** BATT_MSR (battery voltage measurement)
+- **Communication:** SCK, MOSI, MISO (SPI), SDA, SCL (I²C), uRx, uTx (UART)
+- **Control:** RESET (2 pins)
+
+## License
+
+This board is released under the **CC-BY-SA** license, allowing for open-source hardware and software development.
