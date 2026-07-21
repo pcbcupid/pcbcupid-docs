@@ -796,5 +796,10 @@
     "category": "gsense",
     "docPath": "g-sense/gs006",
     "multiFile": false
+  },
+  "GD002": {
+    "category": "glyph",
+    "docPath": "glyph/gd002",
+    "multiFile": true
   }
 }
