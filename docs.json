@@ -801,5 +801,10 @@
     "category": "glyph",
     "docPath": "glyph/gd002",
     "multiFile": true
+  },
+  "T002": {
+    "category": "terra",
+    "docPath": "terra/t002",
+    "multiFile": true
   }
 }
