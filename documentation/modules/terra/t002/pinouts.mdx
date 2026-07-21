@@ -1,0 +1,98 @@
+# T002 TerraLink A7672S EK - Pinout Diagram
+
+## Board Pinout (7-Pin Header)
+
+The board provides a 7-pin header (pins 1-7) for external connections. Pin 1 is marked with a square pad.
+
+| Pin | Name | Type | Description |
+|-----|------|------|-------------|
+| 1 | **RST_KEY1** | Input | Reset button input (active low) |
+| 2 | **PWR_KEY1** | Bidirectional | Power key input (active low) |
+| 3 | **GND** | Power | Ground reference |
+| 4 | **G_TX** | Bidirectional | UART transmit (to module TXD) |
+| 5 | **G_RX** | Bidirectional | UART receive (to module RXD) |
+| 6 | **GP_2** | Bidirectional | General-purpose I/O (GPIO_2) |
+| 7 | **GP_1** | Bidirectional | General-purpose I/O (GPIO_1) |
+
+> **Note**: Pin 3 (GND) is a power pin. All other pins are 3.3V logic level (module VBAT level).
+
+## Module Pinout (A7672S)
+
+The A7672S module has 53 pins (P$1 to P$53). Below are the key signals broken out on the board:
+
+### Power & Control
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$1 | PWRKEY | Power In | Power-on key (pull low to start) |
+| P$16 | RESET | Power In | Reset input (active low) |
+| P$52 | NETLIGHT | Bidirectional | Network status indicator (LED) |
+
+### Main UART (AT Command Interface)
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$9 | U1_TXD | Bidirectional | Module transmit (connect to host RX) |
+| P$10 | U1_RXD | Bidirectional | Module receive (connect to host TX) |
+| P$7 | U1_CTS | Bidirectional | Clear to send (hardware flow control) |
+| P$8 | U1_RTS | Bidirectional | Request to send (hardware flow control) |
+| P$3 | U1_DTR | Bidirectional | Data terminal ready |
+| P$4 | U1_RI | Bidirectional | Ring indicator |
+| P$5 | U1_DCD | Bidirectional | Data carrier detect |
+
+### Debug UART
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$22 | UART_LOG_RX | Bidirectional | Debug log receive |
+| P$23 | UART_LOG_TX | Bidirectional | Debug log transmit |
+
+### Auxiliary UART
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$49 | U3_RXD | Bidirectional | Auxiliary UART receive |
+| P$50 | U3_TXD | Bidirectional | Auxiliary UART transmit |
+
+### SPI Interface
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$11 | SPI_CLK | Bidirectional | SPI clock |
+| P$12 | SPI_CS | Bidirectional | SPI chip select (active low) |
+| P$13 | SPI_MOSI | Bidirectional | SPI master out, slave in |
+| P$14 | SPI_MISO | Bidirectional | SPI master in, slave out |
+
+### I2C Interface
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$37 | CI2C2_SDA | Bidirectional | I2C data line |
+| P$38 | CI2C2_CLK | Bidirectional | I2C clock line |
+
+### General-Purpose I/O
+
+| Pin # | Name | Type | Description |
+|-------|------|------|-------------|
+| P$19 | GPIO_1 | Bidirectional | General-purpose I/O 1 |
+| P$26 | GPIO_2 | Bidirectional | General-purpose I/O 2 |
+| P$48 | GPIO_3 | Bidirectional | General-purpose I/O 3 |
+| P$53 | GPIO_4 | Bidirectional | General-purpose I/O 4 |
+
+## Board Dimensions & Mounting
+
+- **Board Size**: 63.5 mm x 45.7 mm (2.5" x 1.8")
+- **Mounting Holes**: 4 x M2.5 (or 3.54 mm diameter) at corners:
+  - MH1: (-29.21, -20.32) mm
+  - MH2: (-29.21, 20.32) mm
+  - MH3: (29.21, -20.32) mm
+  - MH4: (29.21, 20.32) mm
+- **Header Pitch**: 2.54 mm (0.1")
+
+## Schematic Notes
+
+- All module pins are 3.3V logic (VBAT level).
+- PWRKEY and RESET have internal pull-ups; external pull-down for activation.
+- NETLIGHT is open-drain; connect an LED with series resistor to VBAT.
+
+---
