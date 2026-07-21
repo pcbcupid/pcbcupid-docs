@@ -1,0 +1,135 @@
+# GS006-T5848-1CH-MIC - I2S Digital Output Multi-Mode Microphone Module
+
+## Overview
+
+The **GS006-T5848-1CH-MIC** is a compact digital microphone module featuring the TDK InvenSense T5848 bottom-port I2S digital output multi-mode microphone. This module provides a complete audio sensing solution with I2S digital interface, making it ideal for voice capture, audio recording, and sound detection applications.
+
+The module integrates the T5848 microphone with all necessary passive components and a 6-pin header interface, enabling easy integration with microcontrollers and development boards.
+
+## Key Features
+
+- **High-performance digital microphone** with I2S output
+- **Multi-mode operation** for flexible power/performance trade-offs
+- **Bottom-port design** for optimal acoustic performance
+- **Standard 6-pin header interface** for easy integration
+- **Compact board design** with mounting holes for secure installation
+- **3.3V operation** compatible with common logic levels
+- **I2S digital interface** for direct connection to audio processors
+
+## Technical Specifications
+
+| Parameter | Value |
+|-----------|-------|
+| **Microphone** | TDK InvenSense T5848 |
+| **Interface** | I2S Digital |
+| **Supply Voltage (VCC)** | 3.3V |
+| **Logic Level** | 3.3V |
+| **Port Type** | Bottom Port |
+| **Board Dimensions** | 25.4mm × 22.9mm |
+| **Mounting Holes** | 4× (2.54mm diameter) |
+| **Connector** | 6-pin header (2.54mm pitch) |
+
+## Pin Configuration
+
+| Pin Number | Name | Type | Description |
+|------------|------|------|-------------|
+| 1 | VCC | Power | 3.3V Power Supply |
+| 2 | 3V3_SCK | Bidirectional | I2S Serial Clock (SCK) |
+| 3 | 3V3_SD | Bidirectional | I2S Serial Data (SD) |
+| 4 | 3V3_WS | Bidirectional | I2S Word Select (WS) |
+| 5 | 3V3_LR | Bidirectional | Left/Right Channel Select |
+| 6 | GND | Power | Ground |
+
+## T5848 Microphone Pinout
+
+The T5848 microphone IC has the following pin configuration:
+
+| Pin Number | Name | Type | Description |
+|------------|------|------|-------------|
+| 1 | WS | Bidirectional | I2S Word Select |
+| 2 | LR | Power | Left/Right Channel Select |
+| 3 | GND | Power | Ground |
+| 4 | WAKE | Output | Wake-up Interrupt Output |
+| 5 | THSEL | Input | Threshold Select |
+| 6 | SCK | Input | I2S Serial Clock |
+| 7 | VDD | Power | Power Supply |
+| 8 | SD | Output | I2S Serial Data |
+
+## Functional Description
+
+### I2S Digital Interface
+
+The GS006 module uses the I2S (Inter-IC Sound) digital audio interface for communication. The I2S bus consists of three main signals:
+
+- **SCK (Serial Clock)**: Bit clock for synchronizing data transmission
+- **SD (Serial Data)**: Audio data output from the microphone
+- **WS (Word Select)**: Channel selection signal (left/right)
+
+### Multi-Mode Operation
+
+The T5848 microphone supports multiple operating modes for optimizing power consumption versus performance:
+
+- **Normal Mode**: High-performance audio capture
+- **Low-Power Mode**: Reduced power consumption for always-on applications
+- **Voice Activity Detection**: Wake-on-voice functionality with configurable thresholds
+
+### Left/Right Channel Selection
+
+The LR pin allows configuring the microphone for left or right channel operation in stereo I2S configurations. This enables multiple microphones to share the same I2S bus.
+
+## Application Information
+
+### Typical Applications
+
+- Voice capture and recognition systems
+- Audio recording devices
+- Smart home voice assistants
+- Industrial audio monitoring
+- IoT sensor nodes with audio capability
+- Acoustic event detection
+
+### Power Supply Considerations
+
+- Supply voltage: 3.3V ±10%
+- Ensure clean power supply with adequate decoupling
+- Recommended decoupling capacitor: 100nF ceramic close to VCC pin
+
+### Layout Guidelines
+
+- Keep I2S signal traces short and equal length
+- Avoid routing digital signals near analog audio paths
+- Provide adequate ground plane for noise reduction
+- Use mounting holes for mechanical stability
+
+## Mechanical Dimensions
+
+- **Board Size**: 25.4mm × 22.9mm (1.0" × 0.9")
+- **Mounting Holes**: 4× at corners, 2.54mm diameter
+- **Mounting Hole Positions**:
+  - Top-left: (-10.16mm, 8.89mm)
+  - Top-right: (10.16mm, 8.89mm)
+  - Bottom-left: (-10.16mm, -8.89mm)
+  - Bottom-right: (10.16mm, -8.89mm)
+- **Connector**: 6-pin header, 2.54mm pitch, located at bottom edge
+
+## Downloads
+
+- **Footprint**: [GS006-T5848-1CH-MIC.kicad_mod](pcbcupid_footprint.pretty/GS006-T5848-1CH-MIC.kicad_mod)
+- **Symbol**: [GS006-T5848-1CH-MIC.kicad_sym](pcbcupid_symbol/GS006-T5848-1CH-MIC.kicad_sym)
+- **3D Model**: [GS006-T5848-1CH-MIC.step](pcbcupid/pcbcupid-hardware-library:pcbcupid_footprint.pretty/GS006-T5848-1CH-MIC/GS006-T5848-1CH-MIC.step)
+
+## Ordering Information
+
+| Part Number | Description |
+|-------------|-------------|
+| GS006-T5848-1CH-MIC | I2S Digital Output Multi-Mode Microphone Module |
+
+## Related Products
+
+- GS006 series microphone modules
+- Audio processing development boards
+- Voice recognition evaluation kits
+
+---
+
+*Documentation generated from PCBcupid hardware design files. For technical support, contact your PCBcupid representative.*
