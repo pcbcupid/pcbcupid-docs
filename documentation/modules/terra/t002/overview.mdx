@@ -1,0 +1,43 @@
+# T002 TerraLink A7672S EK - Industrial LTE Cat 1 Evaluation Kit
+
+## Overview
+
+The **T002 TerraLink A7672S EK** is a compact, industrial-grade evaluation and development board built around the **SIMCom A7672S LTE Cat 1 module**. Designed for robust wireless communication in demanding environments, this board supports **LTE-FDD/LTE-TDD/GSM/GPRS** networks, making it ideal for IoT, telemetry, remote monitoring, and industrial automation applications.
+
+### Key Features
+
+- **LTE Cat 1 Module**: SIMCom A7672S with global LTE bands, backward compatible with GSM/GPRS.
+- **Industrial Connectivity**: UART, SPI, I2C, and multiple GPIOs for sensor and actuator integration.
+- **Power Management**: Dual power supply via USB or external battery, with on-board battery measurement.
+- **Compact Form Factor**: 63.5 x 45.7 mm board with 7-pin header and 4 mounting holes.
+- **Development Ready**: Breakout pins for all major interfaces, including UART, SPI, I2C, and GPIO.
+
+### Processor & Module Specifications
+
+| Parameter | Details |
+|-----------|---------|
+| **Module** | SIMCom A7672S |
+| **LTE Category** | Cat 1 (downlink up to 10 Mbps, uplink up to 5 Mbps) |
+| **Supported Modes** | LTE-FDD, LTE-TDD, GSM, GPRS |
+| **UART Interfaces** | Main UART (TXD/RXD), Debug UART (LOG_TX/LOG_RX), Auxiliary UART (U3_TXD/U3_RXD) |
+| **SPI** | Full-duplex SPI (CLK, CS, MOSI, MISO) |
+| **I2C** | Dedicated I2C bus (CI2C2_SDA, CI2C2_CLK) |
+| **GPIOs** | 4 general-purpose GPIOs (GPIO_1 to GPIO_4) |
+| **Control Signals** | PWRKEY, RESET, NETLIGHT, DTR, RI, DCD, CTS, RTS |
+| **Power Supply** | 3.4V – 4.2V (module VBAT), board powered via USB or external battery |
+| **Operating Temp** | -40°C to +85°C (industrial grade) |
+
+### Connectivity
+
+- **USB**: Micro-USB for power and serial communication.
+- **Antenna**: External antenna connector (not shown in footprint, but module supports).
+- **SIM Card**: On-board SIM card holder (not shown in footprint, but module supports).
+- **Breakout Header**: 7-pin header (pins 1-7) for easy prototyping.
+
+### Development Support
+
+- **Arduino/STM32 Compatible**: Can be interfaced with any microcontroller via UART/SPI/I2C.
+- **AT Command Set**: Full AT command control for network registration, data transmission, and SMS.
+- **Open Source**: KiCad design files available for customization.
+
+---
