@@ -1,0 +1,42 @@
+---
+title: "Glyph RP2040 Pinout"
+description: "Complete pin mapping for the Glyph RP2040, grouped by function and connector."
+sidebarTitle: "Glyph RP2040 Pinout"
+---
+
+<div style={{ textAlign: "center" }}>
+  <img src="https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-pinout.png" alt="Pinout diagram" width="800" />
+</div>
+
+<br />
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-pinout.png)
+
+| Pin | Label | Function | Notes |
+|-----|-------|----------|-------|
+| 1 | RESET | Reset | Active-low, pulls RP2040 into reset |
+| 2, 3 | +3.3V | Power | Regulated 3.3V output |
+| 4, 16 | GND | Ground | Common ground reference |
+| 5 | GPIO00 | Digital I/O | Also I2C0 SDA, UART0 TX, SPI0 RX |
+| 6 | GPIO01 | Digital I/O | Also I2C0 SCL, UART0 RX, SPI0 CS |
+| 7 | GPIO02 | Digital I/O | Also SPI0 SCK, I2C1 SDA |
+| 8 | GPIO03 | Digital I/O | Also SPI0 TX, I2C1 SCL |
+| 9 | GPIO08 | Digital I/O | Also UART1 TX, SPI1 RX |
+| 10 | GPIO05 | Digital I/O | Also SPI0 CS, UART1 RX |
+| 11 | GPIO06 | Digital I/O | Also SPI0 SCK, UART1 TX |
+| 12 | GPIO07 | Digital I/O | Also SPI0 TX, UART1 RX |
+| 13 | GPIO04 | Digital I/O | Also SPI0 RX, I2C0 SDA |
+| 14 | GPIO13 | Digital I/O | Also UART1 TX, I2C1 SCL |
+| 15 | GPIO12 | Digital I/O | Also UART1 RX, I2C1 SDA |
+| 17 | +BATT | Power | Direct battery connection (3.7–4.2V) |
+| 18 | L_EN | Enable | Regulator enable, active-high |
+| 19 | VBUS | Power | USB 5V input |
+| 20 | GPIO23 | Digital I/O | Also SPI1 SCK |
+| 21 | GPIO24 | Digital I/O | Also SWD CLK, SPI1 TX |
+| 22 | GPIO25 | Digital I/O | Also SWD IO, SPI1 RX, onboard LED |
+| 23 | GPIO26 | Analog | ADC0, also I2C1 SCL |
+| 24 | GPIO27 | Analog | ADC1, also I2C1 SDA |
+| 25 | GPIO28 | Analog | ADC2, also SPI1 CS |
+| 26 | GPIO29 | Digital I/O | Also ADC3 (unusable as ADC on RP2040) |
+| 27 | GPIO20 | Digital I/O | Also UART0 TX, SPI0 RX |
+| 28 | GPIO21 | Digital I/O | Also UART0 RX, SPI0 TX |
