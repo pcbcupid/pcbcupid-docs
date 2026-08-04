@@ -1,0 +1,89 @@
+---
+title: "Glyph RP2040 Overview"
+description: "A compact RP2040 development board with battery charging, USB-C, and castellated through-hole pins."
+sidebarTitle: "Glyph RP2040"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="GD007 Overview" url="https://shop.pcbcupid.com/product/gd007/" />
+
+<ImgGallery
+  modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD007-Glyph-RP2040/GD007-Glyph-RP2040.glb"
+  images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-overview.png", label: "ILLUSTRATION VIEW", id: "illustration" }]}
+/>
+
+The Glyph RP2040 is a compact development board built around the Raspberry Pi RP2040 microcontroller, designed for projects that need a balance of GPIO flexibility, battery-powered operation, and a small footprint. It integrates a Li-Po battery charger, a low-quiescent-current 3.3V regulator, and a USB-C connector for programming and power, making it suitable for wearable, handheld, and sensor applications.
+
+- **Dimensions:** 50.8 × 22.9 mm (2.0 × 0.9 in), 2.5 mm board thickness
+- **Processor:** Raspberry Pi RP2040, dual-core Arm Cortex-M0+ at up to 133 MHz
+- **RAM:** 264 KB SRAM
+- **Flash:** 2 MB QSPI flash (onboard)
+- **GPIO:** 28 pins broken out, including 3 analog inputs (GPIO26–28), 2 UARTs, 2 SPI, 2 I2C, and 4 PWM channels
+
+### Connectivity
+
+The board exposes all 30 GPIO pins of the RP2040 through two rows of through-hole pads (0.1" pitch) on the long edges, plus a 3-pin header for battery, enable, and VBUS. A USB-C connector provides both programming and power, with the USB data lines routed directly to the RP2040's native USB controller.
+
+### Development Support
+
+Programming is done over USB-C using the RP2040's built-in bootloader — hold the BOOT button (GPIO25) while plugging in to enter USB mass-storage mode, then drag-and-drop a UF2 firmware file. The board is fully supported by the Raspberry Pi Pico SDK, MicroPython, CircuitPython, and the Arduino core for RP2040.
+
+### Memory and Storage
+
+The RP2040's 264 KB SRAM is split into six independent banks, allowing flexible allocation between the two cores. The onboard 2 MB QSPI flash provides ample space for firmware, filesystems, or CircuitPython code, and supports memory-mapped execute-in-place (XIP) for fast code execution.
+
+### Power Management Features
+
+The Glyph integrates an MCP73831 Li-Po charge controller with a 4.2V termination voltage and a programmable charge current (set by an onboard resistor). A low-dropout regulator provides the 3.3V rail, and the L_EN pin allows external control of the regulator for low-power sleep states. The +BATT pin gives direct access to the battery for monitoring or alternative power routing.
+
+### Bootloader and Programming
+
+The RP2040's ROM bootloader is always available — no external programmer is required. For advanced debugging, the SWD (Serial Wire Debug) pins (GPIO24/GPIO25) are broken out, allowing connection to a debug probe for breakpoints and trace.
+
+> **Note:** The battery charger is designed for single-cell Li-Po/Li-Ion batteries only. Do not connect other chemistries or multi-cell packs.
