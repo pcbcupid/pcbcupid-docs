@@ -154,7 +154,8 @@
                   "documentation/modules/g-sense/sht45",
                   "documentation/modules/g-sense/hdc3020-rs485",
                   "documentation/modules/g-sense/qmc6309-magnetometer",
-                  "documentation/modules/g-sense/capacitive-touch-slider"
+                  "documentation/modules/g-sense/capacitive-touch-slider",
+                  "documentation/modules/g-sense/gs006"
                 ]
               },
               {
@@ -172,6 +173,20 @@
                   "documentation/modules/breakout-boards/usb-a-breakout-female",
                   "documentation/modules/breakout-boards/usb-a-breakout-male",
                   "documentation/modules/breakout-boards/usb-c"
+                ]
+              },
+              {
+                "group": "Terra",
+                "pages": [
+                  {
+                    "group": "TerraLink A7672S EK",
+                    "pages": [
+                      "documentation/modules/terra/t002/overview",
+                      "documentation/modules/terra/t002/pinouts",
+                      "documentation/modules/terra/t002/assembly",
+                      "documentation/modules/terra/t002/power-management"
+                    ]
+                  }
                 ]
               }
             ]
@@ -791,25 +806,5 @@
   ],
   "thumbnails": {
     "appearance": "dark"
-  },
-  "GS006": {
-    "category": "gsense",
-    "docPath": "g-sense/gs006",
-    "multiFile": false
-  },
-  "GD002": {
-    "category": "glyph",
-    "docPath": "glyph/gd002",
-    "multiFile": true
-  },
-  "T002": {
-    "category": "terra",
-    "docPath": "terra/t002",
-    "multiFile": true
-  },
-  "GD007": {
-    "category": "glyph",
-    "docPath": "glyph/gd007",
-    "multiFile": false
   }
 }
