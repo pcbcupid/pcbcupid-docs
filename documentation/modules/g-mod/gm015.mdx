@@ -1,0 +1,143 @@
+---
+title: "GM015 DC-DC Buck Converter Module"
+description: "Compact step-down buck converter module based on the SY81103, delivering adjustable output from a wide input voltage range."
+sidebarTitle: "GM015 DC-DC Buck"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="GM015 Overview" url="https://shop.pcbcupid.com/product/gm015/" />
+
+<ImgGallery
+  modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GM015-DC-DC-BUCK/GM015-DC-DC-BUCK.glb"
+  images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GM015-DC-DC-BUCK/GM015-DC-DC-BUCK-overview.png", label: "ILLUSTRATION VIEW", id: "illustration" }]}
+/>
+
+The GM015 DC-DC Buck Converter is a compact, board-level step-down power module built around the SY81103 synchronous buck regulator. It converts a higher DC input voltage down to a lower, stable output voltage, making it ideal for powering microcontrollers, sensors, and other logic circuits from batteries, solar panels, or unregulated supplies. The module measures 25.4 × 22.9 mm and includes through-hole pads for easy integration into custom PCBs or breadboard prototyping.
+
+## Components
+
+- **SY81103 synchronous buck regulator IC** — the core switching converter
+- **Input capacitor** — polarized electrolytic capacitor for input filtering
+- **Output capacitor** — unpolarized ceramic capacitor for output smoothing
+- **Inductor** — energy storage element for the buck conversion
+- **Status LED** — indicates when the module is powered
+- **Screw terminal** — 2-pin connector for input power wiring
+- **Four mounting holes** — 2.5 mm drill diameter for securing the module
+
+## Pin Configuration
+
+- **IN (Pin 1)** — Positive DC input voltage (4.5V–18V typical)
+- **GND (Pin 2)** — Ground connection for input side
+- **OUT (Pin 3)** — Regulated DC output voltage
+- **GND (Pin 4)** — Ground connection for output side
+
+## Working
+
+The GM015 uses a synchronous buck (step-down) topology. When input power is applied, the SY81103 switches the internal high-side MOSFET on and off at a high frequency. During the ON phase, current flows through the inductor, storing energy and charging the output capacitor. During the OFF phase, the low-side MOSFET provides a path for the inductor current to continue flowing to the load. The feedback loop continuously adjusts the duty cycle to maintain a stable output voltage regardless of input voltage variations or load changes. The output voltage is preset on the module and is not user-adjustable; check the module labeling for the specific output voltage of your unit.
+
+## Applications
+
+- Powering Arduino and other microcontroller boards
+- Supplying sensors and IoT devices from higher-voltage sources
+- Battery-powered projects requiring voltage step-down
+- Solar panel systems with 12V panels powering 5V logic
+- Bench power supply for breadboard prototyping
+- Embedded systems requiring efficient power conversion
+
+## Step 1: Hardware Required
+
+- GM015 DC-DC Buck Converter module
+- DC power source (e.g., 12V battery or wall adapter) within the module's input range
+- Multimeter for measuring output voltage
+- Load device (e.g., Arduino board, LED with resistor, or resistor bank)
+- Connecting wires or jumper cables
+
+## Step 2: Circuit Diagram
+
+Connect the DC power source to the **IN** and **GND** pins on the input side of the module. Connect your load to the **OUT** and **GND** pins on the output side. Ensure the input voltage is within the module's specified range (typically 4.5V–18V) and that the load current does not exceed the module's maximum rating. Observe correct polarity — reverse polarity can damage the module.
+
+## Step 3: Code Setup
+
+While the GM015 is an analog power module that requires no programming, you can verify its output using an Arduino's analog input. Connect the module's **OUT** pin to an Arduino analog input (e.g., A0) and the module's **GND** to the Arduino's GND. Use the following sketch to read and display the output voltage:
+
+```cpp
+const int analogPin = A0;
+float voltage = 0.0;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("GM015 Output Voltage Monitor");
+}
+
+void loop() {
+  int raw = analogRead(analogPin);
+  // Assuming 5V reference; adjust if using 3.3V
+  voltage = (raw / 1023.0) * 5.0;
+  Serial.print("Output Voltage: ");
+  Serial.print(voltage, 2);
+  Serial.println(" V");
+  delay(1000);
+}
+```
+
+## Step 4: Upload the Code
+
+Connect the Arduino to your computer via USB, select the correct board and port in the Arduino IDE, and upload the sketch. Open the Serial Monitor at 9600 baud to view the voltage readings.
+
+## Step 5: Observe the Output
+
+Apply power to the GM015 module and observe the Serial Monitor output. The displayed voltage should remain stable near the module's rated output voltage. The onboard LED should illuminate, indicating the module is powered. If the voltage reads zero or is unstable, check all connections, verify input polarity, and confirm the input voltage is within the specified range.
+
+## Downloads
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: "12px", margin: "16px 0" }}>
+<a href="/api/download/footprint/GM015-DC-DC-BUCK" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/GM015-DC-DC-BUCK" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GM015-DC-DC-BUCK/GM015-DC-DC-BUCK.step" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
