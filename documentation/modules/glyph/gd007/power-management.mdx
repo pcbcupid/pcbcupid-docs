@@ -1,0 +1,35 @@
+---
+title: "Glyph RP2040 Power Management"
+description: "Battery and USB power options, voltage monitoring, and regulator control for the Glyph RP2040."
+sidebarTitle: "Glyph RP2040 Power"
+---
+
+The Glyph RP2040 can be powered from two sources: USB (5V) or a single-cell Li-Po/Li-Ion battery (3.7V nominal). Power is automatically routed to the onboard 3.3V regulator, which supplies the RP2040 and all GPIO pins.
+
+### USB Power
+
+Connect a USB-C cable to the board's USB-C port. The 5V from USB is available on the VBUS pin and is also fed to the battery charger. When USB is connected, the system runs from USB power and the battery (if present) is charged simultaneously.
+
+### Battery Power
+
+Connect a single-cell Li-Po or Li-Ion battery to the 3-pin header: **+BATT** (positive), **GND** (negative), and **L_EN** (enable). The MCP73831 charge controller charges the battery at a rate set by the onboard resistor (typically 500 mA). When USB is disconnected, the battery supplies power through the regulator automatically.
+
+The +BATT pin provides direct access to the battery voltage (3.0–4.2V range). You can connect this to an analog input (e.g., GPIO26) through a voltage divider to monitor battery level in firmware.
+
+### Regulator Enable (L_EN)
+
+The L_EN pin controls the 3.3V regulator output. Pull it high (or leave it floating, as it has an internal pull-up) to enable the regulator. Pull it low to shut down the 3.3V rail, reducing quiescent current to microamps — useful for sleep modes or hard power-off states. Note that the RP2040 will lose power when L_EN is low, so all state must be saved to flash first.
+
+### Alternative Power Options
+
+For fixed-voltage applications, you can bypass the battery entirely and feed 3.3V directly to the +3.3V pins (pins 2 and 3). In this case, do not connect a battery or USB, and ensure the input is a clean, regulated 3.3V supply capable of at least 300 mA. Alternatively, you can supply 5V to the VBUS pin without USB data — the onboard regulator will handle the conversion.
+
+> **Warning:** The battery charger is designed for single-cell Li-Po/Li-Ion batteries only (4.2V termination). Do not connect NiMH, lead-acid, or multi-cell packs — this can cause fire or explosion. Always verify battery polarity before connecting. If you supply external 3.3V to the +3.3V pins, do not also connect a battery or USB, as this can back-feed the regulator and damage the board.
+
+## Downloads
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0">
+<a href="/api/download/footprint/GD007-Glyph-RP2040" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/GD007-Glyph-RP2040" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GD007-Glyph-RP2040/GD007-Glyph-RP2040.step" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:999px;color:#93c5fd;text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.2s;white-space:nowrap"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
