@@ -115,6 +115,15 @@
                       "documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-assembly",
                       "documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-power-management"
                     ]
+                  },
+                  {
+                    "group": "GD007",
+                    "pages": [
+                      "documentation/modules/glyph/gd007/overview",
+                      "documentation/modules/glyph/gd007/pinout",
+                      "documentation/modules/glyph/gd007/assembly",
+                      "documentation/modules/glyph/gd007/power-management"
+                    ]
                   }
                 ]
               },
