@@ -1,0 +1,131 @@
+---
+title: "GD007-Glyph RP2040 Breakout Board"
+description: "RP2040-based breakout with Li-Po charging, 26 GPIOs, SWD debug, and battery management in a compact 50.8 × 22.9 mm form factor."
+sidebarTitle: "GD007-Glyph RP2040"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="GD007 Overview" url="https://shop.pcbcupid.com/product/gd007/" />
+
+<ImgGallery
+  modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD007-Glyph-RP2040/GD007-Glyph-RP2040.glb"
+  images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-overview.png", label: "ILLUSTRATION VIEW", id: "illustration" }]}
+/>
+
+The GD007-Glyph RP2040 is a breakout board built around the Raspberry Pi RP2040 microcontroller, integrating a Li-Po battery charger (MCP73831) and a low-dropout regulator for portable and embedded applications. It exposes 26 GPIO pins, SWD debug interfaces, and power management pins through through-hole pads on a compact 50.8 × 22.9 mm board. The board is designed for breadboard prototyping, wearable electronics, and battery-powered projects where a full development board is overkill.
+
+## Pin Configuration
+
+- **RESET (Pin 1)** — Active-low reset input; pull low to reset the RP2040.
+- **+3.3V (Pins 2, 3)** — Regulated 3.3 V output from the onboard LDO; can also be used as an input to power the board.
+- **GND (Pins 4, 16, 18)** — Common ground connections.
+- **GPIO_00 (Pin 5)** — General-purpose I/O; also usable as UART0 TX.
+- **GPIO_01 (Pin 6)** — General-purpose I/O; also usable as UART0 RX.
+- **GPIO_02 (Pin 7)** — General-purpose I/O; also usable as SPI0 SCK.
+- **GPIO_03 (Pin 8)** — General-purpose I/O; also usable as SPI0 TX.
+- **GPIO_08 (Pin 9)** — General-purpose I/O; also usable as SPI0 RX.
+- **GPIO_05 (Pin 10)** — General-purpose I/O; also usable as I2C0 SDA.
+- **GPIO_06 (Pin 11)** — General-purpose I/O; also usable as I2C0 SCL.
+- **GPIO_07 (Pin 12)** — General-purpose I/O; also usable as PWM output.
+- **GPIO_04 (Pin 13)** — General-purpose I/O; also usable as SPI0 CS.
+- **GPIO_13 (Pin 14)** — General-purpose I/O; also usable as PWM output.
+- **GPIO_12 (Pin 15)** — General-purpose I/O; also usable as PWM output.
+- **SWCLK (Pin 17)** — Serial wire debug clock for programming and debugging.
+- **SWDIO (Pin 19)** — Serial wire debug data I/O for programming and debugging.
+- **+BATT (Pin 20)** — Direct connection to the Li-Po battery positive terminal; also the charger output.
+- **L_EN (Pin 21)** — LDO enable pin; drive high to enable the 3.3 V regulator, low to disable.
+- **VBUS (Pin 22)** — USB 5 V input; also used as the charger input.
+- **GPIO_23 (Pin 23)** — General-purpose I/O; also usable as SPI1 SCK.
+- **GPIO_24 (Pin 24)** — General-purpose I/O; also usable as SPI1 TX.
+- **GPIO_25 (Pin 25)** — General-purpose I/O; also usable as SPI1 RX.
+- **GPIO_26 (Pin 26)** — General-purpose I/O; also usable as ADC0 (12-bit ADC input).
+- **GPIO_27 (Pin 27)** — General-purpose I/O; also usable as ADC1.
+- **GPIO_28 (Pin 28)** — General-purpose I/O; also usable as ADC2.
+- **GPIO_29 (Pin 29)** — General-purpose I/O; also usable as ADC3.
+- **GPIO_20 (Pin 30)** — General-purpose I/O; also usable as SPI1 CS.
+- **GPIO_21 (Pin 31)** — General-purpose I/O; also usable as I2C0 SDA (alternate function).
+
+## Key Features
+
+- **Raspberry Pi RP2040** dual-core Arm Cortex-M0+ processor running at up to 133 MHz.
+- **26 exposed GPIO pins** with support for SPI, I2C, UART, PWM, and 4-channel 12-bit ADC.
+- **MCP73831 Li-Po charger** with 4.2 V charge voltage and programmable charge current via external resistor.
+- **Onboard LDO regulator** providing a stable 3.3 V rail from battery or USB input.
+- **SWD debug interface** (SWCLK/SWDIO) for programming and debugging with standard tools like Picoprobe or a Raspberry Pi Debug Probe.
+- **VBUS and +BATT pins** for flexible power input — USB 5 V or single-cell Li-Po battery.
+- **L_EN enable pin** for controlling the 3.3 V regulator output, useful for low-power sleep modes.
+- **Compact 50.8 × 22.9 mm form factor** with 1.7 mm through-hole pads on 2.54 mm pitch, breadboard-compatible.
+- **Reset pin** for external reset control.
+
+## Applications
+
+- **Battery-powered wearables** — the integrated Li-Po charger and LDO make it ideal for compact, rechargeable devices.
+- **Breadboard prototyping** — through-hole pads on standard 2.54 mm pitch allow direct insertion into solderless breadboards.
+- **Portable sensor nodes** — 4 ADC channels and multiple I2C/SPI interfaces support environmental sensing and data logging.
+- **Custom keyboard or macro pads** — 26 GPIOs provide ample matrix scanning and LED driving capability.
+- **Embedded control systems** — dual-core processing and rich peripheral set suit motor control, display driving, and automation tasks.
+- **Educational projects** — SWD debugging and standard RP2040 toolchain support make it a solid learning platform.
+
+## Precaution Note
+
+- **Input voltage limits** — VBUS must be kept within 4.5–5.5 V; +BATT is intended for a single-cell Li-Po (3.0–4.2 V). Exceeding these ranges can damage the charger or LDO.
+- **Battery polarity** — Connecting a battery with reversed polarity to +BATT/GND will permanently damage the MCP73831 charger and potentially the RP2040.
+- **Current draw** — The onboard LDO is not designed for high-current loads; keep total 3.3 V draw below approximately 300 mA to avoid thermal shutdown or voltage droop.
+- **GPIO voltage levels** — All GPIO pins are 3.3 V logic only; applying 5 V to any GPIO pin can damage the RP2040.
+- **L_EN behavior** — When L_EN is pulled low, the 3.3 V rail is disabled; ensure all connected peripherals are powered down or isolated to prevent back-feeding the regulator.
+- **ADC input range** — ADC pins (GPIO_26–29) accept 0–3.3 V only; higher voltages require an external voltage divider.
+- **Charger thermal considerations** — The MCP73831 may heat up during fast charging; ensure adequate airflow or reduce charge current via the PROG resistor for sustained operation.
+
+## Downloads
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: "12px", margin: "16px 0" }}>
+<a href="/api/download/footprint/GD007-Glyph-RP2040" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/GD007-Glyph-RP2040" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GD007-Glyph-RP2040/GD007-Glyph-RP2040.step" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
