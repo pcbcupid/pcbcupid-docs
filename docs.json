@@ -152,7 +152,8 @@
                   "documentation/modules/g-mod/serial-flash",
                   "documentation/modules/g-mod/motor-driver",
                   "documentation/modules/g-mod/lithium-charger",
-                  "documentation/modules/g-mod/gm015"
+                  "documentation/modules/g-mod/gm015",
+                  "documentation/modules/g-mod/gm004"
                 ]
               },
               {
