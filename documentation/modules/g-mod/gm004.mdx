@@ -1,0 +1,213 @@
+---
+title: "GM004 Audio Codec Module"
+description: "I2S audio codec breakout with NAU8325 amplifier, I2C control, and 3W speaker output for embedded audio projects."
+sidebarTitle: "GM004 Audio Codec"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="GM004 Overview" url="https://shop.pcbcupid.com/product/gm004/" />
+
+<ImgGallery
+  modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GM004-AudioCODEC/GM004-AudioCODEC.glb"
+  images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GM004-AudioCODEC/GM004-AudioCODEC-overview.png", label: "ILLUSTRATION VIEW", id: "illustration" }]}
+/>
+
+The GM004 Audio Codec Module is a compact I2S audio breakout board built around the NAU8325 stereo Class-D amplifier. It provides a complete audio playback solution for microcontrollers and single-board computers, accepting digital I2S audio data and driving speakers directly without requiring a separate amplifier stage. The board includes an I2C interface for volume control and configuration, making it suitable for portable speakers, voice assistants, and other embedded audio applications.
+
+## Components
+
+- NAU8325 stereo Class-D audio amplifier with integrated DAC
+- I2S digital audio input interface (MCLK, BCK, LRCK, DACDAT)
+- I2C control interface for volume and configuration (SCL, SDA)
+- Differential stereo speaker outputs (SPK_LN, SPK_LP, SPK_RN, SPK_RP)
+- Dual power supply inputs (+3V3 for logic, +5V for amplifier)
+- Board dimensions: 25.4 × 22.9 mm with 2.5 mm mounting holes
+
+## Pin Configuration
+
+- **SPK_LN** — Left speaker negative output
+- **SPK_LP** — Left speaker positive output
+- **SPK_RP** — Right speaker positive output
+- **SPK_RN** — Right speaker negative output
+- **LRCK** — I2S left/right clock (word select)
+- **DACDAT** — I2S serial data input
+- **BCK** — I2S bit clock
+- **MCLK** — Master clock input
+- **SCL** — I2C clock line
+- **SDA** — I2C data line
+- **GND** — Ground reference
+- **+3V3** — Logic power supply (3.3 V)
+- **+5V** — Amplifier power supply (5 V)
+
+## Amplifier Output Ratings
+
+The NAU8325 amplifier delivers up to 3 W per channel into 4 Ω speakers with a 5 V supply. The differential outputs allow direct connection of speakers without output coupling capacitors. The amplifier supports both stereo (two speakers) and mono bridge-tied load (BTL) configurations. For best performance, use speakers rated between 4 Ω and 8 Ω.
+
+## Working
+
+The module receives digital audio data through the I2S interface. The microcontroller generates the master clock (MCLK), bit clock (BCK), and left/right clock (LRCK) signals, while sending audio samples over the DACDAT line. The NAU8325 decodes this I2S stream, converts it to analog using its internal DAC, and amplifies the signal through the Class-D output stage to drive the connected speakers.
+
+The I2C interface provides register-level control over volume, gain, and operating modes. The +3V3 supply powers the digital logic and I2C interface, while the +5V supply powers the analog amplifier stage. The board includes onboard decoupling capacitors for stable operation.
+
+## Applications
+
+- Portable Bluetooth speakers
+- Voice assistant devices
+- Audio playback for microcontroller projects
+- IoT devices with sound output
+- Alarm and notification systems
+- DIY music players
+
+## Step 1: Hardware Required
+
+- GM004 Audio Codec Module
+- Microcontroller with I2S support (e.g., ESP32, Teensy, or STM32)
+- Two 4 Ω or 8 Ω speakers (up to 3 W each)
+- 3.3 V and 5 V power supplies
+- Jumper wires or breadboard
+
+## Step 2: Circuit Diagram
+
+Connect the module to your microcontroller as follows:
+
+| Module Pin | Microcontroller Pin |
+|------------|---------------------|
+| MCLK | I2S master clock output |
+| BCK | I2S bit clock output |
+| LRCK | I2S word select output |
+| DACDAT | I2S data output |
+| SCL | I2C clock (SCL) |
+| SDA | I2C data (SDA) |
+| +3V3 | 3.3 V supply |
+| +5V | 5 V supply |
+| GND | Common ground |
+
+Connect the left speaker to SPK_LP and SPK_LN, and the right speaker to SPK_RP and SPK_RN. Ensure the power supplies are properly decoupled with 100 µF capacitors near the module if using longer supply wires.
+
+## Step 3: Code Setup
+
+The following Arduino example demonstrates basic audio playback using the ESP32's I2S peripheral. Install the ESP32 board package in Arduino IDE and use this code:
+
+```cpp
+#include <driver/i2s.h>
+#include <math.h>
+
+#define I2S_BCK_PIN  26
+#define I2S_LRCK_PIN 25
+#define I2S_DATA_PIN 22
+#define I2S_MCLK_PIN 27
+
+#define SAMPLE_RATE 44100
+#define SAMPLE_BITS 16
+
+void setup() {
+  Serial.begin(115200);
+
+  i2s_config_t i2s_config = {
+    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
+    .sample_rate = SAMPLE_RATE,
+    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
+    .dma_buf_count = 8,
+    .dma_buf_len = 64,
+    .use_apll = false,
+    .tx_desc_auto_clear = true,
+    .fixed_mclk = 0
+  };
+
+  i2s_pin_config_t pin_config = {
+    .bck_io_num = I2S_BCK_PIN,
+    .ws_io_num = I2S_LRCK_PIN,
+    .data_out_num = I2S_DATA_PIN,
+    .data_in_num = I2S_PIN_NO_CHANGE
+  };
+
+  i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
+  i2s_set_pin(I2S_NUM_0, &pin_config);
+  i2s_set_clk(I2S_NUM_0, SAMPLE_RATE, SAMPLE_BITS, 2);
+}
+
+void loop() {
+  // Generate a 440 Hz sine wave
+  int16_t samples[128];
+  static float phase = 0;
+  const float freq = 440.0;
+  const float phase_step = 2.0 * M_PI * freq / SAMPLE_RATE;
+
+  for (int i = 0; i < 128; i += 2) {
+    int16_t val = (int16_t)(sin(phase) * 8000);
+    samples[i] = val;     // Left channel
+    samples[i + 1] = val; // Right channel
+    phase += phase_step;
+    if (phase >= 2.0 * M_PI) phase -= 2.0 * M_PI;
+  }
+
+  size_t bytes_written;
+  i2s_write(I2S_NUM_0, samples, sizeof(samples), &bytes_written, portMAX_DELAY);
+  delay(10);
+}
+```
+
+## Step 4: Upload the Code
+
+Connect your microcontroller to your computer via USB, select the correct board and port in the Arduino IDE, and upload the sketch. Ensure the module is powered with both 3.3 V and 5 V supplies before uploading.
+
+## Step 5: Observe the Output
+
+After uploading, you should hear a continuous 440 Hz tone from both speakers. If no sound is produced, verify all I2S connections and confirm that both power supplies are present. Adjust the volume by sending I2C commands to the NAU8325's volume control registers (address 0x02 for left channel, 0x03 for right channel).
+
+## Downloads
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: "12px", margin: "16px 0" }}>
+<a href="/api/download/footprint/GM004-AudioCODEC" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/GM004-AudioCODEC" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GM004-AudioCODEC/GM004-AudioCODEC.step" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
