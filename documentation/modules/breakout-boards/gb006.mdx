@@ -1,0 +1,99 @@
+---
+title: "GB006 RGB LED Breakout"
+description: "Compact RGB LED breakout board with four through-hole pins for easy color mixing on any host board."
+sidebarTitle: "GB006 RGB LED"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="GB006 Overview" url="https://shop.pcbcupid.com/product/gb006/" />
+
+<ImgGallery
+  modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GB006-RGB-LED/GB006-RGB-LED.glb"
+  images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GB006-RGB-LED/GB006-RGB-LED-overview.png", label: "ILLUSTRATION VIEW", id: "illustration" }]}
+/>
+
+The GB006 RGB LED breakout is a compact, board-level module that brings a full-color LED to your project with minimal wiring. It exposes the red, green, and blue channels on separate pins, letting you mix any color using PWM or simple digital outputs from a microcontroller, Raspberry Pi, or other host board. The board measures 11.4 × 17.8 mm and includes two mounting holes for secure placement in enclosures or on protoboards.
+
+## Pin Configuration
+
+- **VCC (Pin 1)** — Power supply input for the LED. Connect to your host board's voltage rail (typically 3.3 V or 5 V).
+- **R (Pin 2)** — Red channel control. Drive low to turn on the red LED element; use PWM for brightness control.
+- **G (Pin 3)** — Green channel control. Drive low to turn on the green LED element; use PWM for brightness control.
+- **B (Pin 4)** — Blue channel control. Drive low to turn on the blue LED element; use PWM for brightness control.
+
+## Key Features
+
+- Full RGB color mixing with independent control of red, green, and blue channels
+- Compact 11.4 × 17.8 mm board footprint with through-hole pins for reliable connections
+- Two 1.6 mm mounting holes for mechanical stability
+- Simple active-low control scheme compatible with most microcontrollers
+- Works with both 3.3 V and 5 V logic levels
+
+## Applications
+
+- Status indicators and notification lights
+- Ambient lighting and decorative effects
+- Color-mixing experiments and educational projects
+- User interface feedback in embedded systems
+- Custom lighting fixtures and wearables
+
+## Precaution Note
+
+- **Current limiting required:** Each LED channel needs an external current-limiting resistor (typically 100–330 Ω depending on supply voltage). Operating without resistors will damage the LED.
+- **Supply voltage:** Do not exceed the LED's maximum forward voltage rating. For most standard RGB LEDs, keep VCC at or below 5 V.
+- **Power consumption:** When all three channels are on, the board can draw 20–60 mA total. Ensure your host board's output pins can source the required current, or use transistor/MOSFET drivers for higher-power applications.
+- **Logic level compatibility:** The control pins are active-low, meaning the LED turns on when the pin is driven to ground. Floating pins may cause erratic behavior — always drive them to a defined high or low state.
+
+## Downloads
+
+<div style={{ display: "flex", flexWrap: "wrap", gap: "12px", margin: "16px 0" }}>
+<a href="/api/download/footprint/GB006-RGB-LED" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Footprint</a>
+<a href="/api/download/symbol/GB006-RGB-LED" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Symbol</a>
+<a href="https://spell-files.pcbcupid.com/pc-module/3d-model/step/GB006-RGB-LED/GB006-RGB-LED.step" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 16px", background: "#1e3a5f", border: "1px solid #3b82f6", borderRadius: "999px", color: "#93c5fd", textDecoration: "none", fontSize: "0.85rem", fontWeight: 500, transition: "all 0.2s", whiteSpace: "nowrap" }}><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>3D Model (STEP)</a>
+</div>
