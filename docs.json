@@ -8,15 +8,25 @@
   "colors": {
     "primary": "#0D9373"
   },
+  "navbar": {
+    "links": [
+      { "label": "Circuit Spell", "href": "https://spell.pcbcupid.com" },
+      { "label": "Shop", "href": "https://shop.pcbcupid.com" },
+      { "label": "Learn", "href": "/" },
+      { "label": "Events", "href": "https://events.pcbcupid.com" },
+      { "label": "Forum", "href": "https://forum.pcbcupid.com" },
+      { "label": "Articles", "href": "https://pcbcupid.com/articles" },
+      { "label": "Tools", "href": "https://pcbcupid.com/tools" }
+    ]
+  },
   "contextual": {
     "options": [
       "copy",
       "chatgpt",
       "claude",
-      "windsurf",
-      "mcp",
       "cursor",
-      "vscode"
+      "vscode",
+      "mcp"
     ],
     "display": "toc"
   },
@@ -270,10 +280,6 @@
   "fonts": {
     "family": "Space Grotesk",
     "weight": 400
-  },
-  "banner": {
-    "content": "Our new documentation has been freshly fabricated and assembled with ❤️. We'd love to hear feedback.",
-    "dismissible": true
   },
   "background": {
     "decoration": "gradient"
