@@ -183,7 +183,8 @@
                   "documentation/modules/breakout-boards/usb-4-in-1",
                   "documentation/modules/breakout-boards/usb-a-breakout-female",
                   "documentation/modules/breakout-boards/usb-a-breakout-male",
-                  "documentation/modules/breakout-boards/usb-c"
+                  "documentation/modules/breakout-boards/usb-c",
+                  "documentation/modules/breakout-boards/gb006"
                 ]
               },
               {
