@@ -57,15 +57,34 @@ export const ImgGallery = ({ images, modelUrl }) => {
 <ShopHeader title="Glyph S3 Overview" url="https://shop.pcbcupid.com/product/gd004/" />
 <ImgGallery modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/glyph-s3_h.glb" images={[{url: "https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glyph%20S3%20overview%5B1%5D.avif", label: "ILLUSTRATION VIEW", id: "illustration"}, {url: "https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Glyph-s3-side-view.avif", label: "BOARD VIEW", id: "board"}]} />
 
-
-
+<div className="module-highlight-card">
+  <div className="module-info-item">
+    <span className="module-version-title">Standard Variant </span>
+    <ul className="module-spec-list">
+      <li><strong>Module:</strong> Glyph-S3 </li>
+      <li><strong>Flash:</strong> 8MB (Quad SPI)</li>
+      <li><strong>PSRAM:</strong> None</li>
+    </ul>
+  </div>
+  <div className="module-divider"></div>
+  <div className="module-info-item">
+    <span className="module-version-title">Performance Variant <a href="https://shop.pcbcupid.com/product/gd004/" className="inline-shop-link">Shop Now</a></span>
+    <ul className="module-spec-list">
+      <li><strong>Module:</strong> Glyph-S3-PSRAM</li>
+      <li><strong>Flash:</strong> 4MB (Quad SPI)</li>
+      <li><strong>PSRAM:</strong> 2MB (Octal SPI)</li>
+    </ul>
+  </div>
+</div>
 
 Introducing the Glyph S3, a powerful microcontroller development board based on the ESP32-S3 chip, ideal for AIoT, edge computing, and computer vision applications. With dual-core performance and enhanced peripherals, the Glyph-S3 delivers robust capabilities in a compact footprint.
 
 - **Dimensions**: Measures 50.8mm x 22.8mm x 1.6mm (without headers soldered)
 - **Processor**: ESP32-S3 dual-core LX7 microprocessor @ 240 MHz, 3.3V logic and power
-- **RAM**: 512 KB SRAM
-- **Flash Memory**: 8 MB SPI FLASH
+- **Memory Options**: 
+  - **SRAM**: 512 KB (Internal)
+  - **PSRAM**: 2 MB (Only available on PSRAM Variant)
+- **Flash Memory**: Up to 8 MB SPI FLASH
 - **GPIO**: 20 GPIO pins with the following capabilities:
   - 9 GPIO pins support 12-bit ADC (ADC1): IO1, IO2, IO4, IO5, IO6, IO7, IO8, IO9, IO10
   - I2C
@@ -122,7 +141,19 @@ With extensive library support and a large community, getting started with the G
 
 ### Memory and Storage
 
-While the Glyph S3 has 512KB onboard SRAM, it also relies on an external flash chip for program storage. On this board, there is 8MB of flash memory (ESP32-S3-MINI-1-N8, Quad SPI), which is shared between the code, file storage and OTA.
+The Glyph-S3 is available with different module configurations to suit your project requirements. 
+
+<div className="technical-info-card">
+  <div className="tech-info-header">
+    <span className="tech-info-chip">Technical Specs</span>
+    <span>Memory Architecture</span>
+  </div>
+  <p>Both variants share the <b>512KB onboard SRAM</b> for core operations. Depending on your choice:</p>
+  <ul>
+    <li>The <b>Standard Variant</b> offers more storage for code and assets (8MB Flash).</li>
+    <li>The <b>Performance Variant</b> includes <b>2MB PSRAM</b> — an essential option if you need extra memory for high-resolution displays or complex data buffers.</li>
+  </ul>
+</div>
 
 {/* ![ESP32-S3 Spark Angle](your_image_link_here) */}
 

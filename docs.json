@@ -121,7 +121,9 @@
                   "documentation/modules/g-mod/key-array",
                   "documentation/modules/g-mod/serial-flash",
                   "documentation/modules/g-mod/motor-driver",
-                  "documentation/modules/g-mod/lithium-charger"
+                  "documentation/modules/g-mod/lithium-charger",
+                  "documentation/modules/g-mod/dc-buck-converter",
+                  "documentation/modules/g-mod/dc-boost-converter"
                 ]
               },
               {
@@ -151,6 +153,12 @@
                   "documentation/modules/breakout-boards/usb-a-breakout-female",
                   "documentation/modules/breakout-boards/usb-a-breakout-male",
                   "documentation/modules/breakout-boards/usb-c"
+                ]
+              },
+              {
+                "group": "Gadgets",
+                "pages": [
+                  "documentation/modules/gadgets/usb-to-rs485"
                 ]
               }
             ]
@@ -502,6 +510,14 @@
     {
       "source": "/boards/g-mod/relay",
       "destination": "/documentation/modules/g-mod/relay"
+    },
+    {
+      "source": "/boards/g-mod/dc-buck-converter",
+      "destination": "/documentation/modules/g-mod/dc-buck-converter"
+    },
+    {
+      "source": "/boards/g-mod/dc-boost-converter",
+      "destination": "/documentation/modules/g-mod/dc-boost-converter"
     },
     {
       "source": "/boards/g-sense",

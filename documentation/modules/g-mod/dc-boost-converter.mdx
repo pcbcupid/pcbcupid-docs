@@ -1,0 +1,147 @@
+---
+description: "The GMOD SX1308 DC-DC Boost Converter is a high-frequency, high-efficiency step-up module that converts low input voltages (2V–24V) to higher output voltages (2V–28V)."
+title: "DC-DC Boost Converter (SX1308)"
+sidebarTitle: "Boost Converter"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="DC-DC Boost Converter (SX1308)" url="https://shop.pcbcupid.com/product/gm023/" />
+<ImgGallery modelUrl="https://example.com/dummy-boost-model.glb" images={[{ url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/Boost_convertor/Boost_convertor_illustration.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' }, { url: 'https://via.placeholder.com/800x450?text=Board+View Coming Soon', label: 'BOARD VIEW', id: 'board' }]} />
+
+The **GMOD SX1308 DC-DC Boost Converter** is a high-frequency (1.2MHz) step-up power module designed to efficiently convert lower input voltages into stable higher output voltages. Powered by the high-performance **SX1308** IC, this module is perfect for applications requiring compact, high-efficiency power management, such as driving 5V logic from a single 3.7V Li-ion battery or powering sensors in portable electronics.
+
+Its small form factor and 95% peak efficiency make it an ideal choice for robotics, IoT devices, and DIY electronics projects where space and power conservation are critical.
+
+---
+
+## Product Variants
+
+The GMOD Boost Converter is available in two distinct variants to suit different application needs:
+
+1.  **Fixed 5V Output**: Pre-configured to provide a steady **5V DC** output, making it a "plug-and-play" solution for powering microcontrollers and standard logic circuits.
+2.  **Variable Output**: Features an on-board potentiometer allowing you to manually adjust the output voltage anywhere from **2V to 28V**.
+
+---
+
+## Key Features
+
+- **High-Frequency Operation**: Operates at **1.2MHz**, allowing the use of small external components (inductors/capacitors) for a more compact design.
+- **High Efficiency**: Advanced synchronous rectification enables up to **95% efficiency**.
+- **Stable Performance**: Delivers low ripple and noise for sensitive electronic circuits.
+- **Wide Input/Output Range**: Versatile enough for a variety of battery-powered and industrial applications.
+- **Integrated Protections**: Includes thermal shutdown and over-current protection.
+
+---
+
+## Technical Specifications
+
+| Parameter | Operating Range |
+| :--- | :--- |
+| **Input Voltage (V_IN)** | 2.0V – 24.0V DC |
+| **Output Voltage (V_OUT)** | 2.0V – 28.0V DC |
+| **Integrated Switch Current** | 2.0A |
+| **Switching Frequency** | 1.2 MHz |
+| **Peak Efficiency** | Up to 95% |
+| **Internal Resistance** | 100mΩ (Typical) |
+
+---
+
+## Pin Configuration
+
+| Pin Name | Description |
+| :--- | :--- |
+| **V+ (Input)** | Positive rail of the input supply (2V to 24V) |
+| **V- (Input)** | Negative rail (Ground) of the input supply |
+| **V+ (Output)** | Boosted positive rail of the output (2V to 28V) |
+| **V- (Output)** | Common Ground for the output rail |
+
+---
+
+## Applications
+
+- **Battery Up-Regulation**: Steps up 3.7V Lithium-ion/Li-Polymer battery voltage to 5V to power microcontrollers and sensors.
+- **Robotics & IoT**: Provides compact, efficient step-up voltage management in space-constrained layouts.
+- **Portable Electronics**: Driving LED arrays, displays, and other modules requiring stable higher voltages from lower battery sources.
+
+---
+
+## Step 1: Hardware Required
+
+1. GMOD Boost Converter (Fixed or Variable)
+2. Input Source (e.g., 3.7V Battery or 12V supply)
+3. Multimeter (for Variable variant calibration)
+4. Load (e.g., LED, Sensor, or Microcontroller)
+
+---
+
+## Step 2: Circuit Connection
+
+Connect the input source to the **V+ (Input)** and **V- (Input)** terminals. For the variable variant, it is recommended to adjust the potentiometer **before** connecting your final load.
+
+![Boost Converter Circuit Diagram](https://files.pcbcupid.com/Documentation/Boards/g-mod/Boost_convertor/boost_converter_circuit_placeholder.png)
+
+---
+
+## Step 3: Observe the Output
+
+Once powered, the module will boost the input voltage.
+
+- **For Fixed 5V**: The output will measure approximately 5V regardless of the input (provided V_IN < 5V).
+- **For Variable**: Use a multimeter on the output terminals and slowly rotate the potentiometer to set your desired voltage level.
+
+![Boost Converter Operation](https://example.com/dummy-boost-animation.gif)
+
+<Warning>
+**Boost Ratio Limit**: The SX1308 is a step-up converter; the input voltage should always be **lower** than the desired output voltage for proper operation. Ensure your load does not exceed the 2A internal switch current limit.
+</Warning>
+
+<Info>
+- **Potentiometer**: If the output voltage does not change on first use, you may need to rotate the potentiometer **counter-clockwise** for several turns (often 10-20 turns) to begin seeing a reduction or increase.
+- **Logic Level Power**: If you are powering a microcontroller from a 3.7V battery, the Fixed 5V variant ensures the logic stays stable even as the battery voltage drops.
+</Info>

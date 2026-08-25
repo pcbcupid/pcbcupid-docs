@@ -1,0 +1,149 @@
+---
+description: "The SY81103 DC-DC Buck Converter is a high-efficiency module that steps down input voltage (9V–18V) to a stable 3.3V, 5V, or an adjustable range for electronic devices."
+title: "DC-DC Buck Converter (SY81103)"
+sidebarTitle: "Buck Converter"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="SY81103 DC-DC Buck Converter" url="https://shop.pcbcupid.com/product/gm015/" />
+<ImgGallery modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/dev-anurag/GLB/gmod_dc-dc-buck.glb" images={[{ url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/Buck-convertor/Buck_convertor_illustration.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' }, { url: 'https://via.placeholder.com/800x450?text=Board+View', label: 'BOARD VIEW', id: 'board' }]} />
+
+The **SY81103 DC-DC Buck Converter** is a compact, high-efficiency power conversion module designed to reduce a higher input voltage to a stable lower output voltage. Built around the **SY81103** synchronous step-down IC, it ensures minimal power loss and high performance, making it ideal for battery-powered and industrial applications.
+
+---
+
+## Product Variants
+
+To accommodate different system requirements, this module is available in three distinct variants:
+
+1.  **Fixed 3.3V Output**: Pre-configured to provide a steady 3.3V DC output.
+2.  **Fixed 5V Output**: Pre-configured to provide a steady 5V DC output.
+3.  **Variable Output**: Features an adjustable output range from **1.2V to 5V** using an onboard potentiometer.
+
+---
+
+## Key Features
+
+- **SY81103 High-Efficiency IC**: Synchronous rectification technology for cool operation.
+- **Wide Input Range**: Supports input voltages from **9V to 18V**.
+- **High Load Capacity**: Delivers up to **3A** output current.
+- **Stable 500kHz Frequency**: Ensures low ripple and high efficiency.
+- **Protection**: Includes cycle-by-cycle current limit and thermal shutdown.
+- **Compact G-Mod Footprint**: Designed to fit seamlessly onto Glyph development boards.
+
+---
+
+## Technical Specifications
+
+| Parameter | Operating Range |
+| :--- | :--- |
+| **Input Voltage (V_IN)** | 9.0V – 18.0V DC |
+| **Output Voltage (V_OUT)** | 1.2V – 5.0V DC (Variable) / 3.3V & 5V (Fixed) |
+| **Output Current** | Up to 3.0A |
+| **Switching Frequency** | 500 kHz |
+| **Peak Efficiency** | Up to 95% |
+| **Integrated IC** | SY81103 |
+
+---
+
+## Pin Configuration
+
+The module features input and output terminal blocks for easy integration:
+
+**Left Side – INPUT**
+- **VIN (+)** → DC Input Supply (**9V – 18V**)
+- **GND (–)** → DC Input Ground
+
+**Right Side – OUTPUT**
+- **VOUT (+)** → Regulated DC Output (**3.3V / 5V / 1.2V–5V**)
+- **GND (–)** → Output Ground
+
+---
+
+## Applications
+
+- **IoT & Sensors**: Powers microcontrollers and sensors from 12V batteries.
+- **Industrial Automation**: Provides stable control-line power in noisy environments.
+- **Automotive Electronics**: Regulates 12V vehicle power for sensitive electronics.
+- **Battery Management**: Efficiently steps down Li-ion battery pack voltages (3S/4S).
+- **Prototyping**: Ideal for breadboard and custom PCB power distribution.
+
+<Info>
+Please ensure you choose the correct variant (Fixed or Variable) based on your specific application needs.
+</Info>
+
+---
+
+## Step 1: Hardware Required
+
+1. SY81103 DC–DC Buck Converter Module (Variant-specific)
+2. DC Power Supply (9V – 18V)
+3. Multimeter (for Variable variant calibration)
+4. Jumper Wires / Connecting Wires
+
+---
+
+## Step 2: Circuit Connection
+
+Connect the input source to the input terminals. For the variable variant, it is recommended to adjust the potentiometer **before** connecting your final load.
+
+<Warning>
+Ensure the input polarity is correct before powering the module. Reverse polarity can permanently damage the SY81103 IC.
+</Warning>
+
+![DC-DC CONVERTER DIAGRAM](https://files.pcbcupid.com/Documentation/Boards/g-mod/Buck-convertor/buck_converter_circuit.avif)
+
+---
+
+## Step 3: Observe the Output
+
+1. **Verify Input**: Use a multimeter to confirm your input voltage is within the **9V–18V** range.
+2. **Set Output (Variable Variant Only)**: Rotate the onboard potentiometer until the desired voltage (e.g., 3.3V or 5V) is reached.
+3. **Confirm Stability**: Check that the output remains stable even when the load is connected.
+4. **Thermal Check**: The module is designed for low heat generation, but ensure adequate airflow if drawing the full 3A current for extended periods.

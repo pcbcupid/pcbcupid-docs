@@ -1,0 +1,132 @@
+---
+description: "The USB to RS485 converter gadget enables seamless serial communication between a computer's USB port and RS485 industrial buses."
+title: "USB to RS485 Converter"
+sidebarTitle: "USB to RS485"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="USB to RS485 Converter" url="https://shop.pcbcupid.com/product/usb-to-rs485/" />
+<ImgGallery images={[{url: "https://files.pcbcupid.com/Documentation/Boards/gadgets/usb-to-rs485/usb-to-rs485-illustration.avif", label: "ILLUSTRATION VIEW", id: "illustration"}, {url: "https://files.pcbcupid.com/Documentation/Boards/gadgets/usb-to-rs485/pcbcupid-usb-to-rs485-boardview.avif", label: "BOARD VIEW", id: "board"}]} />
+
+The **USB to RS485 Converter** is a compact gadget that lets you connect a computer or SBC (like a Raspberry Pi) directly to an RS485 industrial bus or Modbus device. Using Silicon Labs' high-performance **CP2102N** USB-to-UART bridge controller along with the **MAX485E** differential transceiver, it translates your computer's USB communication into a robust, differential serial signal resistant to electrical noise.
+
+---
+
+## Key Features
+
+- **Plug-and-Play Integration**: Recognized as a standard virtual COM port on Windows, macOS, and Linux.
+- **Auto-Direction Flow Control**: Automatic hardware direction-switching handles half-duplex transmission without needing extra GPIO control pins.
+- **Robust ESD Protection**: TVS diodes and signal line filtering safeguard your host computer from static discharge and transient voltage spikes.
+- **LED Indicators**: Integrated TX and RX status LEDs provide real-time visual feedback on data transmission.
+- **Terminal Block Interface**: Screw terminals allow simple, reliable connection to RS485 bus lines (A, B, GND).
+
+---
+
+## Technical Specifications
+
+| Parameter | Operating Range |
+| :--- | :--- |
+| **USB to UART Bridge (U1)** | Silicon Labs CP2102N (CP2102NA02MMD) |
+| **RS-485 Transceiver (U2)** | Maxim MAX485E |
+| **Input Connection** | USB Type-A / USB Type-C |
+| **Output Interface** | 3-pin Screw Terminal (A+, B-, GND) |
+| **Maximum Baud Rate** | Up to 3 Mbps (CP2102N capability) / 2.5 Mbps (MAX485E capability) |
+| **Transmission Distance** | Up to 1200 meters (at lower baud rates) |
+| **Operating Voltage** | 5V DC (bus-powered via USB) |
+
+---
+
+## Pin Configuration
+
+The converter outputs three differential lines on its screw terminal connector:
+
+| Terminal Pin | Signal Name | Description |
+| :--- | :--- | :--- |
+| **A+** | RS485 A (D+) | Non-inverting differential signal line |
+| **B-** | RS485 B (D-) | Inverting differential signal line |
+| **GND** | Ground | Common reference ground for long cable runs |
+
+---
+
+## Step 1: Driver Installation
+
+The USB to RS485 converter uses the **CP2102N** chip from Silicon Labs. You will need to ensure the Silicon Labs CP210x USB to UART Bridge VCP drivers are installed:
+
+1. Connect the USB to RS485 converter to your computer's USB port.
+2. **Windows 10/11**: The driver usually installs automatically via Windows Update. If the device appears as "Unknown Device" in Device Manager, download and install the official **CP210x VCP Drivers** from the [Silicon Labs Website](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
+3. **macOS**: Modern macOS releases (macOS 10.11+) include a native Apple USB-Serial driver that supports the CP2102N automatically.
+4. **Linux**: Built-in support is included in the Linux kernel (via the `cp210x` driver module). The device will automatically enumerate under `/dev/ttyUSB*` (e.g. `/dev/ttyUSB0`).
+5. Verify the connection by checking that the COM port is properly recognized in your system.
+
+---
+
+## Step 2: Bus Connections
+
+To interface the USB to RS485 converter with a remote RS485 slave node (like a G-Mod RS485 sensor or Modbus meter), connect the bus lines as follows:
+
+| USB to RS485 Pin | Remote Node / Sensor Pin |
+| :--- | :--- |
+| **A+** | **A (D+)** |
+| **B-** | **B (D-)** |
+| **GND** | **GND** |
+
+<Info>
+  For long-distance cable runs (exceeding 100 meters) or environments with high electrical noise, it is highly recommended to add a **120-ohm terminating resistor** across the A+ and B- lines at both ends of the bus.
+</Info>
+
+---
+
+## Step 3: Software Setup
+
+You can use any serial terminal utility (such as the Arduino IDE Serial Monitor, CoolTerm, or PuTTY) to send and receive commands through the converter:
+
+1. Open your chosen serial monitor software.
+2. Select the COM port corresponding to your USB to RS485 converter.
+3. Set the communication parameters matching your remote device (commonly **9600** or **115200** baud rate, **8 Data bits, No Parity, 1 Stop bit**).
+4. Send commands to poll data from your Modbus or RS485 slaves and view the returned serial bytes.
