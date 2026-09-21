@@ -123,7 +123,8 @@
                   "documentation/modules/g-mod/motor-driver",
                   "documentation/modules/g-mod/lithium-charger",
                   "documentation/modules/g-mod/dc-buck-converter",
-                  "documentation/modules/g-mod/dc-boost-converter"
+                  "documentation/modules/g-mod/dc-boost-converter",
+                  "documentation/modules/g-mod/audio-codec"
                 ]
               },
               {

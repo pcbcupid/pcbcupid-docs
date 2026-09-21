@@ -52,9 +52,9 @@ export const ImgGallery = ({ images, modelUrl }) => {
 };
 
 <ShopHeader title="DC-DC Boost Converter (SX1308)" url="https://shop.pcbcupid.com/product/gm023/" />
-<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model-c/glb/GM013-DC-DC-BOOST/GM013-DC-DC-BOOST-c.glb" images={[{ url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/Boost_convertor/Boost_convertor_illustration.avif', label: 'ILLUSTRATION VIEW', id: 'illustration' }, { url: 'https://via.placeholder.com/800x450?text=Board+View Coming Soon', label: 'BOARD VIEW', id: 'board' }]} />
+<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GM013-DC-DC-BOOST/GM013-DC-DC-BOOST.glb" images={[{ url: 'https://library.pcbcupid.com/api/repo/pcbcupid/pcbcupid-board-illustrations/file/illustrations/GM013-DC-DC-BOOST/GM013-DC-DC-BOOST-FB-o.svg', label: 'ILLUSTRATION VIEW', id: 'illustration' }, { url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/Boost_convertor/Board-view.avif', label: 'BOARD VIEW', id: 'board' }]} />
 
-The **GMOD SX1308 DC-DC Boost Converter** is a high-frequency (1.2MHz) step-up power module designed to efficiently convert lower input voltages into stable higher output voltages. Powered by the high-performance **SX1308** IC, this module is perfect for applications requiring compact, high-efficiency power management, such as driving 5V logic from a single 3.7V Li-ion battery or powering sensors in portable electronics.
+The **SX1308 DC-DC Boost Converter** is a high-frequency (1.2MHz) step-up power module designed to efficiently convert lower input voltages into stable higher output voltages. Powered by the high-performance **SX1308** IC, this module is perfect for applications requiring compact, high-efficiency power management, such as driving 5V logic from a single 3.7V Li-ion battery or powering sensors in portable electronics.
 
 Its small form factor and 95% peak efficiency make it an ideal choice for robotics, IoT devices, and DIY electronics projects where space and power conservation are critical.
 
@@ -124,8 +124,6 @@ The GMOD Boost Converter is available in two distinct variants to suit different
 
 Connect the input source to the **V+ (Input)** and **V- (Input)** terminals. For the variable variant, it is recommended to adjust the potentiometer **before** connecting your final load.
 
-![Boost Converter Circuit Diagram](https://files.pcbcupid.com/Documentation/Boards/g-mod/Boost_convertor/boost_converter_circuit_placeholder.png)
-
 ---
 
 ## Step 3: Observe the Output
@@ -134,8 +132,6 @@ Once powered, the module will boost the input voltage.
 
 - **For Fixed 5V**: The output will measure approximately 5V regardless of the input (provided V_IN < 5V).
 - **For Variable**: Use a multimeter on the output terminals and slowly rotate the potentiometer to set your desired voltage level.
-
-![Boost Converter Operation](https://example.com/dummy-boost-animation.gif)
 
 <Warning>
 **Boost Ratio Limit**: The SX1308 is a step-up converter; the input voltage should always be **lower** than the desired output voltage for proper operation. Ensure your load does not exceed the 2A internal switch current limit.

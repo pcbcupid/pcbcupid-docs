@@ -55,7 +55,7 @@ export const ImgGallery = ({ images, modelUrl }) => {
 
 
 <ShopHeader title="Lithium Battery Charger Module" url="https://shop.pcbcupid.com/product/gm014/" />
-<ImgGallery images={[{url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Li-ion%20charging%20/lithium_charger_illustration.avif", label: "ILLUSTRATION", id: "illustrat"}]} />
+<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GM014-LI-ION-CHARGING/GM014-LI-ION-CHARGING.glb" images={[{url: "https://files.pcbcupid.com/Documentation/Boards/g-mod/Li-ion%20charging%20/lithium_charger_illustration.avif", label: "ILLUSTRATION", id: "illustrat"}]} />
 
 
 
@@ -67,7 +67,7 @@ A **lithium charger** is a versatile power management module used to safely char
 
 ---
 
-## ⚙️ Charging Mode Configuration
+## Charging Mode Configuration
 
 The module can be configured for two different battery types by modifying a hardware solder point on the board labeled **2S**.
 
@@ -82,7 +82,7 @@ To ensure proper charging, your input power supply must meet the following minim
 
 ---
 
-## 🔌 Pin Configuration
+## Pin Configuration
 - **IN+** – DC Power Input Positive
 - **GND** – DC Power Input Ground
 - **B+** – Battery Positive Terminal
@@ -95,7 +95,7 @@ To ensure proper charging, your input power supply must meet the following minim
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Dual Mode Support**: Charges 1S (3.7V) and 2S (7.4V) packs.
 * **High Current Rating**: Supports up to **2A** default charging current.
@@ -106,7 +106,7 @@ To ensure proper charging, your input power supply must meet the following minim
 
 ---
 
-## 🛠️ Step 1: Hardware Required
+## Step 1: Hardware Required
 1. G-MOD Lithium Charger Module (GM014)
 2. Lithium-ion Battery:
    - **1S**: 3.7V Cell
@@ -114,18 +114,14 @@ To ensure proper charging, your input power supply must meet the following minim
 3. DC Power Supply (5V for 1S, 12V for 2S)
 4. Connecting Wires
 5. Screwdriver (for terminal connections)
-
 ---
 
-## ⚡ Step 2: Circuit Connection
-> [!IMPORTANT]
+## Step 2: Circuit Connection
+> [!INFO]
 > Always verify the **2S** solder point configuration before connecting your battery. Connecting a 1S battery while the board is in 2S mode will damage the battery.
-
-![Lithium-Charger-Wiring](https://example.com/dummy-image-url-for-wiring.png)
-
 ---
 
-## 📊 Step 3: Observe the Output
+## Step 3: Observe the Output
 Once connected, the **CHR** pin will pull low to indicate charging is active. Once the battery reaches its target voltage (**4.2V for 1S** or **8.4V for 2S**), the **STB** pin will trigger to signal a full charge.
 
 - **Current Limiting**: If you need to charge smaller batteries, replace the surface-mount current-sensing resistors to lower the 2A output to a safer level for your specific cells.
