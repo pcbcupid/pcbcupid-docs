@@ -203,13 +203,13 @@
               "guides/display-test",
               "guides/temperaturemonitoring-glyph+sh1106oled",
               "guides/dht-onewire-communication",
-              "guides/unipolar-stepper-motor",
-              {
-                "group": "Kits",
-                "pages": [
-                  "guides/kits/beginner-kit"
-                ]
-              }
+              "guides/unipolar-stepper-motor"
+            ]
+          },
+          {
+            "group": "Kits",
+            "pages": [
+              "guides/kits/beginner-kit"
             ]
           },
           {
@@ -331,10 +331,7 @@
       "source": "/guides/beginner-kit",
       "destination": "/guides/kits/beginner-kit"
     },
-    {
-      "source": "/guides/kits/Beginner-kit",
-      "destination": "/guides/kits/beginner-kit"
-    },
+
     {
       "source": "/Enclosure/Enclosure/3d_enclosure_for_glyph_boards",
       "destination": "/documentation/enclosure/3d-printed-enclosure-for-glyph-esp32-boards"
