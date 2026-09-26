@@ -94,6 +94,12 @@
                       "documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-assembly",
                       "documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-power-management"
                     ]
+                  },
+                  {
+                    "group": "Glyph 2040",
+                    "pages": [
+                      "documentation/modules/glyph/glyph-2040/overview-glyph-2040"
+                    ]
                   }
                 ]
               },
@@ -124,13 +130,17 @@
                   "documentation/modules/g-mod/lithium-charger",
                   "documentation/modules/g-mod/dc-buck-converter",
                   "documentation/modules/g-mod/dc-boost-converter",
-                  "documentation/modules/g-mod/audio-codec"
+                  "documentation/modules/g-mod/audio-codec",
+                  "documentation/modules/g-mod/can-bus",
+                  "documentation/modules/g-mod/rs-485-transceiver",
+                  "documentation/modules/g-mod/bi-voltage-level-translator"
                 ]
               },
               {
                 "group": "G-Sense",
                 "pages": [
                   "documentation/modules/g-sense/microphone",
+                  "documentation/modules/g-sense/t5848-microphone",
                   "documentation/modules/g-sense/2-channel-microphone",
                   "documentation/modules/g-sense/sht35",
                   "documentation/modules/g-sense/sht45",
@@ -159,7 +169,8 @@
               {
                 "group": "Gadgets",
                 "pages": [
-                  "documentation/modules/gadgets/usb-to-rs485"
+                  "documentation/modules/gadgets/usb-to-rs485",
+                  "documentation/modules/gadgets/usb-ttl"
                 ]
               }
             ]
@@ -191,7 +202,14 @@
               "guides/temperature-monitoring-using-glyph",
               "guides/display-test",
               "guides/temperaturemonitoring-glyph+sh1106oled",
-              "guides/dht-onewire-communication"
+              "guides/dht-onewire-communication",
+              "guides/unipolar-stepper-motor",
+              {
+                "group": "Kits",
+                "pages": [
+                  "guides/kits/beginner-kit"
+                ]
+              }
             ]
           },
           {
@@ -209,7 +227,8 @@
               "guides/basic-sensors/flame-sensor",
               "guides/basic-sensors/infrared-sensor",
               "guides/basic-sensors/ldr",
-              "guides/basic-sensors/mq2-sensor"
+              "guides/basic-sensors/mq2-sensor",
+              "guides/basic-sensors/touch-sensor"
             ]
           },
           {
@@ -304,6 +323,18 @@
     "indexing": "all"
   },
   "redirects": [
+    {
+      "source": "/guides/beginnerkit",
+      "destination": "/guides/kits/beginner-kit"
+    },
+    {
+      "source": "/guides/beginner-kit",
+      "destination": "/guides/kits/beginner-kit"
+    },
+    {
+      "source": "/guides/kits/Beginner-kit",
+      "destination": "/guides/kits/beginner-kit"
+    },
     {
       "source": "/Enclosure/Enclosure/3d_enclosure_for_glyph_boards",
       "destination": "/documentation/enclosure/3d-printed-enclosure-for-glyph-esp32-boards"

@@ -1,0 +1,161 @@
+---
+description: "The USB to TTL Converter gadget provides seamless UART serial communication between a computer USB Type-C port and microcontrollers using the Silicon Labs CP2102N."
+title: "USB to TTL Converter"
+sidebarTitle: "USB to TTL"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="USB to TTL Converter" url="https://shop.pcbcupid.com/product/usb-to-ttl/" />
+<ImgGallery modelUrl="https://library.pcbcupid.com/api/3d-model/GM007-USB-TTL/file/glb/GM007-USB-TTL.glb" images={[{url: "https://library.pcbcupid.com/api/repo/pcbcupid/pcbcupid-board-illustrations/file/illustrations/GM007-USB-TTL/GM007-USB-TTL-FB-o.svg", label: "ILLUSTRATION VIEW", id: "illustration"}]} />
+
+The **USB to TTL Converter** is an ultra-compact, high-performance gadget designed to bridge your computer or single-board computer (SBC) directly to TTL UART microcontrollers, development boards, and embedded peripherals. 
+
+Powered by the robust Silicon Labs **CP2102N-Axx-xQFN28** USBXpress USB-to-UART bridge IC and featuring a reversible **USB Type-C** interface, it provides lightning-fast serial communication, dual power voltage rails (5V and 3.3V), and rock-solid reliability across all major operating systems.
+
+---
+
+## Key Features
+
+- **High-Performance Bridge**: Powered by Silicon Labs **CP2102N-Axx-xQFN28**, delivering hardware USB 2.0 full-speed performance.
+- **On-Board USB Type-C Connector**: Reversible Type-C port used both for powering the module and for programming/flashing microcontrollers over UART.
+- **Dual Voltage Outputs**: Supplies both **VCC (5V)** directly from USB-C and **VDD (3.3V)** from the internal low-dropout regulator to power target circuits.
+- **Microcontroller Programming**: Fully supports UART bootloader flashing for microcontrollers (ESP32, ESP8266, STM32, Arduino Pro Mini, Raspberry Pi Pico/RP2040).
+- **High-Speed Baud Rates**: Supports standard and custom baud rates ranging from **300 bps up to 3 Mbps**.
+- **Integrated Status Indicators**: On-board TX and RX LEDs provide immediate visual confirmation of active data flow and programming progress.
+- **Cross-Platform Compatibility**: Plug-and-play functionality supported natively on Windows, macOS, and Linux via Silicon Labs VCP drivers.
+- **Standard 5-Pin Header**: Convenient 0.1" (2.54mm) pitch header for breadboards and standard DuPont jumper wires.
+
+---
+
+## Technical Specifications
+
+| Parameter | Specification |
+| :--- | :--- |
+| **USB-to-UART Controller** | Silicon Labs CP2102N-Axx-xQFN28 (28-pin QFN) |
+| **USB Port** | USB Type-C (USB 2.0 Full-Speed 12 Mbps) |
+| **Breakout Pins** | 5-Pin 2.54mm Header: `VCC`, `VDD`, `TX`, `RX`, `GND` |
+| **UART Logic Level** | 3.3V TTL (with 5V-tolerant RX inputs) |
+| **Maximum Baud Rate** | Up to 3 Mbps |
+| **VCC Output Voltage** | 5V DC (Directly from USB VBUS) |
+| **VDD Output Voltage** | 3.3V DC (Regulated output from CP2102N, up to 100 mA) |
+| **Flow Control** | Hardware handshake supported in IC; software XON/XOFF |
+| **Operating Temperature** | -40°C to +85°C |
+
+---
+
+## Pin Configuration
+
+The converter breaks out a versatile 5-pin interface:
+
+| Pin Name | Type | Description |
+| :--- | :--- | :--- |
+| **VCC** | Power Output | **5V DC Output** sourced directly from the host USB-C port (VBUS). Ideal for powering 5V development boards and circuits. |
+| **VDD** | Power Output | **3.3V DC Output** derived from the CP2102N integrated LDO regulator (up to 100mA). Use this to power low-current 3.3V targets or logic reference. |
+| **TX** | Data Output | **Transmit Data (TXD)**: Outputs serial data from the computer to your target device at 3.3V logic levels. Connect to target **RX**. |
+| **RX** | Data Input | **Receive Data (RXD)**: Receives serial data from your target device into the computer. Connect to target **TX**. (5V tolerant). |
+| **GND** | Ground | **Common Reference Ground**: Must be connected to the target board ground for stable communication. |
+
+<Note>
+Always ensure a common ground (**GND**) connection exists between the USB to TTL converter and your target microcontroller.
+</Note>
+
+---
+
+## Step 1: Driver Installation
+
+The module utilizes the **CP2102N** bridge from Silicon Labs. Modern operating systems handle drivers effortlessly:
+
+1. Connect the USB to TTL adapter to your computer using a USB Type-C cable.
+2. **Windows 10/11**: Drivers typically install automatically via Windows Update. If needed, install the official [Silicon Labs CP210x VCP Drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
+3. **macOS**: Built-in support is included natively in macOS 10.11 and later via Apple's native driver stack.
+4. **Linux**: Built-in kernel support is available via the `cp210x` driver module. The device will enumerate automatically under `/dev/ttyUSB*` (e.g., `/dev/ttyUSB0`).
+5. Open Device Manager (Windows) or run `ls /dev/tty*` (macOS/Linux) to identify your assigned COM / serial port.
+
+---
+
+## Step 2: Target Connections
+
+When connecting the converter to a microcontroller (such as an Arduino, ESP32, STM32, RP2040, or Raspberry Pi), crossover the TX and RX data lines:
+
+| USB to TTL Converter Pin | Target Microcontroller / Device Pin | Note |
+| :--- | :--- | :--- |
+| **TX** | **RX** | Transmit connects to Receive |
+| **RX** | **TX** | Receive connects to Transmit |
+| **GND** | **GND** | Common ground reference (Required) |
+| **VDD (3.3V)** *or* **VCC (5V)** | **3.3V** *or* **5V / VIN** | Connect *one* power rail if you wish to power the target board from USB. |
+
+<Warning>
+**Power Precaution:** Connect either **VCC** (5V) or **VDD** (3.3V) depending on your target device's operating voltage, never both. If your target microcontroller is already independently powered by an external source, do **not** connect VCC or VDD—only connect **TX**, **RX**, and **GND**.
+</Warning>
+
+---
+
+## Step 3: Programming Microcontrollers & Serial Communication
+
+### 1. Programming / Flashing Microcontrollers
+The USB to TTL converter can be used directly to upload firmware sketches and binaries to microcontrollers featuring UART bootloaders (such as ESP32, ESP8266, STM32, Arduino Pro Mini, and RP2040):
+
+1. **Connect the Lines**: Wire **TX -> RX**, **RX -> TX**, **GND -> GND**, and power the target board via **VDD (3.3V)** or **VCC (5V)** from the USB-C port.
+2. **Put Target in Bootloader Mode**:
+   - **ESP32 / ESP8266**: Pull `GPIO0` LOW and pulse `RESET` LOW to enter bootloader download mode.
+   - **STM32**: Set `BOOT0` HIGH and press reset.
+   - **Arduino Pro Mini**: Press reset when the IDE reports "Uploading...".
+3. **Select COM Port**: In your IDE (Arduino IDE, PlatformIO, STM32CubeProgrammer, or `esptool.py`), choose the Silicon Labs CP210x COM port.
+4. **Flash Firmware**: Click **Upload**. The on-board TX and RX status LEDs will blink rapidly as the firmware binary is written into target flash memory.
+
+---
+
+### 2. Serial Monitoring & Debugging
+Once programmed, the adapter acts as a high-speed serial terminal for print statements (`Serial.println`) and two-way interaction:
+
+1. Open your preferred serial monitor (Arduino Serial Monitor, PuTTY, CoolTerm, or Tera Term).
+2. Select the CP2102N COM port.
+3. Match the baud rate defined in your target firmware (commonly **115200** or **9600** bps).
+4. Configure framing to **8 Data bits, No Parity, 1 Stop bit (8-N-1)**.
+5. Open the port to view live serial output and transmit commands to your device.

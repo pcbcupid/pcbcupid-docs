@@ -12,9 +12,48 @@ export const ShopHeader = ({ title, url }) => (
   </div>
 );
 
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
 <ShopHeader title="Glyph Mini RP2040 Overview" url="https://shop.pcbcupid.com/product/gdm001" />
 
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/glyph-mini-2040.avif" alt="Glyph Mini RP2040" />
+<ImgGallery modelUrl="https://library.pcbcupid.com/api/3d-model/GDM001-glyph-mini_rp2040/file/glb/GDM001-glyph-mini_rp2040.glb" images={[{url: "https://library.pcbcupid.com/api/repo/pcbcupid/pcbcupid-board-illustrations/file/illustrations/GDM001-glyph-mini_rp2040/GDM001-glyph-mini_rp2040-FB-o.svg", label: "ILLUSTRATION VIEW", id: "illustration"}, {url: "https://files.pcbcupid.com/Documentation/Boards/glyph-mini/glyph-mini-2040.avif", label: "BOARD VIEW", id: "board"}]} />
 
 Introducing the Glyph Mini RP2040, a compact and high-performance microcontroller development board powered by the powerful RP2040 chip. Ideal for IoT projects, robotics, sensors, and advanced embedded systems, the Glyph Mini offers flexibility, speed, and modern connectivity—making it a perfect platform for innovation and rapid prototyping.
 

@@ -1,0 +1,162 @@
+---
+description: "Explore the PCB Cupid Beginner Kit powered by the GLYPH-C6 board: component list, pin mappings, project guides, and step-by-step tutorials."
+title: "Beginner Kit with GLYPH-C6"
+sidebarTitle: "Beginner Kit"
+---
+
+# GLYPH-C6 Beginner Kit
+
+## Welcome to the Beginner Kit
+
+The **PCB Cupid GLYPH-C6 Beginner Kit** is an all-in-one hardware and learning pack designed to take you from your very first line of code to building smart, interactive IoT devices. Powered by the high-performance **GLYPH-C6 (ESP32-C6 RISC-V)** development board with native Wi-Fi 6, Bluetooth 5 (LE), and Zigbee/Thread support, this kit includes essential sensors, displays, switches, and actuators for hands-on electronics prototyping.
+
+Whether you are a student, hobbyist, or developer diving into embedded systems, this kit gives you all the building blocks to learn digital input/output, analog reading, PWM control, I2C/One-Wire communication, motor control, and graphical user interfaces.
+
+---
+
+## What's in the Kit?
+
+Here is the complete inventory of hardware components included in your kit, along with links to their dedicated tutorial guides in this documentation:
+
+| Component | Quantity | Key Specifications & Description | Guide & Reference |
+| :--- | :---: | :--- | :--- |
+| **Pcbcupid GLYPH-C6** | 1 | ESP32-C6 RISC-V 160 MHz microcontroller with Wi-Fi 6, BLE 5, Zigbee/Thread, USB-C, and onboard LED | [GLYPH-C6 Overview](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) • [Pinout](/documentation/modules/glyph/glyph-esp32c6/glyphc6-pinouts) |
+| **Solderless Breadboard** | 1 | Half-size prototyping breadboard for secure, solder-free wiring | [Hardware Setup](/documentation/welcome/prerequisites/arduino-ide-setup) |
+| **Colored LEDs (5mm)** | 15 | 5 × Red, 5 × Green, 5 × Blue LEDs with current-limiting resistors for status indication and PWM dimming | [Blink LED Tutorial](/guides/arduino-ide-blink-led) |
+| **Tactile Pushbuttons** | 4 | Momentary tactile push buttons for digital trigger inputs, user actions, and debounce experiments | [Reading Inputs](/guides/reading-analoginput) |
+| **Ultrasonic Distance Sensor** | 1 | **HC-SR04** non-contact distance sensor (2 cm to 400 cm range, 0.3 cm resolution) | [HC-SR04 Guide](/guides/basic-sensors/ultrasonic-sensor) |
+| **OLED Graphical Display** | 1 | 0.96" / 1.3" monochrome 128×64 I2C display (SH1106 / SSD1306) for real-time data, icons, and menus | [Display Test](/guides/display-test) • [OLED Guide](/guides/temperaturemonitoring-glyph+sh1106oled) |
+| **Capacitive Touch Sensor** | 1 | **TTP223** touch detector module with momentary/toggle modes and onboard indicator | [Touch Sensor Guide](/guides/basic-sensors/touch-sensor) |
+| **Rotary Encoder Module** | 1 | 360° infinite rotary knob with quadrature CLK/DT output and integrated push button (SW) | [Rotary Encoder Guide](/guides/rotor-encoder-with-glyph-c6) |
+| **Unipolar Stepper Motor** | 1 | **28BYJ-48** 5V geared stepper motor with 64:1 reduction gearbox (2048 / 4096 steps per revolution) | [Stepper Motor Guide](/guides/unipolar-stepper-motor) |
+| **ULN2003 Driver Board** | 1 | 7-channel Darlington transistor driver board with flyback diodes and coil activity LEDs | [ULN2003 Driver Guide](/guides/unipolar-stepper-motor) |
+| **Jumper Wires & Cable** | 1 Set | Female-to-Female & Male-to-Male DuPont jumper wires, plus USB-C data cable | — |
+
+---
+
+## Component Tutorial Guides
+
+Every component in this kit has a complete, tested guide with wiring diagrams, pinout charts, and ready-to-run Arduino sketches. Jump straight into any tutorial:
+
+<Columns cols={2}>
+  <Card title="GLYPH-C6 Microcontroller" icon="microchip" href="/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6">
+    Learn the architecture, GPIO mapping, strapping pins, and USB CDC settings for the GLYPH-C6.
+  </Card>
+
+  <Card title="LED Blinking & PWM" icon="lightbulb" href="/guides/arduino-ide-blink-led">
+    Master digital output, time delays, and PWM brightness fading with Red, Green, and Blue LEDs.
+  </Card>
+
+  <Card title="HC-SR04 Ultrasonic Sensor" icon="signal" href="/guides/basic-sensors/ultrasonic-sensor">
+    Calculate distances using ultrasonic pulse timing and build proximity alerts.
+  </Card>
+
+  <Card title="OLED Display (I2C)" icon="tv" href="/guides/display-test">
+    Render custom text, geometric shapes, telemetry values, and UI frames on the 128×64 OLED.
+  </Card>
+
+  <Card title="TTP223 Touch Sensor" icon="fingerprint" href="/guides/basic-sensors/touch-sensor">
+    Implement touch-activated controls with software debouncing and edge-detection toggling.
+  </Card>
+
+  <Card title="Rotary Encoder & Button" icon="rotate-cw" href="/guides/rotor-encoder-with-glyph-c6">
+    Track bidirectional rotation position, speed, and knob push clicks using hardware interrupts.
+  </Card>
+
+  <Card title="28BYJ-48 Stepper Motor" icon="cog" href="/guides/unipolar-stepper-motor">
+    Control precise angular position and rotational speed with the ULN2003 Darlington driver.
+  </Card>
+
+  <Card title="I2C Address Scanner" icon="search" href="/guides/i2c-scan-test">
+    Discover and verify connected I2C peripherals (such as your OLED display) automatically.
+  </Card>
+</Columns>
+
+---
+
+## What You Can Build
+
+With the components in this kit, you can build a wide variety of standalone gadgets and connected IoT projects. Here are some of the most exciting builds to explore:
+
+### 1. Smart Distance Meter & Parking Radar
+- **Components:** GLYPH-C6 + HC-SR04 Ultrasonic Sensor + OLED Display + Red/Green/Blue LEDs.
+- **How it works:** The ultrasonic sensor measures the distance to the nearest obstacle. The OLED shows the exact distance in centimeters and inches, while the LEDs form a visual proximity bar (Green = Safe, Blue = Approaching, Red = Alert / Too Close!).
+- **Skills Learned:** Ultrasonic pulse timing, multi-threshold logic, OLED graphic rendering, multi-LED states.
+
+### 2. Interactive Menu & Setting Controller
+- **Components:** GLYPH-C6 + Rotary Encoder (with switch) + OLED Display.
+- **How it works:** Rotate the knob to scroll through custom items, submenus, and adjustable values (such as motor speed, brightness, or thresholds). Press the knob's built-in button to confirm selections.
+- **Skills Learned:** Embedded UI design, state machines, interrupt handling, encoder quadrature decoding.
+
+### 3. Touch-Controlled Smart Mood Lamp & Dimmer
+- **Components:** GLYPH-C6 + TTP223 Touch Sensor + Rotary Encoder + RGB LEDs.
+- **How it works:** Tap the capacitive touch sensor to instantly turn the lamp on or off. Rotate the rotary encoder to cycle through RGB color hues or adjust brightness smoothly using ESP32 PWM channels.
+- **Skills Learned:** Capacitive sensing, software debouncing, LED PWM fading, color mixing.
+
+### 4. Precision Motorized Turntable & Pan-Tilt Indexer
+- **Components:** GLYPH-C6 + 28BYJ-48 Stepper Motor + ULN2003 Driver + Rotary Encoder.
+- **How it works:** Turn the rotary encoder to set an exact target angle (e.g., 45°, 90°, 180°, or 360°). The stepper motor turns with high torque through its 64:1 reduction gearbox to the exact commanded step count.
+- **Skills Learned:** Half-step sequencing, step acceleration, gear-ratio calculations, open-loop angular accuracy.
+
+### 5. Autonomous Radar Obstacle Scanner
+- **Components:** GLYPH-C6 + Stepper Motor + Ultrasonic Sensor + OLED Display.
+- **How it works:** Mount the ultrasonic sensor onto the stepper motor shaft. The motor sweeps 180° back and forth in discrete increments. At each step, distance is sampled and plotted as a mini radar sweep on the OLED screen!
+- **Skills Learned:** Actuator-sensor synchronization, 2D polar-to-Cartesian screen plotting, robotic navigation basics.
+
+### 6. Wi-Fi Connected Cloud Dashboard & Remote Control
+- **Components:** GLYPH-C6 (built-in Wi-Fi 6) + All Kit Peripherals.
+- **How it works:** Leverage the ESP32-C6's wireless capabilities to run a local web server or connect to an MQTT broker. Read live sensor data and command stepper movements or LED toggles from any web browser or phone!
+- **Skills Learned:** Embedded web servers, REST APIs, JSON formatting, IoT telemetry.
+
+---
+
+## Recommended Pin Mapping (Conflict-Free)
+
+When combining multiple modules from your Beginner Kit on the breadboard, use this pin assignment plan so all components can operate simultaneously without GPIO conflicts:
+
+| Component Pin | GLYPH-C6 GPIO | Function / Bus | Notes |
+| :--- | :---: | :--- | :--- |
+| **OLED SCL** | **GPIO 5** | I2C0 Clock | Connected to default hardware I2C |
+| **OLED SDA** | **GPIO 4** | I2C0 Data | Connected to default hardware I2C |
+| **Ultrasonic TRIG** | **GPIO 0** | Digital Output | Sends 10 µs pulse to start sound wave |
+| **Ultrasonic ECHO** | **GPIO 1** | Digital Input | Measures round-trip echo pulse duration |
+| **Touch Sensor OUT** | **GPIO 20** | Digital Input | HIGH when touched; debounced in code |
+| **Rotary CLK** | **GPIO 2** | Interrupt Input | Quadrature Clock signal |
+| **Rotary DT** | **GPIO 3** | Digital Input | Quadrature Direction signal |
+| **Rotary SW** | **GPIO 21** | Digital Input | Integrated push button (INPUT_PULLUP) |
+| **Stepper IN1** | **GPIO 14** | Digital Output | ULN2003 Coil 1 |
+| **Stepper IN2** | **GPIO 15** | Digital Output | ULN2003 Coil 2 |
+| **Stepper IN3** | **GPIO 18** | Digital Output | ULN2003 Coil 3 |
+| **Stepper IN4** | **GPIO 19** | Digital Output | ULN2003 Coil 4 |
+| **LED 1 (Red)** | **GPIO 6** | PWM / Digital Output | Via 220 Ω resistor |
+| **LED 2 (Green)** | **GPIO 7** | PWM / Digital Output | Via 220 Ω resistor |
+| **LED 3 (Blue)** | **GPIO 8** | PWM / Digital Output | Via 220 Ω resistor |
+| **Pushbutton 1** | **GPIO 9** | Digital Input | External tactile button (INPUT_PULLUP) |
+
+<Note>
+**Power Sharing Tip:** All sensors and the OLED run safely from the GLYPH-C6's **3.3V** pin. The **ULN2003 Stepper Motor driver** requires **5V**, which can be taken directly from the board's **USB** pin when powered via USB-C!
+</Note>
+
+---
+
+## Getting Started: 4 Simple Steps
+
+Follow this fast-track checklist to set up your environment and run your first project:
+
+<Steps>
+  <Step title="Set Up Your Arduino IDE">
+    Download the latest [Arduino IDE](https://www.arduino.cc/en/software) and install the ESP32 board package (`>= 3.1.0`). Under **Tools → Board → esp32**, select **Pcbcupid GLYPH C6**. Enable **Tools → USB CDC On Boot → Enabled**.
+  </Step>
+
+  <Step title="Test the Onboard LED (Hello World)">
+    Open the [Blink LED Tutorial](/guides/arduino-ide-blink-led), select your COM port, and upload the sketch to verify code upload and board communication.
+  </Step>
+
+  <Step title="Wire Individual Modules">
+    Pick one module (e.g., the [TTP223 Touch Sensor](/guides/basic-sensors/touch-sensor) or [HC-SR04 Ultrasonic Sensor](/guides/basic-sensors/ultrasonic-sensor)), wire it on the breadboard, and run the example sketch to understand its operation.
+  </Step>
+
+  <Step title="Combine Modules into Full Projects">
+    Combine your display, sensors, and stepper motor into an integrated device such as the [Interactive Radar Scanner](#5-autonomous-radar-obstacle-scanner) or [Smart Distance Meter](#1-smart-distance-meter--parking-radar)!
+  </Step>
+</Steps>

@@ -1,0 +1,205 @@
+---
+description: "The CAN Bus Communication Module (CAN G-Mod) enables reliable, noise-resistant data exchange between microcontrollers and CAN networks for automotive and industrial systems."
+title: "CAN Bus Transceiver"
+sidebarTitle: "CAN Bus"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader 
+  title="CAN Bus Transceiver" 
+  url="https://shop.pcbcupid.com/product/gm012/" 
+/>
+
+<ImgGallery 
+  modelUrl="https://raw.githubusercontent.com/pcbcupid/pcbcupid-hardware-libraries/main/pcbcupid_3dmodels/glb/gmod_can.glb" 
+  images={[
+    { url: 'https://library.pcbcupid.com/api/repo/pcbcupid/pcbcupid-board-illustrations/file/illustrations/GM012-CAN-BUS/GM012-CAN-BUS-FB-o.svg', label: 'ILLUSTRATION VIEW', id: 'illustration' },
+    { url: 'https://files.pcbcupid.com/Documentation/Boards/g-mod/can/Can%20board%20view.avif', label: 'BOARD VIEW', id: 'board' },
+  ]} 
+/>
+
+A **CAN Bus Transceiver** is an electronic communication module designed to enable reliable data exchange between microcontrollers and CAN bus networks. It converts controller signals into CAN protocol differential signals, ensuring robust, noise-resistant communication with high reliability and performance in automotive and industrial systems.
+
+The module uses the automotive-grade **NXP TJA1042T/3** high-speed CAN transceiver with independent `VIO` pin support, allowing direct interfacing with 3.3V microcontrollers while maintaining full 5V differential bus driving capability.
+
+---
+
+## Pin Configuration
+
+| Pin | Type | Description |
+| :--- | :--- | :--- |
+| **5V** | Power | Main 5V Power Supply Input for the CAN transceiver core |
+| **3V3** | Logic Power | Logic I/O reference voltage (connects to target MCU 3.3V logic) |
+| **GND** | Ground | Common Ground |
+| **TX** | Input | CAN Transmit (TXD) logic input from microcontroller |
+| **RX** | Output | CAN Receive (RXD) logic output to microcontroller |
+| **CANH** | Bus I/O | CAN Bus High differential signal line |
+| **CANL** | Bus I/O | CAN Bus Low differential signal line |
+
+---
+
+## Key Features
+
+- **Automotive-Grade Transceiver**: Powered by the NXP **TJA1042T/3** high-speed CAN transceiver.
+- **Dual Supply Support**: Separate 5V transceiver power and 3.3V logic supply for seamless compatibility with 3.3V microcontrollers (ESP32, RP2040, STM32).
+- **High-Speed Protocol**: Supports CAN 2.0A/B and CAN FD communication up to 5 Mbit/s.
+- **Robust Differential Signaling**: Superior noise immunity and common-mode rejection for harsh electrical environments.
+- **Standby & Protection**: Very low standby current with remote wake-up capability and thermal shutdown protection.
+- **Designed for Harsh Environments**: Built-in ESD protection and high-voltage fault tolerance on CAN bus lines.
+
+---
+
+## Applications
+
+- Automotive diagnostics and in-vehicle electronic control unit (ECU) networks
+- Industrial automation, PLC, and fieldbus communication
+- Robotics, UAVs, and distributed motion control systems
+- Energy storage and battery management systems (BMS)
+- IoT gateways and edge devices requiring CAN bus telemetry
+- Educational kits and CAN protocol prototyping
+
+---
+
+## Step 1: Hardware Required
+
+1. **Glyph Board** (e.g., Glyph ESP32-S3, ESP32-C6) or compatible microcontroller
+2. **CAN G-Mod Module **
+3. **Second CAN Node** or CAN analyzer (e.g., CANable, another Glyph CAN node, or vehicle OBD-II port)
+4. Connecting wires / breadboard
+
+---
+
+## Step 2: Circuit Connections
+
+Connect the CAN G-Mod module to your microcontroller board as follows:
+
+| CAN G-Mod Pin | Microcontroller / Target Board | Description |
+| :--- | :--- | :--- |
+| **5V** | **5V / USB** | Transceiver power |
+| **3V3** | **3.3V** | Logic reference voltage |
+| **GND** | **GND** | Common ground |
+| **TX** | **CAN TX (e.g., GPIO 5)** | CAN TXD signal |
+| **RX** | **CAN RX (e.g., GPIO 4)** | CAN RXD signal |
+| **CANH** | **CAN Bus High Line** | Differential high line |
+| **CANL** | **CAN Bus Low Line** | Differential low line |
+
+---
+
+## Step 3: Arduino Code Setup
+
+The ESP32 family features a built-in Two-Wire Automotive Interface (TWAI) peripheral that is fully compatible with CAN 2.0B. 
+
+Copy and paste the following sample code into your Arduino IDE to transmit and receive CAN messages:
+
+```cpp
+#include "driver/twai.h"
+
+// Define the GPIO pins connected to the CAN G-Mod TX and RX pins
+#define CAN_TX_PIN  5  // Connected to CAN G-Mod TX
+#define CAN_RX_PIN  4  // Connected to CAN G-Mod RX
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+  Serial.println("Starting CAN Bus Transceiver Example...");
+
+  // Configure TWAI (CAN) controller at 500 kbps
+  twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(
+    (gpio_num_t)CAN_TX_PIN, 
+    (gpio_num_t)CAN_RX_PIN, 
+    TWAI_MODE_NORMAL
+  );
+  twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+  twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+
+  // Install and start TWAI driver
+  if (twai_driver_install(&g_config, &t_config, &f_config) != ESP_OK) {
+    Serial.println("Failed to install TWAI driver!");
+    return;
+  }
+
+  if (twai_start() != ESP_OK) {
+    Serial.println("Failed to start TWAI driver!");
+    return;
+  }
+
+  Serial.println("CAN Driver successfully initialized at 500 kbps.");
+}
+
+void loop() {
+  // --- 1. Transmit a CAN Message ---
+  twai_message_t tx_msg;
+  tx_msg.identifier = 0x123;         // Standard 11-bit CAN ID
+  tx_msg.flags = TWAI_MSG_FLAG_NONE;
+  tx_msg.data_length_code = 4;
+  tx_msg.data[0] = 0x10;
+  tx_msg.data[1] = 0x20;
+  tx_msg.data[2] = 0x30;
+  tx_msg.data[3] = 0x40;
+
+  if (twai_transmit(&tx_msg, pdMS_TO_TICKS(100)) == ESP_OK) {
+    Serial.println("Sent CAN frame ID: 0x123");
+  } else {
+    Serial.println("Transmit timed out or bus busy");
+  }
+
+  // --- 2. Check for Incoming CAN Messages ---
+  twai_message_t rx_msg;
+  if (twai_receive(&rx_msg, pdMS_TO_TICKS(500)) == ESP_OK) {
+    Serial.printf("Received Frame from 0x%03X [DLC %d]: ", rx_msg.identifier, rx_msg.data_length_code);
+    for (int i = 0; i < rx_msg.data_length_code; i++) {
+      Serial.printf("0x%02X ", rx_msg.data[i]);
+    }
+    Serial.println();
+  }
+
+  delay(1000);
+}
+```

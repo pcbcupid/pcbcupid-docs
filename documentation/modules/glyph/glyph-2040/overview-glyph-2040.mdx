@@ -1,0 +1,139 @@
+---
+description: "Overview of the Glyph 2040 development board: a dual-core RP2040 microcontroller with 20 GPIOs, 10 solderable breakout pads, and integrated battery management."
+title: "Overview"
+sidebarTitle: "Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+
+  useEffect(function () {
+    if (show3D || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+<ShopHeader title="Glyph 2040 Overview" url="https://shop.pcbcupid.com/" />
+
+<ImgGallery 
+  modelUrl="https://library.pcbcupid.com/api/3d-model/GD007-Glyph-RP2040/file/glb/GD007-Glyph-RP2040.glb" 
+  images={[
+    { url: "https://library.pcbcupid.com/api/repo/pcbcupid/pcbcupid-board-illustrations/file/illustrations/GD007-Glyph-RP2040/GD007-Glyph-RP2040-FB-o.svg", label: "ILLUSTRATION VIEW", id: "illustration" }
+  ]} 
+/>
+
+Introducing the **Glyph 2040**, a super efficient microcontroller development board packed with features for your next embedded and robotics project! Powered by the robust capabilities of the Raspberry Pi **RP2040** chip, the Glyph 2040 brings the determinism and dual-core processing of the RP2040 into the standard Glyph form factor, serving as a powerful upgrade to the compact Glyph-Mini-2040 with integrated battery management and expanded I/O options.
+
+- **Dimensions**: Measures 50.8mm x 22.8mm x 1.6mm (without headers soldered)
+- **Processor**: Raspberry Pi RP2040 32-bit dual-core ARM Cortex-M0+ processor running up to 133 MHz @ 3.3V logic and power
+- **RAM**: 264 KB on-chip SRAM in 6 independent banks
+- **Flash Memory**: 8 MB on-board SPI Flash 
+- **GPIO**: 20 GPIO pins with the following capabilities:
+  - 12-bit ADCs
+  - I2C
+  - SPI
+  - UART
+  - PWM on all pins
+  - Programmable I/O (PIO)
+
+   All the important peripherals, labeled for easy access.
+
+- **10 Solderable Pinouts**:
+  - **Extended Digital GPIOs**: `D11`, `D14`, `D15`, `D16`, `D17`, `D18`, `D19`, and `D22`
+  - **Programmable / Debug Pins**: `SCLK`, `GND`, and `SDIO` for direct SWD programming and custom protocol interfacing
+
+- **Power Management**:
+  - USB Type-C connector for power, programming, and serial port debugging
+  - 3.3V regulator with up to 800mA peak current output
+  - Built-in lipoly/li-ion charger with charging status indicator LED
+  - Auto Switch between Battery & USB Power (hot-swap support)
+  - Ability to Measure Battery Capacity (via MSR pads)
+  - Ability to Turn off the battery with the onboard slide switch
+  - Reverse Voltage protection with Diode
+
+- **Additional Feature**:
+  - **On-board Status LED**: Connected to **D0** (GPIO 0). There is also a dedicated **D0** pinout on the board which acts as an enable pin for the status LED.
+  - On-board GLINK connector for easy integration with QWIIC, STEMMA QT compatible sensors & modules.
+  - High Quality Reset and Bootloader button for easy access
+
+### Native Bootloader and Programming
+
+The Glyph 2040 features the native Raspberry Pi RP2040 USB UF2 bootloader that makes programming new firmware effortless and keeps the cost of the board down. On first-time use, hold down the **BOOT** button while plugging the board into USB (or press **RESET** while holding **BOOT**), and it will automatically mount as a mass storage device named `RPI-RP2` on your computer. Simply drag and drop your compiled `.uf2` file onto the drive, and the board will automatically flash the code and reboot!
+
+If you face any issues related to hardware detection on your system, please check out our troubleshooting guide [here](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup#hardware-not-detecting).
+
+### Connectivity
+
+The RP2040 is a powerful microcontroller ideal for high-speed local processing, real-time sensing, and deterministic control. For wireless IoT applications, the Glyph 2040 easily pairs with external communication modules:
+
+- **Bluetooth**: HC-05 / HC-06 modules
+- **Wi-Fi**: ESP8266 / ESP32 co-processors via AT commands or SPI
+- **Long Range**: nRF24L01, LoRa, or XBee modules
+
+With hardware SPI, I2C, and UART channels readily exposed on the headers and Glink connector, integrating these wireless bridges into your setup is straightforward and efficient.
+
+### Development Support
+
+The Glyph 2040 is supported by a rich, mature ecosystem of development environments:
+
+- **Arduino IDE**: Full support via the popular Raspberry Pi Pico / RP2040 core by Earle Philhower.
+- **CircuitPython**: Official Adafruit CircuitPython support with hundreds of driver libraries.
+- **MicroPython**: Official Raspberry Pi MicroPython firmware with interactive REPL.
+- **C/C++ (Pico SDK)**: Full low-level control, multi-core threading, and DMA support via CMake and VSCode.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt="Development Environments" width="350"/>
+</div>
+
+With extensive library support and an active global community, getting started with the Glyph 2040 is smooth and straightforward for both beginners and experienced developers.
+
+### Memory and Storage
+
+While the Glyph 2040 features 264 KB of on-chip SRAM across 6 independent banks for ultra-fast data execution and zero-wait-state DMA transfers, it relies on an external flash chip for program and file storage. On this board, there is **8 MB of high-speed SPI Flash memory**, which is shared between firmware code, file storage (LittleFS), and application assets.
+
+### RP2040 Chip Features
+
+- **Dual-core ARM Cortex-M0+**: Dual symmetric 32-bit cores running up to 133 MHz for parallel task execution.
+- **Programmable I/O (PIO)**: 2 PIO blocks with 8 state machines that run custom deterministic I/O programs independently of the CPU cores (ideal for custom protocols, bit-banging, DVI/VGA, or LED matrices).
+- **Flexible Clocking**: Internal PLLs allow flexible clock frequency selection and overclocking capabilities.
+- **Low Power Modes**: Sleep and dormant low-power modes reduce power consumption down to ~2 mA for battery operation.
+
+You can read more about it in the official [RP2040 DATASHEET](https://files.waveshare.com/upload/f/fd/Rp2040_datasheet.pdf).
