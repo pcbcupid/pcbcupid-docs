@@ -1,39 +1,139 @@
 ---
-description: "Beginner-friendly guide to building your own button-operated Speech-to-Text Kit using the PCB Cupid GLYPH C6 microcontroller, T5848 I2S microphone, and Android companion app."
+description: "Build a button-operated Speech-to-Text Kit using the PCB Cupid GLYPH C6 microcontroller, an I2S microphone, and the Android companion app or self-hosted React web app."
 title: "GLYPH Voice Kit"
 sidebarTitle: "GLYPH Voice Kit"
 ---
 
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+  var [isFullscreen, setIsFullscreen] = useState(false);
+  var [fullscreenDialog, setFullscreenDialog] = useState(null);
+
+  useEffect(function () {
+    if (show3D || isFullscreen || !images || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images && images[active];
+  function openFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && !dialog.open) dialog.showModal();
+    setIsFullscreen(true);
+  }
+  function closeFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && dialog.open) dialog.close();
+    else setIsFullscreen(false);
+  }
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" noZoom onClick={openFullscreen} role="button" tabIndex={0} onKeyDown={function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFullscreen(); } }} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px', cursor: 'zoom-in' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', padding: '0.85rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images && images.map(function (img, idx) {
+          var isCurrent = !show3D && idx === active;
+          return (
+            <button
+              key={img.id || idx}
+              onClick={function () { setActive(idx); setShow3D(false); }}
+              aria-label={'View image ' + (idx + 1)}
+              style={img.label ? {
+                padding: '0.6rem 1.5rem',
+                borderRadius: '12px',
+                border: isCurrent ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)',
+                background: isCurrent ? '#00b894' : '#fff',
+                color: isCurrent ? '#fff' : '#000',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontFamily: 'inherit'
+              } : {
+                width: isCurrent ? '24px' : '8px',
+                height: '8px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: isCurrent ? '#00b894' : 'rgba(0,0,0,0.25)',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
+                padding: 0
+              }}
+            >
+              {img.label || null}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+      <dialog ref={setFullscreenDialog} aria-label={img && img.label} onClose={function () { setIsFullscreen(false); }} onClick={function (event) { if (event.target === event.currentTarget) closeFullscreen(); }} style={{ width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none', margin: 0, padding: '2rem', border: 0, background: 'rgba(0,0,0,0.88)' }}>
+        <div style={{ position: 'relative', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          <button type="button" aria-label="Close fullscreen image" onClick={closeFullscreen} style={{ position: 'absolute', top: 0, right: 0, zIndex: 1, width: '2.5rem', height: '2.5rem', border: 0, borderRadius: '999px', background: 'rgba(255,255,255,0.92)', color: '#111', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1 }}>×</button>
+          <img src={img && img.url} alt={img && img.label} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        </div>
+      </dialog>
+    </div>
+  );
+};
+
 # GLYPH Voice Kit
 
 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-  <span style={{ backgroundColor: '#0D9373', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>Firmware: transport-r6</span>
-  <span style={{ backgroundColor: '#10b981', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>App: v0.11.0</span>
+  <span style={{ backgroundColor: '#0D9373', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>Firmware: transport-r11</span>
+  <span style={{ backgroundColor: '#10b981', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>Apps: Android & Web</span>
   <span style={{ backgroundColor: '#6366f1', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>License: MIT</span>
   <span style={{ backgroundColor: '#f59e0b', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>ESP32-C6 RISC-V</span>
 </div>
 
 <CardGroup cols={2}>
   <Card title="GitHub Repository" icon="github" href="https://github.com/pcbcupid/Glyph-Voice">
-    Browse source code, report issues, and check technical specifications on [pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice).
+    Browse source code, guides, and schematics on [pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice).
   </Card>
   <Card title="Download App & Firmware" icon="download" href="https://github.com/pcbcupid/Glyph-Voice/releases/">
-    Grab the prebuilt Android APK (`glyph-voice-0.11.0.apk`) and ready-to-flash binary files directly from [GitHub Releases](https://github.com/pcbcupid/Glyph-Voice/releases/).
+    Download prebuilt Android APKs and merged flash binaries directly from [GitHub Releases](https://github.com/pcbcupid/Glyph-Voice/releases/).
   </Card>
 </CardGroup>
+
+<ImgGallery images={[
+  { url: "https://files.pcbcupid.com/Documentation/Boards/Examples/kits/Glyph-voice/glyph-kit-f.avif", id: "kit-f" },
+  { url: "https://files.pcbcupid.com/Documentation/Boards/Examples/kits/Glyph-voice/glyph-kit-b.avif", id: "kit-b" },
+  { url: "https://files.pcbcupid.com/Documentation/Boards/Examples/kits/Glyph-voice/enclosure-f.avif", id: "enclosure-f" },
+  { url: "https://files.pcbcupid.com/Documentation/Boards/Examples/kits/Glyph-voice/enclosure-b.avif", id: "enclosure-b" }
+]} />
 
 ---
 
 ## 1. What is the GLYPH Voice Kit?
 
-The **GLYPH Voice Kit** is a portable, button-operated voice transcription and AI note-taking system. By pairing the [GLYPH C6](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) development board with a high-performance [G-Sense 1-Channel Microphone (T5848)](/documentation/modules/g-sense/t5848-microphone) and an Android companion app, you can capture spoken voice anywhere and instantly convert it into written text.
+The **GLYPH Voice Kit** is a portable, button-operated voice transcription and AI note-taking system. By pairing the [GLYPH C6](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) development board with an I2S digital microphone module (such as the [G-Sense T5848 Microphone](/documentation/modules/g-sense/t5848-microphone)) and either a native **Android companion app** or a **self-hosted React web app**, you can capture spoken voice anywhere and instantly convert it into written text.
 
-### How It Works (The Simple Version)
+```text
+I2S microphone → GLYPH C6 → local Wi-Fi ┬→ Android App → local Parakeet STT → text
+                                       └→ Web Browser + Computer Parakeet Server → text
 
-1. **Press to Talk:** Tap the **BOOT** button on your GLYPH C6 board to begin speaking.
-2. **Audio Streaming:** The board captures your voice through the digital I2S microphone, filters the audio, and streams it wirelessly to your phone's personal Wi-Fi hotspot over a local WebSocket.
-3. **On-Device Speech-to-Text:** The Android companion app transcribes your words in real time using an offline, on-device AI model (NVIDIA Parakeet). No internet connection or cellular data is needed!
-4. **Instant AI Summary (Optional):** When you finish speaking, the app can automatically summarize your notes into a clean, concise paragraph using DeepSeek or OpenAI.
+Optional: Cloud Speech-to-Text (Whisper) or AI Text Summaries (DeepSeek / OpenAI)
+```
+
+### How It Works
+
+1. **Press to Talk:** Tap the **BOOT** button on your GLYPH C6 board to begin speaking. Tap it again when you are finished.
+2. **Audio Streaming:** The board samples 48 kHz 24-bit audio from the digital I2S microphone, filters and decimates it to 16 kHz PCM16 with digital gain, and streams 1280-byte (40 ms) frames over a local WebSocket (`ws://<board-ip>:8080/audio`).
+3. **Local Speech-to-Text:** Transcribe completely offline using an optimized on-device NVIDIA Parakeet model:
+   - **On Android:** Runs directly on your phone via `sherpa-onnx` without requiring an internet connection.
+   - **On Web:** Runs through a lightweight local Python Parakeet server running on your computer.
+4. **Manual Wi-Fi Connection:** In `transport-r11`, Bluetooth and automatic discovery have been replaced with a reliable manual Wi-Fi IP workflow. Connect the board to your 2.4 GHz Wi-Fi or phone hotspot, enter the board's IP into the app, and start transcribing.
+5. **Instant AI Summaries (Optional):** When you finish speaking, you can optionally configure an API key to automatically summarize your notes into structured takeaways using DeepSeek or OpenAI.
 
 ---
 
@@ -41,19 +141,19 @@ The **GLYPH Voice Kit** is a portable, button-operated voice transcription and A
 
 <Steps>
   <Step title="Wire Your Hardware">
-    Connect the [G-Sense T5848 Microphone](/documentation/modules/g-sense/t5848-microphone) to your [GLYPH C6](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) with 5 jumper wires as shown in the [Wiring Table](#3-hardware-wiring).
+    Connect your I2S microphone to the [GLYPH C6](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) using 5 jumper wires according to the [Hardware & Wiring](#3-hardware-wiring) table.
   </Step>
 
   <Step title="Flash the Firmware">
-    Download the ready-to-use firmware binary from [GitHub Releases](https://github.com/pcbcupid/Glyph-Voice/releases/) and flash it to your GLYPH C6 using Web Flasher or `esptool.py`.
+    Flash the `glyph_voice.ino.merged.bin` image at address `0x0` using the browser-based [Espressif Web Flasher](https://espressif.github.io/esptool-js/) in Chrome/Edge, or use `esptool.py`. No Arduino IDE required!
   </Step>
 
   <Step title="Configure Wi-Fi Credentials">
-    Power on your board. Connect your phone to the board's setup network (`GLYPH-Setup-XXXXXX`), open `http://192.168.4.1/` in your browser, and enter your phone hotspot name and password.
+    Reset the board with BOOT released and tap **BOOT** during the 3-second startup countdown. Using an interactive USB serial terminal (115200 baud), set a board name and password. Then join the board's setup Wi-Fi (`GLYPH-<name>-<suffix>`), open `http://192.168.4.1/`, and save your 2.4 GHz Wi-Fi or phone hotspot details.
   </Step>
 
-  <Step title="Open App & Start Talking">
-    Install `glyph-voice-0.11.0.apk` from [GitHub Releases](https://github.com/pcbcupid/Glyph-Voice/releases/), turn on your 2.4 GHz phone hotspot, tap **Connect** in the app, and click the **BOOT** button to record!
+  <Step title="Connect App & Start Talking">
+    Read the board's IP address from the USB Serial Monitor (`STATUS` command) or setup confirmation screen. In the Android app or Web app (`http://localhost:8765`), tap **Connect Glyph**, enter the IP, and press **BOOT** on the board to record!
   </Step>
 </Steps>
 
@@ -61,15 +161,15 @@ The **GLYPH Voice Kit** is a portable, button-operated voice transcription and A
 
 ## 3. Hardware & Wiring
 
-### Bill of Materials (What You Need)
+### Bill of Materials
 
 | Component | Quantity | Description & Documentation |
 | :--- | :---: | :--- |
 | **Microcontroller** | 1 | [GLYPH C6 Development Board](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6) • [Pinout Guide](/documentation/modules/glyph/glyph-esp32c6/glyphc6-pinouts) |
-| **Microphone Module** | 1 | [G-Sense 1-Channel Microphone (T5848)](/documentation/modules/g-sense/t5848-microphone) |
+| **Microphone Module** | 1 | Digital I2S Microphone ([G-Sense T5848](/documentation/modules/g-sense/t5848-microphone) / T5858 / ICS-43434) |
 | **Jumper Wires** | 5 | Female-to-Female DuPont jumper wires |
 | **USB Cable** | 1 | USB Type-C data & power cable |
-| **Android Smartphone** | 1 | Android 8.0 or newer with 2.4 GHz Wi-Fi Hotspot support |
+| **Host Device** | 1 | 64-bit Android phone (Android 8.0+) OR a computer (Windows, macOS, Linux) with 2.4 GHz Wi-Fi |
 
 ---
 
@@ -77,140 +177,206 @@ The **GLYPH Voice Kit** is a portable, button-operated voice transcription and A
 
 Connect your microphone directly to your GLYPH C6 using the following pin mapping:
 
-| GLYPH C6 Pin | T5848 Mic Pin | Function | Notes |
+| GLYPH C6 Pin | Microphone Pin | Function | Notes |
 | :--- | :--- | :--- | :--- |
-| **3V3** | **VCC** | 3.3V Power | Safe, regulated logic supply from GLYPH board |
+| **3V3** | **VCC** | 3.3V Power | Regulated 3.3V logic supply (confirm module voltage rating) |
 | **GND** | **GND** | Ground | Common system ground |
-| **GPIO 16** | **L/R** | Channel Select | Held LOW by firmware to select Left audio channel |
+| **GPIO 16** | **L/R** | Channel Select | Driven LOW by firmware to select Left I2S slot |
 | **GPIO 17** | **WS / LRCLK** | Word Select Clock | Frame synchronization clock (48 kHz) |
-| **GPIO 22** | **SCK / BCLK** | Bit Clock | Serial data clock (3.072 MHz) |
+| **GPIO 22** | **SCK / BCLK** | Bit Clock | Serial bit clock (3.072 MHz) |
 | **GPIO 23** | **SD / DOUT** | Serial Data | Digital voice audio data going into the GLYPH C6 |
-| **GPIO 9 (BOOT)** | *On-board button* | Record Button | Built-in tactile button; click to Start / Stop recording |
+| **GPIO 14** | *Onboard Status LED* | Wi-Fi Status | **Blinks** when waiting for Wi-Fi IP; **Solid ON** once connected |
+| **GPIO 9 (BOOT)** | *Onboard tactile button* | Record / Setup | Click to Start/Stop recording; tap during countdown for Wi-Fi setup |
 
 <Tip>
 **USB CDC Setting:**
-Because GPIO 16 and GPIO 17 share internal lines with UART0, ensure **USB CDC On Boot** is enabled in the Arduino IDE tools menu (`Tools → USB CDC On Boot → Enabled`) when compiling firmware from source.
+Because GPIO 16 and GPIO 17 share internal lines with UART0, ensure **USB CDC On Boot** is enabled in Arduino IDE tools (`Tools → USB CDC On Boot → Enabled`) when compiling firmware from source.
 </Tip>
 
 ---
 
 ## 4. Setting Up the Firmware
 
-You can either flash the precompiled binary directly or build the sketch from source in the Arduino IDE.
+The latest **transport-r11** firmware provides merged binaries ready for one-click browser flashing, interactive USB serial prompts, and Wi-Fi status indication on GPIO 14.
 
 <Tabs>
-  <Tab title="Option A: Flash Prebuilt Binary (Recommended)">
-    1. Download `glyph-voice-c6-0.11.0.bin` from [Releases · pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice/releases/).
-    2. Connect your GLYPH C6 board to your computer with a USB-C cable.
-    3. Run the following command in your terminal:
+  <Tab title="Option A: Browser Web Flasher (Recommended)">
+    You do **not** need Arduino IDE or Python installed!
+
+    1. Open desktop **Chrome or Edge** and navigate to the [Espressif Web Flasher](https://espressif.github.io/esptool-js/).
+    2. Connect your GLYPH C6 via a USB-C data cable and click **Connect**. Select your board's serial port (detected as **ESP32-C6**).
+    3. Download `glyph_voice.ino.merged.bin` from [GitHub Releases](https://github.com/pcbcupid/Glyph-Voice/releases).
+    4. Choose the merged `.bin` file, set **Flash Address** to `0x0`, and click **Program**.
+    5. After programming finishes, disconnect the flasher tab.
+    6. Open the write-capable [Chrome Labs Serial Terminal](https://googlechromelabs.github.io/serial-terminal/) in another tab at **115200 baud** (Set **Local echo: OFF** and **Flush on enter: ON**).
+    7. Reset your board with BOOT released to interact with the Wi-Fi setup wizard.
+  </Tab>
+
+  <Tab title="Option B: Command-Line (esptool)">
+    If you have Python installed, use `esptool`:
+
     ```bash
-    python -m esptool --chip esp32c6 --port <YOUR_COM_PORT> --baud 460800 write-flash 0x0 glyph-voice-c6-0.11.0.bin
+    python -m pip install esptool
+    python -m esptool --chip esp32c6 --port <YOUR_COM_PORT> --baud 460800 write-flash 0x0 glyph_voice.ino.merged.bin
     ```
   </Tab>
 
-  <Tab title="Option B: Arduino IDE">
-    1. Open Arduino IDE and install the **esp32** board package (version `3.3.10`).
+  <Tab title="Option C: Arduino IDE">
+    1. Open Arduino IDE and install the **esp32** board package (`3.3.10`).
     2. Install the **WebSockets** library by Markus Sattler (`2.7.2`).
     3. Open `firmware/glyph_voice/glyph_voice.ino` from the cloned repository.
     4. Under **Tools → Board**, select **Pcbcupid GLYPH C6**.
-    5. Set **Tools → USB CDC On Boot** to **Enabled**.
-    6. Select your serial port and click **Upload**.
+    5. Set **Tools → Partition Scheme** to **No OTA (2MB APP/2MB SPIFFS)**. *(This prevents "Sketch too big" errors).*
+    6. Set **Tools → USB CDC On Boot** to **Enabled**.
+    7. Select your serial COM port and click **Upload**.
   </Tab>
 </Tabs>
 
-### Wi-Fi First-Time Setup Portal
+### Useful USB Serial Commands
 
-When you turn on the board for the first time, it creates its own Wi-Fi setup hotspot:
+In any write-capable terminal connected at **115200 baud** (with newline ending):
 
-1. **Connect:** On your phone or laptop, look for the Wi-Fi network named `GLYPH-Setup-XXXXXX` (where XXXXXX is part of your board's MAC address).
-2. **Password:** Enter `glyphvoice`.
-3. **Open Portal:** Navigate to `http://192.168.4.1/` in your browser.
-4. **Save Hotspot Details:** Enter your phone's Wi-Fi hotspot name (SSID) and password, then tap Save. The GLYPH C6 will reboot and connect to your phone automatically.
-5. **Need to Reconfigure Later?** While the board is disconnected from Wi-Fi, press and hold the **BOOT** button for **5 seconds** to bring back the setup portal.
+- **`STATUS`**: Prints the board label, MAC address, current recording IP, Wi-Fi signal strength (RSSI), active recording state, and free heap memory.
+- **`HELP`**: Displays the startup help instructions and command summary.
+- **`WIFI SETUP`**: Forces the board into Wi-Fi setup mode without requiring a reboot (make sure the app is disconnected first).
 
 ---
 
-## 5. Android Companion App
+## 5. Wi-Fi Setup Portal
 
-The open-source companion app manages the connection, runs the on-device AI transcription model, and saves your conversation history.
+When you flash a new board or tap **BOOT** during the startup countdown, the board launches its Wi-Fi provisioning portal:
+
+1. **Countdown Prompt:** Upon power-up or reset, the serial console displays a `3... 2... 1...` countdown. Tap the **BOOT** button during these 3 seconds (or send `WIFI SETUP` over serial). Boards without saved Wi-Fi enter setup automatically.
+2. **Interactive Serial Setup:** The serial monitor will prompt you for:
+   - A board label (e.g., `Alice` or `VoiceKit`, 1–19 letters/numbers).
+   - A private board hotspot password (8–63 printable ASCII characters) and confirmation.
+3. **Connect to Setup Hotspot:** The board generates a Wi-Fi network named `GLYPH-<label>-<suffix>` (e.g., `GLYPH-Alice-865690`). Connect your phone or laptop to this network using the password you entered.
+4. **Open Setup Portal:** In your browser, navigate to:
+   ```text
+   http://192.168.4.1/
+   ```
+5. **Save Target Wi-Fi:** Enter your personal 2.4 GHz phone hotspot or router SSID and password, then click **Save and restart**.
+6. **Connection Test:** The board tests the connection for up to 30 seconds. On success, it displays and logs its new local IP address and restarts into normal mode.
+7. **LED Confirmation:** **GPIO 14** blinks while the board is acquiring an IP, and turns **solid ON** once connected to your local network.
+
+<Warning>
+**2.4 GHz Only:** The ESP32-C6 Wi-Fi radio connects only to **2.4 GHz** networks. Ensure your phone's hotspot has **2.4 GHz band** or **Extend Compatibility** enabled. Enterprise and captive portal login networks are not supported.
+</Warning>
+
+---
+
+## 6. Companion Apps: Android & Web
+
+You can connect to your GLYPH Voice Kit using either the native Android companion app or the self-hosted React web app on a PC.
+
+### Platform A: Android Companion App
+
+The Android app runs an offline, INT8-quantized NVIDIA Parakeet speech recognition model directly on your smartphone.
 
 <Card title="Download Android APK" icon="android" href="https://github.com/pcbcupid/Glyph-Voice/releases/">
-  Download `glyph-voice-0.11.0.apk` from the official releases page and install it on your device.
+  Download the latest APK (`glyph-voice-*.apk`) from the official GitHub Releases page.
 </Card>
 
-### App Highlights
+#### Features & Highlights
+- **Zero Invasive Permissions:** Does not require phone microphone access, location, or Bluetooth scanning permissions.
+- **100% Offline English STT:** Bundles the `nvidia/parakeet-unified-en-0.6b` model. Extracted on first run without requiring mobile data.
+- **Background Foreground Service:** Keeps recording and transcribing even when your phone screen is locked.
+- **Local SQLite History:** Transcripts and summaries are stored securely on device.
 
-- **Zero Intrusive Permissions:** The app does not request phone microphone access, location, or file storage permissions.
-- **Background Recording:** Runs as a persistent foreground service so recording and transcription continue smoothly even if you lock your screen.
-- **Searchable History:** All previous transcriptions and summaries are stored locally in an embedded SQLite database on your phone.
-
-### How to Connect
-
-1. Enable your phone's **Personal Hotspot** (make sure **2.4 GHz band** or **Extend Compatibility** is turned ON).
-2. Turn on your GLYPH Voice hardware.
-3. Open the **GLYPH Voice** app on your phone and tap **Connect**.
-4. The app automatically discovers the board on your hotspot within 3 seconds.
-5. Click the **BOOT** button on the GLYPH C6: live words will begin appearing on your screen as you speak!
+#### How to Connect on Android
+1. Enable your phone's **2.4 GHz Hotspot** (or ensure your phone and board are on the same Wi-Fi router).
+2. Open the **GLYPH VOICE** app.
+3. Tap **Connect Glyph**, enter the board's IP address (e.g. `192.168.43.50:8080`), and tap **Connect**.
+4. Press the **BOOT** button on the GLYPH C6 to start speaking; press it again to finish.
 
 ---
 
-## 6. Speech Recognition: Offline vs Cloud
+### Platform B: Self-Hosted React Web App
 
-The app gives you the flexibility to transcribe completely offline or connect to cloud speech services.
+The GLYPH Voice web platform lets you run speech-to-text directly in your desktop browser, backed by a local Parakeet Python server running on your computer.
+
+#### 1-Command Installation
+
+Clone or extract the repository, open a terminal in the project directory, and run the installer:
+
+| OS | Install (Run Once) | Start Server |
+| :--- | :--- | :--- |
+| **Windows x64** | `installation\install.cmd` | `start-web.cmd` |
+| **Linux x86_64** | `bash installation/install.sh` | `bash start-web.sh` |
+| **macOS** | `bash installation/install-macos.command` | `bash start-web.sh` |
+
+The installer sets up an isolated, project-local Python and Node environment and downloads the ~501 MB Parakeet model weights (requires ~5 GB free disk space). No global system PATH modifications or admin privileges are required.
+
+#### Using the Web Interface
+1. Launching the start script opens `http://localhost:8765` in your browser.
+2. Copy the private server token printed in your terminal into the local model settings.
+3. Enter your GLYPH board's IP address and click **Connect**.
+4. Click the board's **BOOT** button to record and see real-time transcription directly on your PC!
+
+---
+
+## 7. Speech Recognition: Offline vs Cloud
+
+The GLYPH Voice ecosystem gives you the choice between total offline privacy or connecting to high-capacity cloud APIs.
 
 | Feature | Local Parakeet (Default) | Cloud Speech (Optional) |
 | :--- | :--- | :--- |
-| **Model** | `nvidia/parakeet-unified-en-0.6b` | User-configured (e.g. OpenAI Whisper) |
-| **Internet Required** | **No** (100% Offline) | **Yes** (Cellular or Wi-Fi data) |
-| **Privacy** | Audio never leaves your phone | Audio chunks sent via HTTPS to your API endpoint |
-| **Punctuation** | Full punctuation & capitalization | Depends on cloud model |
-| **Storage Requirement**| ~663 MB model extracted on initial run | Minimal app storage |
+| **Model** | `nvidia/parakeet-unified-en-0.6b` (INT8) | User-configured (e.g., OpenAI Whisper) |
+| **Internet Required** | **No** (100% Offline) | **Yes** (Cellular / Broadband) |
+| **Privacy** | Audio never leaves your device/computer | Audio sent over HTTPS to your chosen API endpoint |
+| **Punctuation** | Full automatic punctuation & casing | Handled by cloud model |
+| **Storage Requirement** | ~663 MB (Android) / ~501 MB (Web) | Minimal local storage |
 
-### Offline Parakeet Model
+### Configuring Cloud Speech (Optional)
 
-The default engine uses an optimized INT8-quantized export of NVIDIA's Parakeet model running via `sherpa-onnx`. The weights are packaged with the app release and extracted automatically the first time you tap Connect. It provides fast, accurate English transcription directly using your phone's processor.
-
-### Using Cloud Transcription (Optional)
-
-If you prefer using an external cloud service (such as OpenAI Whisper):
-1. Open the right drawer in the app and choose **Speech recognition → Cloud**.
-2. Enter your OpenAI-compatible endpoint URL (e.g., `https://api.openai.com/v1/audio/transcriptions`).
-3. Paste your API key. Keys are encrypted securely inside your phone's hardware-backed **Android Keystore**.
+If you wish to use an external cloud transcription service:
+1. Disconnect the board from the app.
+2. In the Android app or Web settings, open **Speech recognition → Cloud**.
+3. Enter your transcription endpoint (e.g., `https://api.openai.com/v1/audio/transcriptions`).
+4. Enter the model ID (e.g., `whisper-1`) and paste your API key. On Android, keys are securely encrypted using the hardware-backed **Android Keystore**.
 
 ---
 
-## 7. Automated AI Summaries
+## 8. Automated AI Summaries
 
-If you want your spoken voice notes automatically organized into neat summaries:
+Transform spoken voice notes into organized summaries and action items automatically:
 
-1. Open the right drawer in the app and tap **Connect your API**.
-2. Select your provider:
-   - **DeepSeek:** Powered by DeepSeek's conversational models.
-   - **OpenAI:** Powered by models like `gpt-4.1-mini`.
-3. Paste your API Key.
+1. Open the drawer/settings in the companion app or web app.
+2. Tap **Connect your API** and choose your provider:
+   - **DeepSeek:** Powered by DeepSeek conversational models.
+   - **OpenAI:** Powered by models such as `gpt-4o-mini`.
+3. Paste your API Key and save.
 
-Whenever you finish a recording longer than 2 seconds, the app automatically formats the transcript into a natural, easy-to-read summary paragraph. You can toggle between the original verbatim transcript and the summary at any time!
+Whenever you finish a recording longer than 2 seconds, the app formats the transcript into a concise summary paragraph. You can toggle between the verbatim transcript and the AI summary at any time.
 
 ---
 
-## 8. Simple Troubleshooting Tips
+## 9. Troubleshooting & FAQ
 
 - **Board not connecting to hotspot?**  
-  Ensure your phone's hotspot is broadcasting on the **2.4 GHz** frequency band. The ESP32-C6 Wi-Fi radio cannot connect to 5 GHz-only hotspots.
-- **App doesn't discover the board?**  
-  Turn off **AP Isolation** or **Client Isolation** in your phone's hotspot settings so the board and phone can communicate over local UDP.
-- **Audio sounds empty or silent?**  
-  Double check that the **SD / DOUT** pin of the T5848 mic is connected to **GPIO 23** and **WS / LRCLK** is wired to **GPIO 17**.
-- **Accidentally entered flashing mode?**  
-  If you hold the BOOT button while plugging in the USB cable, the board enters ROM bootloader mode. Simply unplug and plug it back in without touching the button.
+  Ensure your phone hotspot is broadcasting on the **2.4 GHz** frequency band. ESP32-C6 cannot connect to 5 GHz-only networks.
+- **Can't connect to board IP?**  
+  Check if **AP Isolation** or **Client Isolation** is enabled on your router or hotspot. Devices must be allowed to communicate directly with each other over the local subnet.
+- **IP changed after reboot?**  
+  DHCP routers may assign a new IP when restarting. Check the USB serial console by sending the `STATUS` command to see the latest IP.
+- **Only one active client allowed:**  
+  The GLYPH C6 WebSocket server accepts one active audio client at a time. If switching between Android and Web, disconnect one before connecting the other.
+- **Status LED (GPIO 14) behavior:**  
+  - Blinking: Board is searching for Wi-Fi or waiting for DHCP IP assignment.
+  - Solid ON: Board is successfully connected to Wi-Fi.
+- **Accidentally entered ROM bootloader?**  
+  If you hold the BOOT button while plugging in the USB cable, the ESP32-C6 enters ROM bootloader mode. Unplug and plug it back in with BOOT released.
+- **Audio sounds silent or garbled?**  
+  Verify that microphone **SD / DOUT** is wired to **GPIO 23**, **WS / LRCLK** to **GPIO 17**, and **SCK / BCLK** to **GPIO 22**.
 
 ---
 
-## 9. Source Code & References
+## 10. Source Code & References
 
-The complete source code for firmware, companion app, audio processing core, and hardware design is fully open source under the MIT license:
+The complete hardware, firmware, companion app, and web server are open source under the MIT license:
 
 - **Source Code Repository:** [pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice)
-- **Releases & APK Downloads:** [Releases · pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice/releases/)
-- **Microcontroller Reference:** [PCB Cupid GLYPH C6 Documentation](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6)
+- **Releases & Binary Downloads:** [Releases · pcbcupid/Glyph-Voice](https://github.com/pcbcupid/Glyph-Voice/releases/)
+- **Microcontroller Reference:** [PCB Cupid GLYPH C6 Overview](/documentation/modules/glyph/glyph-esp32c6/overview-glyph-c6)
+- **GLYPH C6 Pinouts:** [GLYPH C6 Pinout Guide](/documentation/modules/glyph/glyph-esp32c6/glyphc6-pinouts)
 - **Microphone Reference:** [PCB Cupid G-Sense T5848 Microphone](/documentation/modules/g-sense/t5848-microphone)
