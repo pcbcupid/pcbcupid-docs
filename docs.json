@@ -334,6 +334,46 @@
     },
 
     {
+      "source": "/Getting_Started",
+      "destination": "/documentation/welcome/getting-started"
+    },
+    {
+      "source": "/boards/g-mod/lithium-charger",
+      "destination": "/documentation/modules/g-mod/lithium-charger"
+    },
+    {
+      "source": "/boards/g-mod/relay-2-ch",
+      "destination": "/documentation/modules/g-mod/relay"
+    },
+    {
+      "source": "/boards/g-sense/MCP79412-RTC",
+      "destination": "/documentation/modules/g-mod/mcp79412-rtc"
+    },
+    {
+      "source": "/boards/g-sense/PCF8563-RTC",
+      "destination": "/documentation/modules/g-mod/pcf8563-rtc"
+    },
+    {
+      "source": "/boards/g-sense/QMC6309",
+      "destination": "/documentation/modules/g-sense/qmc6309-magnetometer"
+    },
+    {
+      "source": "/boards/g-sense/limit-switch",
+      "destination": "/documentation/modules/g-mod/limit-switch"
+    },
+    {
+      "source": "/boards/g-sense/sht35",
+      "destination": "/documentation/modules/g-sense/sht35"
+    },
+    {
+      "source": "/boards/g-sense/sht45",
+      "destination": "/documentation/modules/g-sense/sht45"
+    },
+    {
+      "source": "/boards/g-sense/touch-slider",
+      "destination": "/documentation/modules/g-sense/capacitive-touch-slider"
+    },
+    {
       "source": "/Enclosure/Enclosure/3d_enclosure_for_glyph_boards",
       "destination": "/documentation/enclosure/3d-printed-enclosure-for-glyph-esp32-boards"
     },
