@@ -38,6 +38,9 @@ LDRs are used in automatic streetlights, light meters, and solar tracking system
 
 ## Step 3: Code Setup
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #define LIGHT_SENSOR_PIN 3 // GLYPH-C6 pin GPIO 3 (ADC channel)
 
@@ -83,6 +86,37 @@ void loop()
   delay(100);
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Connect the LDR voltage divider to GPIO 3, using 3.3 V for the divider. Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`. Adjust the light thresholds for your divider and surroundings.
+
+```python
+import time
+import analogio
+import microcontroller
+
+light_sensor = analogio.AnalogIn(microcontroller.pin.GPIO3)
+
+while True:
+    analog_value = light_sensor.value * 4095 // 65535
+    if analog_value < 40:
+        level = "Dark"
+    elif analog_value < 800:
+        level = "Dim"
+    elif analog_value < 2000:
+        level = "Light"
+    elif analog_value < 3200:
+        level = "Bright"
+    else:
+        level = "Very bright"
+    print("Analog Value =", analog_value, "=>", level)
+    time.sleep(0.1)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

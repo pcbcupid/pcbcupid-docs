@@ -43,6 +43,9 @@ Connect the MQ2 sensor to the GLYPH-C6 as follows:
 
 ## Step 3: Code Setup
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #define MQ2_PIN 4  // ADC1 channel (GPIO 4 on GLYPH-C6)
 
@@ -90,6 +93,44 @@ void loop() {
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+The MQ2 heater needs 5 V, but its A0 output may also reach 5 V. Put a voltage divider between A0 and GPIO 4: **10 kΩ from A0 to GPIO 4, and 15 kΩ from GPIO 4 to GND**. Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`. The PPM values are estimates until you calibrate `ro_kohm` and confirm your module's load resistance and gas response curves.
+
+```python
+import math
+import time
+import analogio
+import microcontroller
+
+mq2 = analogio.AnalogIn(microcontroller.pin.GPIO4)
+ro_kohm = 10.0  # Replace with the clean-air calibration for your sensor.
+rl_kohm = 3.3   # Check the load resistor on your MQ2 module.
+
+while True:
+    adc_value = mq2.value
+    adc_voltage = adc_value * 3.3 / 65535
+    sensor_voltage = adc_voltage * 25 / 15  # Undo the 10 kΩ / 15 kΩ divider.
+
+    if sensor_voltage <= 0 or sensor_voltage >= 5:
+        print("ADC:", adc_value, "| Reading outside calibration range")
+    else:
+        rs_kohm = (5 - sensor_voltage) * rl_kohm / sensor_voltage
+        rs_ro = rs_kohm / ro_kohm
+        ppm_lpg = 10 ** ((math.log10(rs_ro) - 1.3) / -0.45)
+        ppm_co = 10 ** ((math.log10(rs_ro) - 1.55) / -0.38)
+        ppm_smoke = 10 ** ((math.log10(rs_ro) - 0.93) / -0.42)
+        print("ADC:", adc_value, "| V:", round(sensor_voltage, 2),
+              "| Rs/Ro:", round(rs_ro, 2), "| LPG:", round(ppm_lpg),
+              "ppm | CO:", round(ppm_co), "ppm | Smoke:",
+              round(ppm_smoke), "ppm")
+    time.sleep(2)
+```
+
+  </Tab>
+</Tabs>
 ## Step 4: Upload the Code
 
 1. **Connect the Board**

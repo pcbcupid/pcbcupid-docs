@@ -114,6 +114,9 @@ IR sensors are used in various robotic projects, most commonly for path tracing 
 
 ## Step 3: Code Setup
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 /*
  * This ESP32 code is created by esp32io.com
@@ -147,6 +150,30 @@ void loop()
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Connect the sensor's OUT pin to GPIO 7 and power the module from 3.3 V. Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+sensor = digitalio.DigitalInOut(microcontroller.pin.GPIO7)
+sensor.direction = digitalio.Direction.INPUT
+
+while True:
+    if not sensor.value:
+        print("The obstacle is present")
+    else:
+        print("The obstacle is NOT present")
+    time.sleep(0.1)
+```
+
+  </Tab>
+</Tabs>
 ## Step 4: Upload the Code
 
 1. **Connect the Board**

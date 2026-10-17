@@ -68,7 +68,10 @@ Wire the module to the GLYPH-C6 as listed in [Pin Configuration](#pin-configurat
 
 ## Step 3: Code Setup
 
-Open the Arduino IDE and paste the sketch below into a new file. Every touch toggles the onboard LED and prints the event over Serial.
+Choose the code tab for your firmware below. Every touch toggles the onboard LED and prints the event to the serial console.
+
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 // TTP223 capacitive touch sensor on Pcbcupid GLYPH-C6
@@ -121,7 +124,50 @@ void loop() {
 }
 ```
 
-How it works: the sketch reads the sensor continuously. A **debounce filter** only accepts a state that has held steady for 50 ms, which swallows the noisy flicker of a finger just starting to touch the pad. Every accepted touch increments a counter, flips the onboard LED, and prints the result.
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`. Connect TTP223 OUT to GPIO 20 and use its momentary (A) mode; the onboard LED is GPIO 14.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+touch = digitalio.DigitalInOut(microcontroller.pin.GPIO20)
+touch.direction = digitalio.Direction.INPUT
+led = digitalio.DigitalInOut(microcontroller.pin.GPIO14)
+led.direction = digitalio.Direction.OUTPUT
+led.value = False
+
+led_on = False
+touch_count = 0
+last_reading = False
+stable_state = False
+last_change = time.monotonic()
+
+print("TTP223 touch sensor ready - touch the pad!")
+while True:
+    reading = touch.value
+    if reading != last_reading:
+        last_change = time.monotonic()
+    if time.monotonic() - last_change > 0.05 and reading != stable_state:
+        stable_state = reading
+        if stable_state:
+            touch_count += 1
+            led_on = not led_on
+            led.value = led_on
+            print("Touched! ({})".format(touch_count))
+        else:
+            print("Released")
+    last_reading = reading
+    time.sleep(0.01)
+```
+
+  </Tab>
+</Tabs>
+
+How it works: the code reads the sensor continuously. A **debounce filter** only accepts a state that has held steady for 50 ms, which swallows the noisy flicker of a finger just starting to touch the pad. Every accepted touch increments a counter, flips the onboard LED, and prints the result.
 
 ## Step 4: Upload the Code
 
@@ -165,7 +211,10 @@ Open the Serial Monitor at **115200 baud** and touch the module's pad:
 
 ## Alternative: External LED Touch Lamp
 
-The onboard LED is convenient, but a touch lamp usually wants a real light. Add an LED with a 220 Ω resistor: resistor → LED anode → **GPIO 19**, LED cathode → **GND**. The sketch below toggles it with every touch.
+The onboard LED is convenient, but a touch lamp usually wants a real light. Add an LED with a 220 Ω resistor: resistor → LED anode → **GPIO 19**, LED cathode → **GND**. The code below toggles it with every touch.
+
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 // TTP223 touch lamp: every touch toggles an external LED.
@@ -195,5 +244,37 @@ void loop() {
   lastState = state;
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`. Keep TTP223 OUT on GPIO 20 and connect the external LED through its resistor to GPIO 19.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+touch = digitalio.DigitalInOut(microcontroller.pin.GPIO20)
+touch.direction = digitalio.Direction.INPUT
+led = digitalio.DigitalInOut(microcontroller.pin.GPIO19)
+led.direction = digitalio.Direction.OUTPUT
+led.value = False
+
+last_state = False
+lamp_on = False
+
+while True:
+    state = touch.value
+    if state and not last_state:
+        lamp_on = not lamp_on
+        led.value = lamp_on
+        print("Lamp ON" if lamp_on else "Lamp OFF")
+    last_state = state
+    time.sleep(0.01)
+```
+
+  </Tab>
+</Tabs>
 
 Edge detection (reacting only on the LOW → HIGH change) is the simpler sibling of the debounce filter in the main sketch: one tap always produces exactly one toggle, no matter how long you hold the pad.

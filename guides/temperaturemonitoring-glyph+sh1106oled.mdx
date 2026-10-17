@@ -75,6 +75,9 @@ Finally, the OLED pixels light up based on the data in memory, and you see your 
 
 3. **Copy and paste the following code into the Arduino IDE:**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <Wire.h>
 #include <WiFi.h>
@@ -197,6 +200,69 @@ void loop()
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+For a Wi-Fi GLYPH board such as C3, copy adafruit_displayio_sh1106.mpy, adafruit_display_text/, adafruit_requests.mpy, adafruit_connection_manager.mpy, and their bundle dependencies into lib/. Connect the OLED to the board's SDA/SCL pins. Replace the Wi-Fi and API key placeholders.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import board
+import displayio
+import terminalio
+import wifi
+import socketpool
+import ssl
+from i2cdisplaybus import I2CDisplayBus
+from adafruit_display_text import label
+import adafruit_displayio_sh1106
+import adafruit_requests
+
+SSID = "YOUR_WIFI_NAME"
+PASSWORD = "YOUR_WIFI_PASSWORD"
+API_KEY = "YOUR_OPENWEATHERMAP_API_KEY"
+CITY_ID = "1277333"
+
+displayio.release_displays()
+bus = I2CDisplayBus(board.I2C(), device_address=0x3C)
+display = adafruit_displayio_sh1106.SH1106(bus, width=128, height=64)
+group = displayio.Group()
+lines = []
+for row in range(5):
+    text = label.Label(terminalio.FONT, text=" ", color=0xFFFFFF, x=0, y=8 + row * 12)
+    group.append(text)
+    lines.append(text)
+display.root_group = group
+
+wifi.radio.connect(SSID, PASSWORD)
+requests = adafruit_requests.Session(socketpool.SocketPool(wifi.radio), ssl.create_default_context())
+url = "https://api.openweathermap.org/data/2.5/weather?id={}&appid={}&units=metric".format(CITY_ID, API_KEY)
+
+while True:
+    try:
+        response = requests.get(url)
+        try:
+            data = response.json()
+            if response.status_code != 200:
+                raise ValueError("Weather API: {}".format(data))
+            lines[0].text = "Temp: {:.1f} C".format(data["main"]["temp"])
+            lines[1].text = "Humidity: {}%".format(data["main"]["humidity"])
+            lines[2].text = "Lat: {:.2f}".format(data["coord"]["lat"])
+            lines[3].text = "Lon: {:.2f}".format(data["coord"]["lon"])
+            lines[4].text = "Pressure: {} hPa".format(data["main"]["pressure"])
+            print("Weather updated")
+        finally:
+            response.close()
+    except (OSError, ValueError, KeyError) as error:
+        print("Weather request failed:", error)
+    time.sleep(60)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

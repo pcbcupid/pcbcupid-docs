@@ -89,6 +89,9 @@ IoT-based remote motor control projects
 2. **Make sure to install the  library**
 3. **Copy and paste the following code into the Arduino IDE:**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 // For GLYPH-C6 
 
@@ -130,6 +133,43 @@ void rotateStepper(bool dir, int steps) {
   }
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+The wiring and Arduino code on this page use a **DRV8825 STEP/DIR** driver. Connect GPIO18 to STEP, GPIO15 to DIR, and GPIO20 to ENABLE, with a separate motor supply and common ground. Set STEPS_PER_REVOLUTION to match your motor and microstepping configuration.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+step = digitalio.DigitalInOut(microcontroller.pin.GPIO18)
+direction = digitalio.DigitalInOut(microcontroller.pin.GPIO15)
+enable = digitalio.DigitalInOut(microcontroller.pin.GPIO20)
+for pin in (step, direction, enable):
+    pin.direction = digitalio.Direction.OUTPUT
+step.value = False
+enable.value = False  # DRV8825 ENABLE is active low
+
+STEPS_PER_REVOLUTION = 200  # Adjust for your motor and MS1–MS3 microstep settings
+
+while True:
+    for forward in (True, False):
+        direction.value = forward
+        print("Clockwise" if forward else "Counter-clockwise")
+        for _ in range(STEPS_PER_REVOLUTION):
+            step.value = True
+            time.sleep(0.0005)
+            step.value = False
+            time.sleep(0.001)
+        time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
   
 ## Step 4: Upload the Code
 

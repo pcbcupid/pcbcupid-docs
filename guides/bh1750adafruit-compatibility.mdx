@@ -36,6 +36,9 @@ Connect the BH1750 sensor to the Glyph boards using the following pin configurat
 1. **Open Arduino IDE.**
 2. **Copy and paste the following code into the Arduino IDE:**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <BH1750.h>
 #include <Wire.h>
@@ -63,6 +66,28 @@ void loop()
   delay(1000);
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Copy adafruit_bh1750.mpy and its adafruit_bus_device dependency into lib/ before saving code.py. Use the same GLINK/Qwiic wiring shown above.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import board
+import adafruit_bh1750
+
+sensor = adafruit_bh1750.BH1750(board.I2C())
+
+while True:
+    print("Light: {:.1f} lx".format(sensor.lux))
+    time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
 
 ### Explanation
 

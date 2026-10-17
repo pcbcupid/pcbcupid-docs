@@ -59,6 +59,9 @@ ESP32 boards support GPIO multiplexing, so you can use any pin as SDA, SCL but n
 1. **Open Arduino IDE**
 2. **Enter the following code into the Arduino IDE**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 
 // Wire.h is part of the core Arduino libraries and comes pre-installed with the Arduino IDE. 
@@ -126,6 +129,33 @@ void loop()
 }
 
 ```                  
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Use the board's SDA and SCL pins (GPIO4 and GPIO5 on GLYPH C3). For custom pins, replace board.I2C() with busio.I2C(microcontroller.pin.GPIO5, microcontroller.pin.GPIO4).
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import board
+
+i2c = board.I2C()  # GLYPH default SDA/SCL pins
+
+while True:
+    while not i2c.try_lock():
+        pass
+    try:
+        addresses = i2c.scan()
+    finally:
+        i2c.unlock()
+    print("I2C devices:", [hex(address) for address in addresses])
+    time.sleep(5)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 3: Upload the Code
 

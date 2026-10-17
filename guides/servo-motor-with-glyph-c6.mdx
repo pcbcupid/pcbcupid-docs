@@ -74,6 +74,9 @@ Open Arduino IDE and navigate to `Sketch > Include Library > Manage Libraries`. 
 
 3. **Enter the following code into the Arduino IDE**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <ESP32Servo.h>  // Include the ESP32 Servo library
 
@@ -105,6 +108,38 @@ void loop() {
 }
 
   ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Connect the servo signal to GPIO6. Supply the servo from a suitable external source if it draws more current than the board can provide, and connect the supply ground to GLYPH GND.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import microcontroller
+import pwmio
+
+servo = pwmio.PWMOut(microcontroller.pin.GPIO6, frequency=50)
+
+def set_angle(angle):
+    pulse_us = 1000 + angle * 1000 // 180
+    servo.duty_cycle = pulse_us * 65535 // 20000
+
+while True:
+    for angle in range(0, 181, 5):
+        set_angle(angle)
+        print("Servo Position:", angle)
+        time.sleep(0.05)
+    for angle in range(180, -1, -5):
+        set_angle(angle)
+        print("Servo Position:", angle)
+        time.sleep(0.05)
+```
+
+  </Tab>
+</Tabs>
 ## Step 4: Upload the Code
 
 1. **Connect the Board**

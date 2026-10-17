@@ -50,6 +50,9 @@ Open Arduino IDE and go to `Sketch > Include Library > Manage Libraries`. Search
 
 4. **Enter the following code into the Arduino IDE**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <WiFiManager.h> // WiFiManager library
 #include <HTTPClient.h>   // HTTP client to make requests. HTTPClient is a class provided by libraries such as HTTPClient.h on the GLYPH board, allowing you to make HTTP requests (such as GET and POST) to web servers over the internet. It is commonly used to interact with APIs, send data to servers, or retrieve information from the web (e.g., weather data, sensor logs, etc.).
@@ -172,6 +175,49 @@ delay(30000); // Wait for 30 seconds(30000 milliseconds) before fetching. This d
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+This requires a Wi-Fi GLYPH board such as C3 or C6; H2 has no Wi-Fi. Copy adafruit_requests.mpy and adafruit_connection_manager.mpy (plus dependencies listed in the matching bundle) into lib/. Replace the Wi-Fi and API key placeholders before running.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import wifi
+import socketpool
+import ssl
+import adafruit_requests
+
+SSID = "YOUR_WIFI_NAME"
+PASSWORD = "YOUR_WIFI_PASSWORD"
+API_KEY = "YOUR_OPENWEATHERMAP_API_KEY"
+CITY = "Bangalore"
+
+wifi.radio.connect(SSID, PASSWORD)
+requests = adafruit_requests.Session(socketpool.SocketPool(wifi.radio), ssl.create_default_context())
+url = "https://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=metric".format(CITY, API_KEY)
+
+while True:
+    try:
+        response = requests.get(url)
+        try:
+            data = response.json()
+            if response.status_code != 200:
+                print("Weather API error:", data)
+            else:
+                print("Temperature in {}: {} C".format(CITY, data["main"]["temp"]))
+                print("Weather description:", data["weather"][0]["description"])
+        finally:
+            response.close()
+    except (OSError, ValueError, KeyError) as error:
+        print("Weather request failed:", error)
+    time.sleep(30)
+```
+
+  </Tab>
+</Tabs>
 ## Step 2: Upload the Code
 
 1. **Connect the Board**

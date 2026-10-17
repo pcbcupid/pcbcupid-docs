@@ -58,6 +58,9 @@ The push-button switch on the encoder can be used to trigger specific actions wh
 ![pcbcupid_rotaryencoder](https://files.pcbcupid.com/Documentation/Boards/Examples/rotary_encoder/PCBCUPID_rotaryencodercirkitdiagram.avif)
  
 ## Step 3: Code Setup
+<Tabs>
+  <Tab title="Arduino Code">
+
   ```cpp
 #define ENCODER_CLK 4
 #define ENCODER_DT 5
@@ -112,6 +115,46 @@ void loop() {
   }
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Power the encoder module from 3.3 V so its CLK, DT, and SW outputs stay within GLYPH C6's 3.3 V GPIO limits.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+clk = digitalio.DigitalInOut(microcontroller.pin.GPIO4)
+dt = digitalio.DigitalInOut(microcontroller.pin.GPIO5)
+button = digitalio.DigitalInOut(microcontroller.pin.GPIO6)
+for pin in (clk, dt, button):
+    pin.direction = digitalio.Direction.INPUT
+    pin.pull = digitalio.Pull.UP
+
+position = 0
+last_clk = clk.value
+last_button = button.value
+
+while True:
+    current_clk = clk.value
+    if last_clk and not current_clk:
+        direction = 1 if dt.value != current_clk else -1
+        position += direction
+        print("Position:", position, "Direction:", "Increasing" if direction > 0 else "Decreasing")
+    last_clk = current_clk
+    current_button = button.value
+    if last_button and not current_button:
+        print("Button Pressed!")
+    last_button = current_button
+    time.sleep(0.002)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

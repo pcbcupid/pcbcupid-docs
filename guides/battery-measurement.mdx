@@ -63,6 +63,9 @@ Monitor Battery Health – Helps determine if the battery is functioning properl
 2. Install the **Battery Sense** library by going to `Sketch > Include Library > Manage Libraries` and searching for Battery Sense
 3. Copy and paste the following code into the Arduino IDE:
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <Battery.h>
 
@@ -104,6 +107,34 @@ void loop()
 	Serial.println("%)");
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+For GLYPH C3, connect the battery to the BAT pads and close the MSR solder jumper as described above. The percentage is a voltage estimate, not a fuel-gauge reading. Calibrate the divider with a multimeter; never connect the cell directly to A0.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import analogio
+import microcontroller
+
+battery_adc = analogio.AnalogIn(microcontroller.pin.GPIO0)  # GLYPH C3 A0
+DIVIDER_RATIO = 1.585  # Match the board's battery-sense divider
+CALIBRATION = 1.0  # Adjust after comparing with a multimeter
+EMPTY_V = 3.4
+FULL_V = 4.2
+
+while True:
+    voltage = battery_adc.value * 3.3 / 65535 * DIVIDER_RATIO * CALIBRATION
+    percent = max(0, min(100, int((voltage - EMPTY_V) * 100 / (FULL_V - EMPTY_V))))
+    print("Battery: {:.2f} V (about {}%)".format(voltage, percent))
+    time.sleep(2)
+```
+
+  </Tab>
+</Tabs>
 
 ### ADC Calibration and Real-World Accuracy
 

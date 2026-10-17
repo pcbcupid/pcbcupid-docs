@@ -61,6 +61,9 @@ Wiring with GLYPH-C6:
 
 ## Step 3: Code Setup
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #define FLAME_SENSOR_D0 4       // D0 from sensor to GPIO4 on GLYPH-C6
 #define FLAME_THRESHOLD 400    // Adjust based on environment
@@ -83,6 +86,32 @@ void loop() {
   delay(500);
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Connect the sensor's **A0 (analog)** output to GPIO 4 and power it from 3.3 V. Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py`. Adjust the threshold for your sensor and lighting.
+
+```python
+import time
+import analogio
+import microcontroller
+
+flame_sensor = analogio.AnalogIn(microcontroller.pin.GPIO4)
+flame_threshold = 400
+
+while True:
+    analog_value = flame_sensor.value * 4095 // 65535
+    print("Analog Value:", analog_value)
+    if analog_value < flame_threshold:
+        print("Flame Detected!")
+    else:
+        print("No flame.")
+    time.sleep(0.5)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 1) **Connect the Board**

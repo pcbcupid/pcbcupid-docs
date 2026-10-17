@@ -100,6 +100,9 @@ To read from the DHT sensor, we’ll use the [DHT library from Adafruit](https:/
 
 3. **Enter the following code into the Arduino IDE**
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 // Importing the DHT Library of Adafruit
 #include "DHT.h"
@@ -167,6 +170,34 @@ Serial.println(F("°F"));
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Copy adafruit_dht.mpy into lib/. Connect the sensor data line to GPIO9 as in the Arduino code; a bare DHT sensor needs the pull-up resistor described above.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import microcontroller
+import adafruit_dht
+
+sensor = adafruit_dht.DHT22(microcontroller.pin.GPIO9)
+# For a DHT11, replace DHT22 with DHT11.
+
+while True:
+    try:
+        temperature_c = sensor.temperature
+        humidity = sensor.humidity
+        print("Humidity: {:.1f}%  Temperature: {:.1f} C".format(humidity, temperature_c))
+    except RuntimeError as error:
+        print("DHT read failed:", error)
+    time.sleep(2)
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

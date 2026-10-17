@@ -95,6 +95,9 @@ The two coils energised at once in half-step mode draw about 200 mA in total, wh
 
 Open the Arduino IDE and paste the sketch below into a new file. It rotates the shaft one full revolution in one direction, pauses, then one revolution back.
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 // 28BYJ-48 unipolar stepper + ULN2003 driver on Pcbcupid GLYPH-C6
 // Rotates the shaft one full revolution each way, then repeats.
@@ -163,6 +166,43 @@ void loop() {
   delay(1000);
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Use the same ULN2003 wiring and separate motor power shown above. Connect motor supply GND to GLYPH GND; never drive the motor coils directly from GPIO.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+pins = [digitalio.DigitalInOut(getattr(microcontroller.pin, "GPIO" + str(n)))
+        for n in (14, 15, 18, 19)]  # ULN2003 IN1–IN4
+for pin in pins:
+    pin.direction = digitalio.Direction.OUTPUT
+
+sequence = (
+    (1, 1, 0, 0), (0, 1, 0, 0), (0, 1, 1, 0), (0, 0, 1, 0),
+    (0, 0, 1, 1), (0, 0, 0, 1), (1, 0, 0, 1), (1, 0, 0, 0),
+)
+phase = 0
+STEPS_PER_REVOLUTION = 4096
+
+while True:
+    for direction in (1, -1):
+        for _ in range(STEPS_PER_REVOLUTION):
+            phase = (phase + direction) % len(sequence)
+            for pin, value in zip(pins, sequence[phase]):
+                pin.value = value
+            time.sleep(0.002)
+        time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
 
 How it works: `halfStepSequence` holds the 8 half-step states from the table above. `stepMotor()` walks through the rows forward or backward, and `stepDelay` sets how long each state is held — the smaller the delay, the faster the shaft spins.
 

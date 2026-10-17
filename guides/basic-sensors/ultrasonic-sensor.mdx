@@ -108,9 +108,10 @@ Connect the **HC-SR04** sensor to the GLYPH-C6 board using the following pin con
 
 ## Step 3: Code Setup
 
-1. **Open Arduino IDE**
+Choose the code tab for your firmware below.
 
-2. **Enter the following code into the Arduino IDE**
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 
@@ -160,6 +161,34 @@ void loop()
   delay(1000);
 }
   ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+The HC-SR04 ECHO pin sends a 5 V signal. Use a level shifter or a divider with **10 kΩ from ECHO to GPIO 15 and 10 kΩ from GPIO 15 to GND**; connect TRIG to GPIO 18. Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide), copy `adafruit_hcsr04.mpy` from the matching [CircuitPython library bundle](https://circuitpython.org/libraries) into `CIRCUITPY/lib`, and save this example as `code.py`.
+
+```python
+import time
+import microcontroller
+import adafruit_hcsr04
+
+sonar = adafruit_hcsr04.HCSR04(
+    trigger_pin=microcontroller.pin.GPIO18,
+    echo_pin=microcontroller.pin.GPIO15,
+)
+
+while True:
+    try:
+        distance_cm = sonar.distance
+        print("Distance (cm):", round(distance_cm, 2))
+        print("Distance (inch):", round(distance_cm * 0.393701, 2))
+    except RuntimeError:
+        print("No echo; check the sensor or move the target closer.")
+    time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
 ## Step 4: Upload the Code
 
 1. **Connect the Board**

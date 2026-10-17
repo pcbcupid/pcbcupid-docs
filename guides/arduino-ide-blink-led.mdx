@@ -30,6 +30,9 @@ These are the inbuilt LED pin based on the type of GLYPH board you have :
 
 If not you can copy the below code and comment/uncomment the **led** initialization. 
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 
 //Use this line if you are using GLYPH C3
@@ -54,6 +57,29 @@ void setup()
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+led = digitalio.DigitalInOut(microcontroller.pin.GPIO1)  # C3; use GPIO0 for H2 or GPIO14 for C6
+led.direction = digitalio.Direction.OUTPUT
+
+while True:
+    led.value = True
+    time.sleep(1)
+    led.value = False
+    time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
 Next begin by plugging in your board to your computer, and wait a moment for it to be recognized by the OS. It will create a COM/serial port that you can now select from the `Tools > Port` menu dropdown and upload the sketch.
 
 The LED should start blinking!
@@ -64,6 +90,9 @@ The LED should start blinking!
 
 A similar process can be followed to blink an external LED, but do remember to change the led LED number in the code to the pin number where an external led is connected. 
 Below you can see an example code which should help 
+
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 
@@ -82,6 +111,31 @@ void setup()
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Connect the external LED through a 220 Ω resistor to GLYPH C3 A2 (GPIO2) and its other leg to GND; change the GPIO number if your wiring differs.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+led = digitalio.DigitalInOut(microcontroller.pin.GPIO2)  # GLYPH C3 A2
+led.direction = digitalio.Direction.OUTPUT
+
+while True:
+    led.value = True
+    time.sleep(1)
+    led.value = False
+    time.sleep(1)
+```
+
+  </Tab>
+</Tabs>
 Next begin by plugging in your board to your computer, and wait a moment for it to be recognized by the OS. It will create a COM/serial port that you can now select from the `Tools > Port` menu dropdown and upload the sketch.
 
 ![PCBUCPID-plugin-glyph-board](https://files.pcbcupid.com/Documentation/Boards/Examples/blink/PCBCUPID-Plugin-glyph-board.avif)

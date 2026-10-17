@@ -77,6 +77,9 @@ When connected directly to a microcontroller, the LCD uses parallel communicatio
 2) Make sure to install the  library
 3) Copy and paste the following code into the Arduino IDE
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <LiquidCrystal.h> //https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
 
@@ -98,6 +101,29 @@ void loop() {
   delay(1000);
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Copy the adafruit_character_lcd folder into lib/. Keep RS, EN, D4, D5, D6, D7 wired to GPIO8, 9, 10, 2, 3, 4. Use a 3.3 V compatible LCD or proper level shifting if the LCD is powered at 5 V.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import digitalio
+import microcontroller
+from adafruit_character_lcd import character_lcd
+
+pins = [digitalio.DigitalInOut(getattr(microcontroller.pin, "GPIO" + str(n)))
+        for n in (8, 9, 10, 2, 3, 4)]
+lcd = character_lcd.Character_LCD_Mono(*pins, 16, 2)
+lcd.message = "Hello ESP32!\nLiquidCrystal"
+while True:
+    pass
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

@@ -89,6 +89,9 @@ Usage: Both display text, graphics, sensor data, etc., but you must use the righ
 
 ### Code for SH1106 OLED Display 
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <Arduino.h>
 #include <U8g2lib.h>
@@ -129,6 +132,34 @@ void loop()
     u8g2.sendBuffer();
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+For an SH1106 I2C display, copy adafruit_displayio_sh1106.mpy and adafruit_display_text/ into lib/. Use the board's SDA and SCL pins; if the display has another I2C address, update 0x3C.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import board
+import displayio
+import terminalio
+from i2cdisplaybus import I2CDisplayBus
+from adafruit_display_text import label
+import adafruit_displayio_sh1106
+
+displayio.release_displays()
+bus = I2CDisplayBus(board.I2C(), device_address=0x3C)
+display = adafruit_displayio_sh1106.SH1106(bus, width=128, height=64)
+group = displayio.Group()
+group.append(label.Label(terminalio.FONT, text="PCB Cupid", color=0xFFFFFF, x=30, y=32))
+display.root_group = group
+while True:
+    pass
+```
+
+  </Tab>
+</Tabs>
 3. Go to the website named [Lopaka](https://lopaka.app/sandbox). Then do as in these Images:
 
 Step 1: Under the **Library** drop down box, select **u8g2** and set **display** to **128x64**
@@ -157,6 +188,9 @@ Step 7: Paste the Code in your Arduino IDE as shown below
 1. **Install the **Adafruit SD1306** & **Adafruit GFX** Libraries by Adafruit by going to `Sketch > Include Library > Manage Libraries` and searching for these libraries**
 
 2. **Copy and paste the following code into the Arduino IDE:**
+
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 #include <Wire.h>
@@ -195,6 +229,29 @@ void loop()
   // Nothing needed here
 }
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+For a 128×32 SSD1306 I2C display, copy adafruit_ssd1306.mpy and its adafruit_framebuf and adafruit_bus_device dependencies into lib/. If your OLED is 128×64, change the height to 64.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import board
+import adafruit_ssd1306
+
+display = adafruit_ssd1306.SSD1306_I2C(128, 32, board.I2C(), addr=0x3C)
+display.fill(0)
+display.text("PCBCUPID", 10, 10, 1)
+display.show()
+
+while True:
+    pass
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 

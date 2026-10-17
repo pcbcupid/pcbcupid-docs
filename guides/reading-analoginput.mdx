@@ -72,6 +72,9 @@ In this program, the Configuring and Writing of LED PWM Value can be done in 2 W
 2. **Enter the following code into the Arduino IDE**
 * **Method 1** : Using **ledcWrite()** function
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 // Pin number of the LED
 const int led = 1; // which is Digital pin D0 in GLYPH-C3
@@ -113,7 +116,35 @@ Serial.println(brightness);
 
 ```
 
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+On GLYPH C3, wire the potentiometer wiper to GPIO2 and the LED through a resistor to GPIO1. CircuitPython's ADC and PWM duty cycle both use 0–65535, so no range conversion is needed.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import analogio
+import microcontroller
+import pwmio
+
+pot = analogio.AnalogIn(microcontroller.pin.GPIO2)
+led = pwmio.PWMOut(microcontroller.pin.GPIO1, frequency=5000, duty_cycle=0)
+
+while True:
+    led.duty_cycle = pot.value
+    print("LED brightness:", led.duty_cycle * 255 // 65535)
+    time.sleep(0.05)
+```
+
+  </Tab>
+</Tabs>
+
 * **Method 2** : Using **analogWrite()** function
+
+<Tabs>
+  <Tab title="Arduino Code">
 
 ```cpp
 // Pin number of the LED
@@ -147,6 +178,31 @@ void loop()
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+This matches Method 2 wiring: potentiometer wiper to A0 (GPIO0) and LED through a resistor to A1 (GPIO1).
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import time
+import analogio
+import microcontroller
+import pwmio
+
+pot = analogio.AnalogIn(microcontroller.pin.GPIO0)  # GLYPH C3 A0
+led = pwmio.PWMOut(microcontroller.pin.GPIO1, frequency=5000, duty_cycle=0)  # A1
+
+while True:
+    led.duty_cycle = pot.value
+    print("LED brightness:", led.duty_cycle * 255 // 65535)
+    time.sleep(0.05)
+```
+
+  </Tab>
+</Tabs>
 If you are using Method 2, it is not mandatory to set the PWM Resolution and Frequency, as the function **analogWrite()** by default, generates an 8-bit PWM by setting the Duty cycle values in the range 0 - 255 (255 is the maximum possible duty cycle value that **analogWrite()** can accept). However, if you wish to set a custom PWM frequency and resolution on a selected pin, you can do so by using the functions **analogWriteResolution()** and
 **analogWriteFrequency()**. 
 

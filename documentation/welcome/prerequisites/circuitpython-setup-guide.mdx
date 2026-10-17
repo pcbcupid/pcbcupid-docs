@@ -1,0 +1,65 @@
+---
+description: "Install CircuitPython on a PCB Cupid GLYPH board, connect it to Thonny, and save your first program to the board."
+title: "CircuitPython Setup Guide"
+---
+
+CircuitPython runs Python programs directly on your GLYPH board. This guide covers installing the firmware, connecting with Thonny, and saving a program that runs whenever the board starts.
+
+<Warning>
+Flashing CircuitPython replaces the firmware currently on the board. Save any existing sketches or files you need before continuing. Download the firmware for your **exact** GLYPH model; a different board's image can have the wrong flash layout or pin definitions.
+</Warning>
+
+## Download Thonny and your board firmware
+
+1. Install [Thonny](https://thonny.org/) for your operating system.
+2. Open the CircuitPython download page for your board: [GLYPH C3](https://circuitpython.org/board/pcbcupid_glyph_c3/), [GLYPH C6](https://circuitpython.org/board/pcbcupid_glyph_c6/), [GLYPH H2](https://circuitpython.org/board/pcbcupid_glyph_h2/), or [GLYPH S3](https://circuitpython.org/downloads/) (search for **PCBCupid GLYPH S3**).
+3. Download the latest stable **`.bin`** firmware for that board. Keep track of where the file was saved.
+4. Connect the GLYPH to your computer with a USB **data** cable.
+
+## Flash CircuitPython with Thonny
+
+1. Hold **BOOT**, press and release **RESET**, then release **BOOT**. If the board has no RESET button, hold BOOT while plugging in the USB cable. The board should appear as a serial port.
+2. In Thonny, open **Tools → Options → Interpreter** and select the ESP32 interpreter to access **Install or update firmware**. Open the firmware installer.
+3. Select the serial port for your GLYPH, choose the `.bin` file you downloaded, and set the **start address to `0x0`**. CircuitPython ESP32 images must be flashed at `0x0`, even if a MicroPython preset suggests another address.
+4. Click **Install** and wait for the success message. Disconnect and reconnect the board, or press RESET with BOOT released.
+
+<Info>
+If Thonny does not offer the correct chip or start address, use the **OPEN INSTALLER** button on the board's CircuitPython download page to flash the same firmware, then return to Thonny for editing. Close Thonny's serial connection before opening the browser installer.
+</Info>
+
+## Connect Thonny and run code
+
+1. In **Tools → Options → Interpreter**, choose **CircuitPython (generic)** and select the GLYPH serial port. The Shell should show the CircuitPython `>>>` prompt. Press **Ctrl+C** if a running program occupies the Shell.
+2. Paste the following example into a new Thonny editor tab. Change the GPIO number to your board's onboard LED: **C3: 1**, **C6: 14**, **H2: 0**. For other models, check that board's pinout.
+
+```python
+import time
+import digitalio
+import microcontroller
+
+led = digitalio.DigitalInOut(microcontroller.pin.GPIO1)  # GLYPH C3 onboard LED
+led.direction = digitalio.Direction.OUTPUT
+
+while True:
+    led.value = True
+    time.sleep(1)
+    led.value = False
+    time.sleep(1)
+```
+
+3. Choose **File → Save as**, select **CircuitPython device**, and save the file as **`code.py`**. CircuitPython runs `code.py` automatically at startup and after you save it. Use the Thonny Shell for `print()` output and errors.
+
+<Info>
+The C3, C6, and H2 use a serial connection and may not show a `CIRCUITPY` USB drive. Save files to **CircuitPython device** in Thonny. On a board that does show a `CIRCUITPY` drive, saving `code.py` there works too.
+</Info>
+
+## Add libraries for the examples
+
+The basic GPIO examples only use built-in CircuitPython modules. Sensor and display examples name any extra `adafruit_*.py` files they need. Download the [CircuitPython library bundle](https://circuitpython.org/libraries) that matches your firmware's major version, then copy the named files and their dependencies into the board's **`lib/`** directory using Thonny's device file browser. Keep the filenames and folder structure from the bundle.
+
+## If the board is not detected
+
+- Try a different USB data cable or port and close any other serial monitor.
+- Re-enter bootloader mode with BOOT and RESET before flashing. After flashing, reset with BOOT released.
+- Check that the firmware download matches the exact GLYPH board and that the flash start address is `0x0`.
+- Reopen the CircuitPython interpreter and select the new serial port if its port name changed after flashing.

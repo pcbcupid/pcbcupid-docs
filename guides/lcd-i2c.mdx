@@ -77,6 +77,9 @@ The PCF8574 acts as a bridge between the microcontroller’s I²C bus and the LC
 2) Make sure to install the  library
 3) Copy and paste the following code into the Arduino IDE
 
+<Tabs>
+  <Tab title="Arduino Code">
+
 ```cpp
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h> // https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
@@ -100,6 +103,34 @@ void loop() {
 }
 
 ```
+
+  </Tab>
+  <Tab title="CircuitPython Code">
+
+Copy adafruit_pcf8574.mpy, adafruit_bus_device/, and adafruit_character_lcd/ into lib/. This uses the common PCF8574 backpack mapping (RS=P0, EN=P2, backlight=P3, D4–D7=P4–P7) at 0x27. Check the address with the I2C scanner and use a 3.3 V backpack or level shifter if its pull-ups go to 5 V.
+
+Follow the [CircuitPython setup guide](/documentation/welcome/prerequisites/circuitpython-setup-guide) and save this example as `code.py` on the board.
+
+```python
+import board
+import adafruit_pcf8574
+from adafruit_character_lcd import character_lcd
+
+expander = adafruit_pcf8574.PCF8574(board.I2C(), address=0x27)
+backlight = expander.get_pin(3)
+backlight.switch_to_output(value=True)
+lcd = character_lcd.Character_LCD_Mono(
+    expander.get_pin(0), expander.get_pin(2),
+    expander.get_pin(4), expander.get_pin(5),
+    expander.get_pin(6), expander.get_pin(7), 16, 2
+)
+lcd.message = "Hello\nPCBCUPID"
+while True:
+    pass
+```
+
+  </Tab>
+</Tabs>
 
 ## Step 4: Upload the Code
 
