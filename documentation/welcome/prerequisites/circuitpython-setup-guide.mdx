@@ -3,7 +3,7 @@ description: "Install CircuitPython on a PCB Cupid GLYPH board, connect it to Th
 title: "CircuitPython Setup Guide"
 ---
 
-CircuitPython runs Python programs directly on your GLYPH board. This guide covers installing the firmware, connecting with Thonny, and saving a program that runs whenever the board starts.
+CircuitPython runs Python programs directly on your GLYPH board. This guide covers flashing the firmware with Thonny or esptool, connecting with Thonny, and saving a program that runs whenever the board starts.
 
 <Warning>
 Flashing CircuitPython replaces the firmware currently on the board. Save any existing sketches or files you need before continuing. Download the firmware for your **exact** GLYPH model; a different board's image can have the wrong flash layout or pin definitions.
@@ -12,8 +12,17 @@ Flashing CircuitPython replaces the firmware currently on the board. Save any ex
 ## Download Thonny and your board firmware
 
 1. Install [Thonny](https://thonny.org/) for your operating system.
+
+![Thonny installation screen](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/thonny-installation.avif)
+
 2. Open the CircuitPython download page for your board: [GLYPH C3](https://circuitpython.org/board/pcbcupid_glyph_c3/), [GLYPH C6](https://circuitpython.org/board/pcbcupid_glyph_c6/), [GLYPH H2](https://circuitpython.org/board/pcbcupid_glyph_h2/), or [GLYPH S3](https://circuitpython.org/downloads/) (search for **PCBCupid GLYPH S3**).
+
+![CircuitPython website showing board downloads](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/circuitpython-1.avif)
+
 3. Download the latest stable **`.bin`** firmware for that board. Keep track of where the file was saved.
+
+![Downloading the CircuitPython .bin file for GLYPH C3](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/circuitpython-2.avif)
+
 4. Connect the GLYPH to your computer with a USB **data** cable.
 
 ## Flash CircuitPython with Thonny
@@ -27,9 +36,39 @@ Flashing CircuitPython replaces the firmware currently on the board. Save any ex
 If Thonny does not offer the correct chip or start address, use the **OPEN INSTALLER** button on the board's CircuitPython download page to flash the same firmware, then return to Thonny for editing. Close Thonny's serial connection before opening the browser installer.
 </Info>
 
+## Install esptool in a terminal
+
+If you prefer flashing from a terminal, install [Python 3.10 or newer](https://www.python.org/downloads/) and run:
+
+```sh
+python -m pip install esptool
+python -m esptool --help
+```
+
+The second command confirms that esptool is available. On macOS or Linux, use `python3` instead of `python` if that is how Python is installed. If your system blocks a global pip install, follow Espressif's [virtual environment instructions](https://docs.espressif.com/projects/esptool/en/latest/esp32/installation.html#virtual-environment-installation).
+
+## Flash CircuitPython with esptool
+
+1. Download the `.bin` file for your exact GLYPH model from the link above. Close Thonny and any serial monitor so esptool can use the port.
+2. Put the board in bootloader mode: hold **BOOT**, press and release **RESET**, then release **BOOT**. If there is no RESET button, hold BOOT while plugging in USB.
+3. Open a terminal in the folder containing the downloaded `.bin` file. Replace `COM5` with your board's serial port (for example, `/dev/ttyACM0` on Linux or `/dev/cu.usbmodem...` on macOS) and `firmware.bin` with the actual downloaded filename:
+
+```sh
+python -m esptool --port COM5 write-flash 0x0 firmware.bin
+```
+
+4. Wait for esptool to finish writing and verifying the image. Press **RESET** with BOOT released, or unplug and reconnect the board. Then [connect with Thonny](#connect-thonny-and-run-code) to save `code.py`.
+
+![esptool terminal output while flashing CircuitPython](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/esptool-flashing.avif)
+
+Use `python3 -m esptool` if you installed esptool with `python3`. The `0x0` flash address is required for the downloaded CircuitPython ESP32 `.bin` image; see Espressif's [write-flash command reference](https://docs.espressif.com/projects/esptool/en/latest/esp32/esptool/basic-commands.html#write-binary-data-to-flash-write-flash).
+
 ## Connect Thonny and run code
 
 1. In **Tools → Options → Interpreter**, choose **CircuitPython (generic)** and select the GLYPH serial port. The Shell should show the CircuitPython `>>>` prompt. Press **Ctrl+C** if a running program occupies the Shell.
+
+![Selecting the CircuitPython interpreter and serial port in Thonny](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/thonny-port_selection.avif)
+
 2. Paste the following example into a new Thonny editor tab. Change the GPIO number to your board's onboard LED: **C3: 1**, **C6: 14**, **H2: 0**. For other models, check that board's pinout.
 
 ```python
@@ -48,6 +87,8 @@ while True:
 ```
 
 3. Choose **File → Save as**, select **CircuitPython device**, and save the file as **`code.py`**. CircuitPython runs `code.py` automatically at startup and after you save it. Use the Thonny Shell for `print()` output and errors.
+
+![CircuitPython test code running in Thonny](https://files.pcbcupid.com/Documentation/Boards/prerequisites/Circuitpython-setup/thonny-test_code.avif)
 
 <Info>
 The C3, C6, and H2 use a serial connection and may not show a `CIRCUITPY` USB drive. Save files to **CircuitPython device** in Thonny. On a board that does show a `CIRCUITPY` drive, saving `code.py` there works too.
