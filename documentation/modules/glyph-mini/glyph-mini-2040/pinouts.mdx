@@ -1,19 +1,15 @@
 ---
-description: "Tour the Glyph Mini 2040 board: GPIO pin assignments, power rails, communication buses, USB-C port, and Glink connector reference pinout diagram."
+description: "Tour the Glyph Mini 2040 board: GPIO pin assignments, power rails, communication buses, USB-C port, and reference pinout diagram."
 title: "Pinouts"
 sidebarTitle: "Pinouts"
-hidden: true
 ---
 
 <div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/pc-module/images/GDM001-glyph-mini_rp2040/GDM001-glyph-mini_rp2040-pinout.avif" alt="PCBCUPID_GlyphMini2040-Pinout-whiteBG_result" width="800"/>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/GDM001-glyph-mini_rp2040/GDM001-glyph-mini_rp2040-pinout.avif" alt="PCBCUPID_GlyphMini2040-Pinout-whiteBG_result" width="800"/>
 
 </div>
-<br/>
 
-[CLICK HERE TO DOWNLOAD HD](https://files.pcbcupid.com/Documentation/Boards/glyph-mini/PCBCUPID_GlyphMini2040_Pinout_PNG.png)
-
-[CLICK HERE TO DOWNLOAD PDF](https://files.pcbcupid.com/Documentation/Boards/glyph-mini/PCBCUPID_GlyphMini2040_Pinout.pdf)
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GDM001-glyph-mini_rp2040/GDM001-glyph-mini_rp2040-pinout.png)
 
 The Glyph Mini 2040 has many pins, ports, and features. This page takes you on a tour on each of the pin on the board!
 
@@ -24,10 +20,6 @@ The Glyph Mini 2040 has many pins, ports, and features. This page takes you on a
 - **RUN / RESET**: This is the run/reset pin of the RP2040, you can pull down this using an external button or other controller to reset the board.
 - **3.3V**: These pins are the output from the 3.3V regulator, they can supply up to 800mA peak current.
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_power_pins_result.avif" alt="PCBCUPID_mini2040_power_pins_result" width="600"/>
-
-</div>
 
 ### Communication Pins
 
@@ -40,10 +32,6 @@ The RP2040 is capable of handling I2C, SPI, and UART on many pins. However, to s
 - I2C0 SCL: **SCL**, GPIO9
 - I2C0 SDA: **SDA**, GPIO8
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_i2c_result.avif" alt="PCBCUPID_mini2040_i2c_result" width="600"/>
-
-</div>
 
 #### SPI Pins
 
@@ -52,29 +40,17 @@ The RP2040 is capable of handling I2C, SPI, and UART on many pins. However, to s
 - SPI0 MISO: **MI**, GPIO4
 - SPI0 CS  : **SS / CS**, GPIO5 (or any available GPIO)
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_spi_pins_result.avif" alt="PCBCUPID_mini2040_spi_pins_result" width="600"/>
-
-</div>
 
 #### UART Pins
 
 - UART0 TX: **TX**, GPIO0
 - UART0 RX: **RX**, GPIO1
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_uart_pins_result.avif" alt="PCBCUPID_mini2040_uart_pins_result" width="600"/>
-
-</div>
 
 #### USB Pins
 
 This is used for power and data transfer. Connect to your computer via a USB C cable to update firmware and at the USB pin you would receive 5v.
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_all_usb_pins_result.avif" alt="PCBCUPID_mini2040_all_usb_pins_result" width="600"/>
-
-</div>
 
 #### Buttons and Status LED
 
@@ -95,10 +71,6 @@ The RP2040 has four 12-bit ADC channels. These pins are the only pins capable of
 - **A2/GPIO28**: ADC channel 2
 - **A3/GPIO29**: ADC channel 3
 
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_analog_pins_result.avif" alt="PCBCUPID_mini2040_analog_pins_result" width="600"/>
-
-</div>
 
 ### Digital Pins
 
@@ -125,17 +97,3 @@ These are the digital I/O pins. They all have multiple capabilities but can be u
 - **A1/GPIO27**: Analog I/O pin 1 (ADC1, I2C1 SCL, PWM5 B).
 - **A2/GPIO28**: Analog I/O pin 2 (ADC2, UART0 TX, PWM6 A).
 - **A3/GPIO29**: Analog I/O pin 3 (ADC3, UART0 RX, PWM6 B).
-
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/pinouts_mini2040/PCBCUPID_mini2040_digital_pinouts_pins_result.avif" alt="PCBCUPID_mini2040_digital_pinouts_pins_result" width="600"/>
-</div>
-
-### Schematic Diagram For Glyph Mini 2040
-
-<div style={{ textAlign: "center" }}>
-<img src="https://files.pcbcupid.com/Documentation/Boards/glyph-mini/Glyph-Mini-2040-Schematic.avif" alt="PCBCUPID_Mini2040_Schematic" width="600"/>
-</div>
-
-<br/>
-
-For better view you can download the schematic diagram from [here](https://library.pcbcupid.com/api/mfg/GDM001-glyph-mini_rp2040/file/GDM001-glyph-mini_rp2040-schematic.pdf)

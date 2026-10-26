@@ -97,9 +97,27 @@
                     ]
                   },
                   {
+                    "group": "Glyph S3 Lucid",
+                    "pages": [
+                      "documentation/modules/glyph/glyph-s3-lucid/overview",
+                      "documentation/modules/glyph/glyph-s3-lucid/pinouts",
+                      "documentation/modules/glyph/glyph-s3-lucid/power-management"
+                    ]
+                  },
+                  {
+                    "group": "Glyph C5",
+                    "pages": [
+                      "documentation/modules/glyph/glyph-c5/overview-glyph-c5",
+                      "documentation/modules/glyph/glyph-c5/pinouts",
+                      "documentation/modules/glyph/glyph-c5/power-management"
+                    ]
+                  },
+                  {
                     "group": "Glyph 2040",
                     "pages": [
-                      "documentation/modules/glyph/glyph-2040/overview-glyph-2040"
+                      "documentation/modules/glyph/glyph-2040/overview-glyph-2040",
+                      "documentation/modules/glyph/glyph-2040/pinouts",
+                      "documentation/modules/glyph/glyph-2040/power-management"
                     ]
                   }
                 ]
@@ -110,7 +128,29 @@
                   {
                     "group": "Glyph Mini 2040",
                     "pages": [
-                      "documentation/modules/glyph-mini/glyph-mini-2040/overview"
+                      "documentation/modules/glyph-mini/glyph-mini-2040/overview",
+                      "documentation/modules/glyph-mini/glyph-mini-2040/pinouts"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "TERRA",
+                "pages": [
+                  {
+                    "group": "EC200U",
+                    "pages": [
+                      "documentation/modules/terra/terralink-ec200u/overview",
+                      "documentation/modules/terra/terralink-ec200u/pinouts",
+                      "documentation/modules/terra/terralink-ec200u/programming"
+                    ]
+                  },
+                  {
+                    "group": "A7672S",
+                    "pages": [
+                      "documentation/modules/terra/terralink-a7672s/overview",
+                      "documentation/modules/terra/terralink-a7672s/pinouts",
+                      "documentation/modules/terra/terralink-a7672s/programming"
                     ]
                   }
                 ]

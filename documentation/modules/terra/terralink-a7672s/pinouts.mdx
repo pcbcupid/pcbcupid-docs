@@ -1,0 +1,181 @@
+---
+description: "A simple guide to the TerraLink A7672S UART header, power connections, SIM holders, and antenna ports."
+title: "Pinouts"
+sidebarTitle: "Pinouts"
+---
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/T002-terralink-a7672s-ek-pinout.avif" alt="TerraLink A7672S pinout diagram" width="800" />
+</div>
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/T002-terralink-a7672s-ek-pinout.png)
+
+TerraLink A7672S connects to a controller through its **seven-pin, 2.54 mm header**. USB-C provides a separate connection for computer access and power. Use the pin-1 marker on the board to identify the header orientation; the numbers below follow the physical header pins.
+
+### Communication Pins
+
+| Header pin | Signal | What it does |
+| :--- | :--- | :--- |
+| 1 | Reset control | External control of modem reset through the onboard driver |
+| 2 | Power-key control | External control of the modem's power-key signal through the onboard driver |
+| 3 | GND | Common ground for the controller and TerraLink |
+| 4 | UART command input (`G_TX`) | Receives data from the controller's TX pin |
+| 5 | UART response output (`G_RX`) | Sends data to the controller's RX pin |
+| 6 | GPIO 2 | Translated modem GPIO signal |
+| 7 | GPIO 1 | Translated modem GPIO signal |
+
+The UART header uses **3.3 V logic**. The onboard translator connects it to the modem's 1.8 V interface. The two GPIO connections also use the translated 3.3 V domain; their behavior is controlled by the modem firmware.
+
+<Note>
+The names `G_TX` and `G_RX` follow the controller side of the connection: controller TX connects to header pin 4, and controller RX connects to header pin 5. Both boards must share ground. These signals are TTL UART, not RS-232 voltage levels.
+</Note>
+
+### Power Connections
+
+- **USB-C**: Accepts USB 5 V and carries modem USB data when a data-capable cable is used.
+- **VIN terminal, pin 1**: External **5–15 V DC** supply input, as marked `5V-15V` on the board silkscreen.
+- **GND terminal, pin 2**: External supply ground.
+
+The 5–15 V range applies to the VIN screw terminal. USB-C accepts USB 5 V; do not apply 15 V to USB-C, the UART header, or any test pad. Observe the terminal polarity. The supply must handle cellular transmit-current bursts. A controller GPIO is a signal connection and cannot power TerraLink.
+
+### SIM and Antenna Connections
+
+The board has two nano SIM holders, connected to the modem's SIM1 and SIM2 interfaces. Insert or remove SIMs with board power off. Select the active SIM using the procedure supported by the installed firmware. Two holders do not establish two simultaneous cellular data connections.
+
+| Connection | Purpose |
+| :--- | :--- |
+| Cellular antenna | Mobile-network radio connection |
+| BLE antenna | Connection to the module's BLE antenna signal |
+| GNSS antenna | Connection to the module's satellite-positioning antenna signal |
+
+Check the installed module variant and firmware for BLE and GNSS support. Antenna connectors alone do not enable optional features. Use an antenna suitable for the intended radio and frequency bands.
+
+### Buttons and Indicators
+
+- **Power key**: Operates the modem's local power-key input. Use the timing specified in the modem hardware guide.
+- **Reset**: Operates the modem's reset input.
+- **Power and activity LEDs**: Provide local indication of supply and modem/UART activity. Confirm registration and connection state through modem responses.
+
+The reset and power-key header connections use onboard driver circuits. They are not a supply switch, and their header control behavior differs from connecting directly to the modem's active-low pins. Leave them disconnected for the basic UART example and use the local buttons.
+
+### Solder Pads and Test Points
+
+These small exposed pads provide access for measurement, diagnostic equipment, or soldered wires. They are separate from the main controller header. Disconnect power before soldering, use short insulated wires with strain relief, and keep solder away from neighboring pads.
+
+#### Supply and Ground Test Pads
+
+##### 5V
+
+The USB 5 V rail. Measure against GND to check USB input power. This is separate from the 5–15 V VIN terminal.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP3.avif" alt="TerraLink A7672S 5V pad highlighted" width="600" />
+</div>
+
+##### 3V8
+
+The nominal 3.8 V modem supply. Measure against GND; an oscilloscope can reveal supply dips during cellular transmission.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP4.avif" alt="TerraLink A7672S 3V8 pad highlighted" width="600" />
+</div>
+
+##### 3V3
+
+The onboard nominal 3.3 V regulator output. Measure against GND to check this rail.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP5.avif" alt="TerraLink A7672S 3V3 pad highlighted" width="600" />
+</div>
+
+##### 1V8
+
+The modem-derived nominal 1.8 V rail. Measure against GND while the module is on. This measurement pad is separate from the BOOT pad group.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP6.avif" alt="TerraLink A7672S 1V8 pad highlighted" width="600" />
+</div>
+
+##### GND
+
+One of the two ground test pads. Use it as the reference for voltage measurements or diagnostic equipment.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP7.avif" alt="TerraLink A7672S GND pad highlighted" width="600" />
+</div>
+
+##### GND — Additional Ground Pad
+
+The second ground test pad. Both ground pads connect to the same board ground.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP8.avif" alt="TerraLink A7672S GND pad highlighted" width="600" />
+</div>
+
+The voltage labels identify existing supply rails, **not additional general-purpose power inputs**. Power the board through USB-C or the VIN terminal. Do not inject voltage into these rails or assume they can power a Glyph board or other load; available output current has not been established.
+
+#### Log UART Pads: L_TX and L_RX
+
+The A7672S log pads connect directly to the modem and bypass the main UART level translator. Treat them as **native 1.8 V signals** and confirm the installed module specifications before connecting equipment. Use a compatible 1.8 V UART adapter or level shifter: adapter RX → `L_TX`, adapter TX → `L_RX`, and common `GND`. Do not connect a 3.3 V or 5 V adapter TX directly; leave its power lead disconnected.
+
+##### L_TX — Log Output
+
+The modem sends diagnostic data on this pad. Connect it to the compatible adapter's RX input.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP2.avif" alt="TerraLink A7672S L_TX pad highlighted" width="600" />
+</div>
+
+##### L_RX — Log Input
+
+This pad receives diagnostic input from a compatible adapter's TX output when required by the vendor procedure.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP1.avif" alt="TerraLink A7672S L_RX pad highlighted" width="600" />
+</div>
+
+Power TerraLink through its normal input, then capture the log using the baud rate and serial settings specified for the installed firmware. Log output is intended for diagnostics; availability and format depend on firmware. Use the main UART header for the documented AT-command examples.
+
+#### USB Data Pads: D+ and D−
+
+`D+` and `D-` carry USB data, not UART or GPIO signals. Prefer the USB-C connector for normal computer access and firmware updates. An alternate USB connection also needs the correct ground, VBUS/power arrangement, and USB wiring. Keep the data pair short and routed together; do not attach two USB hosts simultaneously or leave long wire branches on the USB signals.
+
+##### D+ — USB Data Positive
+
+The USB positive data signal connects to the modem's USB_DP pin and the USB-C data connection.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP10.avif" alt="TerraLink A7672S D+ pad highlighted" width="600" />
+</div>
+
+##### D− — USB Data Negative
+
+The USB negative data signal connects to the modem's USB_DM pin and the USB-C data connection. Use D+ and D− together as a USB differential pair.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/smd_pinout_TP9.avif" alt="TerraLink A7672S D− pad highlighted" width="600" />
+</div>
+
+#### Boot-Mode Pads: 1V8, BOOT, and GND
+
+These are **three separate solder pads** for accessing the modem's USB boot-mode input. They are used for firmware download or recovery, not for normal AT-command control or programming a Glyph board.
+
+| Label | What it means | How it is used |
+| :--- | :--- | :--- |
+| `1V8` | The board's modem-derived 1.8 V rail | Provides a logic-high reference; it is not an external power input |
+| `BOOT` | The modem's USB_BOOT input, on the centre pad | Selects the startup mode when driven to the level required by the modem |
+| `GND` | Board ground, or 0 V | Provides a logic-low reference |
+
+The separate 1V8 test point elsewhere on the board is connected to the same 1.8 V rail. The pad names describe electrical connections; the correct recovery connection differs between EC200U and A7672S.
+
+#### A7672S: BOOT Low for USB Download
+
+A7672S's USB_BOOT input has an internal pull-up. For forced USB download, temporarily connect `BOOT` to `GND` before applying power, then follow SIMCom's reset sequence to enter download mode. Connect USB-C to the computer and use the matching SIMCom drivers, download tool, and firmware image. Release the temporary BOOT-to-GND connection after the download interface is entered, as instructed by the vendor procedure.
+
+For normal startup, leave the separate pads unconnected so the modem's internal pull-up can set BOOT high. Do not hold BOOT at GND during normal startup. The EC200U's BOOT-to-1V8 recovery procedure does not apply to A7672S. Refer to **A7672S Hardware Design V1.00, section 3.4.2**, available through [SIMCom technical files](https://www.simcom.com/technical_files-p6.html?filetype=0&pro_cat=0&pro_li=88&time=0).
+
+<Warning>
+Never connect `1V8` directly to `GND` or join all three pads: this shorts the 1.8 V supply. Do not apply 3.3 V, 5 V, or VIN to BOOT. Make soldered connections with power disconnected; use a temporary connection suitable for the vendor's recovery sequence.
+</Warning>
+
+Continue with [Programming with Glyph](/documentation/modules/terra/terralink-a7672s/programming) for the wiring table and first communication test.

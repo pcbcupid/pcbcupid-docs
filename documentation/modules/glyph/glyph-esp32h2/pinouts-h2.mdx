@@ -17,7 +17,8 @@ sidebarTitle: "Pinouts"
 The Glyph H2 board is packed with versatile pins and features. This guide will help you navigate the pinout details for efficient use.
 
 <Note title="Technical Detail: Strapping Pins">
-GPIO 8 and GPIO 9 are **Strapping Pins** used during the chip's power-on/reset sequence to determine the boot mode:
+GPIO 8, GPIO 9, and GPIO 25 are **strapping pins** sampled during reset. GPIO 8 and GPIO 9 control the boot mode:
+- **GPIO 25**: Selects the JTAG signal source during early boot.
 - **GPIO 9**: Controls whether the chip boots from internal Flash (Default: High) or enters **Serial Download Mode** (Low). On your Glyph board, this pin is connected to the onboard **BOOT** button.
 - **GPIO 8**: Determines the boot behavior and log output. It should ideally be pulled High or left floating during reset for normal operation.
 Avoid connecting peripherals to these pins that might pull them to an unexpected state during startup.
@@ -108,13 +109,13 @@ The ESP32-H2 supports PWM on all pins. However, it is not capable of PWM on all 
 
 ### Analog Pins
 
-The ESP32-H2 has four ADC channels. These pins are the only pins capable of handling analog (12-bit), and they can also do digital.
+The ESP32-H2 has five ADC1 channels on GPIO1–5. These pins support 12-bit analog input and can also be used as digital I/O.
 
 - **A1/IO1**: ADC1 channel 0
 - **A2/IO2**: ADC1 channel 1
 - **A3/IO3**: ADC1 channel 2
 - **SDA/IO4**: ADC1 channel 3
-- **SCL/IO5**: ADC2 channel 4
+- **SCL/IO5**: ADC1 channel 4
 
 <div style={{ textAlign: "center" }}>
 <img src="https://files.pcbcupid.com/Documentation/Boards/glyph_h2/pinouts_h2/PCBCUPID_h2_analog_pinout_result.avif" alt= "PCBCUPID_h2_analog_pinout_result" width="600"/>
@@ -140,8 +141,8 @@ These are the digital I/O pins. They all have multiple capabilities but can be u
 - **D14/GPIO14**: Digital I/O pin 14(GPIO14, XTAL_32K_N).
 - **MO/GPIO22**: The main SPI0 MOSI(GPIO22).
 - **RX/GPIO23**: The main UART0 RX pin(FSPICS1, U0RXD).
-- **TX/GPIO24**: The main UART0 TX pin(GPIO23,FSPICS2, U0TXD).
-- **MI/GPIO25**: The main SPI0 MISO(GPIO24,I2C0 SDA, SPI0 CS).
+- **TX/GPIO24**: The main UART0 TX pin(GPIO24,FSPICS2, U0TXD).
+- **MI/GPIO25**: The main SPI0 MISO(GPIO25,I2C0 SDA, SPI0 CS).
 - **D-/GPIO26**: Digital I/O pin 26(GPIO26,FSPICS4,USB_D-).
 - **D+/GPIO27**: Digital I/O pin 27(GPIO27,FSPICS5,USB_D+).
 

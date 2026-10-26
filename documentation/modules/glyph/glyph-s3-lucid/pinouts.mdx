@@ -1,0 +1,137 @@
+---
+description: "Tour the Glyph S3 Lucid board: GPIO pin assignments, power rails, integrated 0.91-inch display, SPST action buttons, USB-C port, and Glink connector reference pinout."
+title: "Pinouts"
+sidebarTitle: "Pinouts"
+---
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/GD008-Glyph-S3-LCD/GD008-Glyph-S3-LCD-pinout.avif" alt="Glyph S3 Lucid Pinout" width="800" />
+</div>
+
+<br/>
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GD008-Glyph-S3-LCD/GD008-Glyph-S3-LCD-pinout.png)
+
+The **Glyph S3 Lucid** features a rich set of GPIOs, high-speed communication buses, dedicated power management with an inbuilt BMS, an integrated 0.91" LCD display, and 3 tactile SPST action buttons. This page takes you on a tour of each pin and hardware interface on the board!
+
+<Note title="Technical Detail: Strapping and Boot Pins">
+The ESP32-S3 uses specific strapping pins during reset:
+- **GPIO 0**: Controls whether the chip boots into internal flash or enters **Serial Download Boot Mode**. On your Glyph S3 Lucid board, this pin is wired to the onboard **BOOT** button.
+- Avoid pulling strapping pins to unexpected logic states during startup to ensure reliable booting.
+</Note>
+
+---
+
+### Power Pins and Connections
+
+- **GND**: Common ground for all power, logic, and analog signals.
+- **BAT**: Connect the positive battery terminal here (operating range 2.7V - 4.2V) and negative to GND to power the board through the inbuilt BMS.
+- **USB**: +5V rail supplied directly by the USB Type-C connector when plugged in.
+- **EN**: Chip Enable pin of the ESP32-S3. Pulling this pin to ground resets the microcontroller.
+- **3.3V / 3V3**: Regulated 3.3V power output from the onboard low-dropout (LDO) regulator (supplying up to 900mA peak capacity).
+- **Inbuilt BMS**: Integrated Battery Management System providing automatic overcharge and overdischarge protection when powering via the BAT and GND pins. (The rear of the board contains only the mounting space for the soldered LCD display—no rear battery solder pads or MSR pads).
+
+---
+
+### Communication Pins
+
+#### I2C, SPI, and UART on ESP32-S3
+
+The ESP32-S3 provides high-speed communication buses routed to standard, consistent pins across the Glyph ecosystem:
+
+#### I2C Pins
+
+- I2C0 SCL: **SCL**, IO5
+- I2C0 SDA: **SDA**, IO4
+
+Both lines are routed to the physical header pins as well as the onboard **GLINK** connector. A secondary I2C bus can also be assigned to any available GPIO pair.
+
+#### SPI Pins
+
+- SPI0 SCK : **SCK**, IO35
+- SPI0 MOSI: **MO**, IO36
+- SPI0 MISO: **MI**, IO37
+- SPI0 CS  : **ANY IO That's available** (such as D13, D14, D15)
+
+#### UART Pins
+
+- UART0 TX: **TX**, IO43
+- UART0 RX: **RX**, IO44
+- UART1 TX: **IO17**
+- UART1 RX: **IO18**
+
+---
+
+### Additional Ports / Pins & Lucid Hardware
+
+#### Integrated 0.91" LCD Display
+
+The board features an onboard 0.91" LCD display for visual output, graphics, and interactive gaming.
+
+#### 3 SPST Action Button Switches
+
+The board features 3 onboard tactile SPST push buttons designed to control user actions, menu selections, and games running on the 0.91" display.
+
+#### Glyph Glink Port
+
+A 4-pin JST-SH connector compatible with the SparkFun Qwiic and Adafruit STEMMA QT ecosystems. It provides quick solderless connections to I2C sensors and peripheral boards.
+
+#### USB Pins
+
+Used for power and data transfer. Connect to your computer via a USB Type-C cable to update firmware, program the chip via native USB Serial/JTAG, and supply +5V at the **USB** pin.
+
+#### PWM Pins
+
+The ESP32-S3 supports PWM on all general-purpose pins via the LED PWM (LEDC) controller with configurable frequency and duty cycle. Please refer to the [ESP32S3 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/PCBCUPID_esp32-s3_datasheet.pdf) for channel mapping.
+
+#### Power Slide Switch (ON)
+
+A physical slide switch that disconnects the battery line, allowing you to turn off the board completely when operating on battery power without unplugging the battery.
+
+#### Status LED (GPIO33)
+
+An onboard user-controllable status LED connected to **GPIO 33** for visual blinking feedback, status monitoring, or debugging.
+
+---
+
+### Analog Pins (ADC)
+
+The ESP32-S3 features two SAR ADC units. On the Glyph S3 Lucid, 9 ADC1 channels are routed to the headers for high-precision analog readings:
+
+- **A1/IO1**: ADC1 channel 0
+- **A2/IO2**: ADC1 channel 1
+- **IO4**: ADC1 channel 3 (Can also function as ADC1_CH3 when not used for I2C)
+- **IO5**: ADC1 channel 4 (Can also function as ADC1_CH4 when not used for I2C)
+- **A6/IO6**: ADC1 channel 5
+- **A7/IO7**: ADC1 channel 6
+- **A8/IO8**: ADC1 channel 7
+- **A9/IO9**: ADC1 channel 8
+- **A10/IO10**: ADC1 channel 9
+
+---
+
+### Digital Pins
+
+These are the digital I/O pins and primary hardware assignments:
+
+- **A1/GPIO1**: Analog / Digital I/O (ADC1_CH0).
+- **A2/GPIO2**: Analog / Digital I/O (ADC1_CH1).
+- **SDA/GPIO4**: The main I2C1 data pin (GPIO4).
+- **SCL/GPIO5**: The main I2C1 clock pin (GPIO5).
+- **A6/GPIO6**: Analog / Digital I/O (ADC1_CH5).
+- **A7/GPIO7**: Analog / Digital I/O (ADC1_CH6).
+- **A8/GPIO8**: Analog / Digital I/O (ADC1_CH7).
+- **A9/GPIO9**: Analog / Digital I/O (ADC1_CH8).
+- **A10/GPIO10**: Analog / Digital I/O (ADC1_CH9).
+- **D13/GPIO13**: Digital I/O pin 13 (FSPIIO7).
+- **D14/GPIO14**: Digital I/O pin 14 (FSPIDQS).
+- **D15/GPIO15**: Digital I/O pin 15 (U0RTS).
+- **D16/GPIO16**: Digital I/O pin 16 (U0CTS).
+- **D17/GPIO17**: Digital I/O pin 17 (UART1 TX / U1TXD).
+- **D18/GPIO18**: Digital I/O pin 18 (UART1 RX / U1RXD).
+- **LED/GPIO33**: On-board Status LED (GPIO33).
+- **SCK/GPIO35**: Main SPI SCK pin.
+- **MO/GPIO36**: Main SPI MOSI pin.
+- **MI/GPIO37**: Main SPI MISO pin.
+- **TX/GPIO43**: Main UART0 TX pin (U0TXD).
+- **RX/GPIO44**: Main UART0 RX pin (U0RXD).

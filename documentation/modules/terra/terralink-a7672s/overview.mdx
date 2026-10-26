@@ -1,0 +1,127 @@
+---
+description: "Explore the TerraLink A7672S cellular modem board with USB-C, a 3.3 V UART and GPIO interface, two nano SIM holders, and external antenna connections."
+title: "Overview"
+sidebarTitle: "Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+  var [isFullscreen, setIsFullscreen] = useState(false);
+  var [fullscreenDialog, setFullscreenDialog] = useState(null);
+
+
+  useEffect(function () {
+    if (show3D || isFullscreen || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+  function openFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && !dialog.open) dialog.showModal();
+    setIsFullscreen(true);
+  }
+  function closeFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && dialog.open) dialog.close();
+    else setIsFullscreen(false);
+  }
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" noZoom onClick={openFullscreen} role="button" tabIndex={0} onKeyDown={function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFullscreen(); } }} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px', cursor: 'zoom-in' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+      <dialog ref={setFullscreenDialog} aria-label={img && img.label} onClose={function () { setIsFullscreen(false); }} onClick={function (event) { if (event.target === event.currentTarget) closeFullscreen(); }} style={{ width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none', margin: 0, padding: '2rem', border: 0, background: 'rgba(0,0,0,0.88)' }}>
+        <div style={{ position: 'relative', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          <button type="button" aria-label="Close fullscreen image" onClick={closeFullscreen} style={{ position: 'absolute', top: 0, right: 0, zIndex: 1, width: '2.5rem', height: '2.5rem', border: 0, borderRadius: '999px', background: 'rgba(255,255,255,0.92)', color: '#111', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1 }}>×</button>
+          <img src={img && img.url} alt={img && img.label} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        </div>
+      </dialog>
+    </div>
+  );
+};
+
+<ShopHeader title="TerraLink A7672S" url="https://shop.pcbcupid.com/" />
+
+<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/T002-terralink-a7672s-ek/T002-terralink-a7672s-ek.glb" images={[
+  { url: "https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/T002-terralink-a7672s-ek-FB-o.avif", label: "ILLUSTRATION VIEW", id: "illustration" },
+  { url: "https://spell-files.pcbcupid.com/pc-module/images/T002-terralink-a7672s-ek/pcbcupid-T002-terralink-a7672s-ek-terraA767Top.avif", label: "BOARD VIEW", id: "board" }
+]} />
+
+Introducing **TerraLink A7672S**, a cellular modem board for connecting Glyph development boards and other microcontrollers to the mobile network. Glyph handles your application, sensors, and local controls; the A7672S handles the cellular connection. Together they can support remote monitoring, telemetry, and devices that need connectivity beyond a local Wi-Fi network.
+
+- **Modem**: SIMCom A7672S, from the LTE Cat 1 A7672 family.
+- **Cellular Data**: Rated peak speeds of 10 Mbps download and 5 Mbps upload.
+- **Dimensions**: 63.50 × 45.72 mm PCB, with 1.6 mm nominal thickness.
+- **Host Connections**: USB 2.0 and a seven-pin UART/control header at 2.54 mm pitch.
+- **Logic Levels**: 3.3 V on the external UART and GPIO connections, translated to the modem's internal 1.8 V interface.
+- **SIM**: Two nano SIM holders connected to the modem's two SIM interfaces.
+- **Power**: USB-C input and a separate VIN/GND terminal, with onboard regulation for the modem.
+- **Additional Features**: Two translated GPIO connections, local power-key and reset buttons, activity indicators, antenna connectors, and signal test points.
+
+### What the A7672S Does
+
+The modem handles cellular radio communication while the host sends instructions through **AT commands**. These are text commands used to configure the modem, check its status, and request network operations. The modem replies with results and can send notifications when its operating state changes.
+
+The A7672 family supports network services including TCP/IP, MQTT, and HTTP/HTTPS. These let an application exchange messages with an IoT service or send data to a web API using the modem's network stack. SIMCom lists firmware updates over USB and FOTA, which is an update delivered over the cellular network. Features must match the installed firmware. See the [SIMCom A7672 specifications](https://en.simcom.com/product/A7672.html).
+
+The LTE speed figures are modem peak ratings. Actual speed depends on network coverage, signal strength, the operator, the data plan, the remote server, and the host connection. The UART rate is a separate limit and should not be confused with the cellular download rate.
+
+### Connectivity
+
+The board exposes two nano SIM holders. SIM selection and switching are controlled by the modem and its firmware; two holders do not mean two simultaneous cellular data connections. Choose compatible SIMs and follow the installed firmware's SIM-selection procedure.
+
+The cellular antenna connection is separate from the BLE and GNSS antenna connections. BLE and GNSS are optional module features, so verify them against the installed variant and firmware. Check cellular band support against your intended operator before deployment.
+
+USB-C provides computer access for modem communication and supported firmware tools. The UART header provides an embedded-host connection, together with power-key control, reset control, and two translated GPIO signals.
+
+### Using TerraLink with Glyph
+
+Glyph controls TerraLink through its UART interface. Your application runs on Glyph, gathers data, sends commands, and processes modem responses. For example, a Glyph application can read a sensor, upload measurements to a server, and handle connection retries.
+
+The board translates the modem's 1.8 V UART and two GPIO signals to a 3.3 V host interface. Other microcontrollers can use those connections when their logic voltage is compatible. A 5 V host needs appropriate level shifting, and the controller and TerraLink must share ground.
+
+Start with [Programming with Glyph](/documentation/modules/terra/terralink-a7672s/programming) for wiring and an Arduino serial-console example. See [Pinouts](/documentation/modules/terra/terralink-a7672s/pinouts) for the connector functions.
+
+### Development Options
+
+With standard AT firmware, write the controller application in an environment supported by your Glyph board, such as Arduino, ESP-IDF, or MicroPython. A computer can also send AT commands over USB, which is useful for checking modem behavior before implementing the same sequence on Glyph.
+
+Programming Glyph and updating A7672S firmware are separate operations. SIMCom offers embedded development options for some A7672 variants, but direct application development inside this modem requires confirmation of the exact module revision, SDK, and firmware support. Use the vendor tools and a matching image for modem firmware updates.
+
+### Power Supply
+
+Power TerraLink through its supported power input rather than a controller GPIO. Cellular transmission causes bursts of current, so the source must support modem operation without the voltage dropping. The VIN screw terminal is marked for **5–15 V DC**; USB-C uses **5 V**. Choose a supply that can handle cellular current bursts.
+
+<Note>
+**Need help with TerraLink A7672S?** Start with [Pinouts](/documentation/modules/terra/terralink-a7672s/pinouts) for connections and voltage levels, or [Programming with Glyph](/documentation/modules/terra/terralink-a7672s/programming) for setup and troubleshooting. When requesting help, include your controller model, power-supply voltage and current rating, wiring photo, modem firmware version, and AT-command responses. Remove SIM identifiers, passwords, and API keys before sharing logs.
+</Note>

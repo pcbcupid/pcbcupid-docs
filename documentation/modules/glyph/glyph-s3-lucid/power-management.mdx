@@ -1,0 +1,65 @@
+---
+description: "Power the Glyph S3 Lucid over USB-C or rechargeable lithium battery with inbuilt BMS, monitor charge status, and configure power options for portable edge projects."
+title: "Power Management"
+sidebarTitle: "Power Management"
+---
+
+## Power Management for Glyph S3 Lucid
+
+### Battery + USB Power with Inbuilt BMS
+
+We designed the Glyph S3 Lucid to be effortless to power both on the workbench via USB and in the field with a portable rechargeable battery. The board integrates a dedicated **Battery Management System (BMS)** to ensure maximum battery longevity and operating safety.
+
+There are two primary ways to power the board:
+
+1. **USB Power**: Connect with a standard USB Type-C cable. The onboard low-dropout (LDO) regulator steps down the 5V USB rail to a stable 3.3V to power the ESP32-S3 microcontroller, display, and peripherals.
+2. **Battery Power via Inbuilt BMS**: Connect a 3.7V / 4.2V Lithium Polymer (LiPo) or Lithium Ion (Li-ion) battery directly to the **BAT** (+) pin and **GND** (-) pin on the board. The rear of the board does not have battery solder pads or MSR pads (the back is dedicated entirely to the soldered LCD display). The onboard BMS automatically manages power delivery, battery regulation, and safety against overcharge and overdischarge.
+
+When USB power is plugged in, the system automatically hot-swaps to USB power and simultaneously begins charging the battery (with status feedback via the charging indicator LED). When USB is unplugged, power smoothly transitions to the battery without resetting the board.
+
+Additionally, the Glyph S3 Lucid features an onboard **Power Slide Switch (ON)** that disconnects the battery line, allowing you to turn off the board completely when running on battery power without having to physically unplug the cell.
+
+<Danger>
+Always ensure proper polarity when connecting LiPo / Li-ion batteries. Connecting a battery with reverse polarity will damage the board and BMS circuitry.
+</Danger>
+
+---
+
+### Power Supplies
+
+The Glyph S3 Lucid provides multiple power access points:
+
+- **BAT Pin**: Connect your single-cell battery's positive (+) terminal here (operating range: 2.7V - 4.2V), with negative (-) to GND.
+- **USB Pin**: Supplies +5V directly from the USB Type-C port when connected.
+- **3.3V / 3V3 Pin**: Output from the onboard high-performance 3.3V regulator, capable of delivering up to **900mA peak current**.
+
+---
+
+### Measuring Battery Voltage
+
+To monitor remaining battery percentage and voltage levels in firmware, the board incorporates internal voltage monitoring circuitry connected directly to the BMS. Your firmware can read the battery voltage through the ADC without needing any manual solder jumpers or external divider components.
+
+---
+
+### Alternative Power Options
+
+For powering the Glyph S3 Lucid in standalone or extended installations:
+
+- **USB Powered**: Use a 5V 1A or 5V 2A USB wall adapter for reliable continuous operation.
+- **Portable Use Without LiPo**: Power the board directly from a standard 5V USB power bank via the Type-C port.
+- **Higher Voltage Power Source**: Use a step-down buck converter (e.g., 12V/24V down to 5V) and connect its regulated 5V output to the USB and GND pins.
+
+<Danger>
+**What You Cannot Do**
+- Do not connect alkaline, NiMH, or non-rechargeable batteries to the battery port.
+- Do not connect battery packs with voltages higher than 4.2V (e.g., 2S/3S LiPo packs), as doing so will permanently destroy the BMS and voltage regulators.
+</Danger>
+
+---
+
+### External Power Supplies
+
+The Glyph S3 Lucid is engineered to run via USB Type-C or single-cell lithium batteries through its BMS. If an external regulated supply must be used:
+
+- **External 3.3V Supply**: Connect a regulated 3.3V rail directly across the 3.3V and GND pins.
+- **External 5V Supply**: Connect a regulated 5V source across the USB (+5V) and GND pins.

@@ -1,0 +1,118 @@
+---
+description: "Connect a Glyph development board to TerraLink EC200U and use a simple Arduino UART console to send modem commands."
+title: "Programming with Glyph"
+sidebarTitle: "Programming"
+---
+
+**Glyph runs your application; TerraLink EC200U provides the cellular connection.** You upload code to Glyph, then that code sends AT commands to the modem over UART. The modem handles the radio and returns responses to Glyph. This procedure uses the modem's standard AT firmware and does not replace its firmware.
+
+### Connection Diagram
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/T001-terralink-ec200-ek/pcbcupid-T001-terralink-ec200-ek-terra-ec200u-cd.avif" alt="Glyph to TerraLink EC200U connection diagram" width="800" />
+</div>
+
+### Step 1: Hardware Required
+
+- A Glyph C3 development board for the example below.
+- A TerraLink EC200U board and a suitable power source.
+- A USB data cable for programming Glyph and jumper wires for UART.
+- A suitable cellular antenna and an activated SIM for later network tests. The basic `AT` communication check does not require network registration.
+
+Other Glyph boards can use the same UART approach. Select exposed, available RX/TX pins and use the UART API for that board's processor. The Arduino sketch below targets **ESP32-based Glyph boards**, with the wiring specifically shown for Glyph C3.
+
+### Step 2: Connect Glyph to TerraLink
+
+Power both boards off before wiring. This example configures the Glyph C3's **MI/GPIO7 as UART TX** and **MO/GPIO6 as UART RX**. Do not use these pins for SPI at the same time.
+
+| Glyph C3 connection | TerraLink header connection |
+| :--- | :--- |
+| MI/GPIO7 (UART TX) | Pin 4: UART command input (`G_TX`) |
+| MO/GPIO6 (UART RX) | Pin 5: UART response output (`G_RX`) |
+| GND | Pin 3: GND |
+
+Leave header pins 1 and 2 disconnected for this example and use TerraLink's local power-key/reset buttons.
+
+<Warning>
+TerraLink's external UART uses 3.3 V logic. Power the modem through its supported power input using a source suitable for cellular operation, and connect the controller ground to modem ground. Do not connect the supply input to a GPIO, and do not assume Glyph's 3.3 V output can supply the modem's transmit-current bursts.
+</Warning>
+
+Check [Pinouts](/documentation/modules/terra/terralink-ec200u/pinouts) for the header orientation. GPIO numbers in the sketch are processor GPIO numbers, not header-position numbers.
+
+### Step 3: Set Up Arduino IDE
+
+Follow the [Arduino IDE setup guide](/documentation/welcome/prerequisites/arduino-ide-setup), then select the Glyph C3 board and its connected port. Enable **USB CDC on Boot** when using the Glyph C3 native USB port for Serial Monitor.
+
+The example uses a second hardware UART for TerraLink and keeps the USB serial connection for the computer. No modem library is needed for this first test. It uses the [Arduino-ESP32 UART API](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/serial.html).
+
+### Step 4: Upload the Serial Console
+
+```cpp
+#include <Arduino.h>
+
+constexpr int MODEM_RX = 6;
+constexpr int MODEM_TX = 7;
+constexpr unsigned long MODEM_BAUD = 115200;
+
+void setup() {
+  Serial.begin(115200);
+  Serial1.begin(MODEM_BAUD, SERIAL_8N1, MODEM_RX, MODEM_TX);
+}
+
+void loop() {
+  while (Serial.available() > 0) {
+    Serial1.write(Serial.read());
+  }
+  while (Serial1.available() > 0) {
+    Serial.write(Serial1.read());
+  }
+}
+```
+
+The sketch forwards characters from Serial Monitor to TerraLink and sends modem responses back to the computer. `115200` is the example UART setting: it must match the modem's configured baud rate. `SERIAL_8N1` means eight data bits, no parity, and one stop bit. Change the GPIO constants when using another compatible ESP32-based Glyph board.
+
+### Step 5: Send Your First Commands
+
+Power TerraLink and follow the modem hardware guide's power-key sequence. Open Serial Monitor at **115200 baud** and select **Both NL & CR** so commands include the carriage-return terminator. Send:
+
+```text
+AT
+```
+
+A responding modem should return:
+
+```text
+OK
+```
+
+Then try these status commands individually:
+
+| Command | What it checks |
+| :--- | :--- |
+| `ATI` | Modem identification |
+| `AT+CPIN?` | SIM readiness |
+| `AT+CSQ` | Reported signal quality |
+| `AT+CEREG?` | LTE network-registration status |
+
+Read the exact response definitions in the [Quectel EC200U AT command manual](https://quectel.com/content/uploads/2024/02/Quectel_EC200UEG91xUEG915G_Series-AT-Commands-Manual_V1.1.pdf). An `OK` response to `AT` confirms serial communication; it does not mean a SIM is ready, the network is registered, or internet access is active.
+
+### From a Console to an Application
+
+Once communication works, replace manual typing with code that sends commands, waits for complete responses, and checks for errors or timeouts. The modem can also send notifications without being asked, so your application must distinguish those from command responses.
+
+A typical sensor application checks SIM readiness, waits for network registration, configures the operator's APN, activates a data connection, and then uses the modem's supported MQTT or HTTP commands. Use the EC200U command set for these steps; examples for another modem are not automatically interchangeable.
+
+### Other Development Methods
+
+- **Computer over USB**: Send commands from a serial terminal using the modem USB AT port and matching drivers.
+- **Other microcontrollers**: Use a compatible UART interface and implement the same command/response flow. A 5 V controller needs suitable level shifting.
+- **QuecPython / QuecOpen**: Supported EC200U variants can run application logic inside the modem using a matching vendor development platform. QuecPython needs dedicated firmware; this is separate from uploading a Glyph sketch. See the [Quectel firmware guide](https://developer.quectel.com/doc/quecpython/Getting_started/en/4G/flash_firmware.html).
+
+### If the Modem Does Not Respond
+
+- Check common ground, header orientation, and the TX/RX wiring against the table.
+- Check the modem's power state, supply stability, UART baud rate, and line-ending setting.
+- Confirm GPIO6/GPIO7 are not also assigned to another peripheral.
+- Garbled output usually calls for checking UART format and baud rate; resets during transmission call for checking the power source and antenna connection.
+
+This is a communication example, not a complete network application. Validate it on your board and firmware before adding automatic power control or unattended retries.

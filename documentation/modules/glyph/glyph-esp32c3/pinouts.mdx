@@ -30,7 +30,8 @@ The Glyph-C3 has many pins, ports, and features. This page takes you on a tour o
 </Warning>
 
 <Note title="Technical Detail: Strapping Pins">
-GPIO 8 and GPIO 9 are **Strapping Pins** used during the chip's power-on/reset sequence to determine the boot mode:
+GPIO 2, GPIO 8, and GPIO 9 are **strapping pins** sampled during reset. GPIO 8 and GPIO 9 control the boot mode:
+- **GPIO 2**: Espressif recommends pulling this pin high at reset to avoid glitches.
 - **GPIO 9**: Controls whether the chip boots from internal Flash (Default: High) or enters **Serial Download Mode** (Low). On your Glyph board, this pin is connected to the onboard **BOOT** button.
 - **GPIO 8**: Determines the boot behavior and log output. It should ideally be pulled High or left floating during reset for normal operation.
 Avoid connecting peripherals to these pins that might pull them to an unexpected state during startup.
@@ -121,7 +122,7 @@ The ESP32-C3 supports PWM on all pins. However, it is not capable of PWM on all 
 
 ### Analog Pins
 
-The ESP32-C3 has four ADC channels. These pins are the only pins capable of handling analog (12-bit), and they can also do digital.
+The ESP32-C3 has six ADC-capable GPIOs: GPIO0–4 on ADC1 and GPIO5 on ADC2. These pins support 12-bit analog input and can also be used as digital I/O.
 
 - **A0/IO0**: ADC1 channel 0
 - **A1/IO1**: ADC1 channel 1

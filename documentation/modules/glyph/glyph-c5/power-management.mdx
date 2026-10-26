@@ -1,0 +1,56 @@
+---
+description: "Power the Glyph C5 over USB-C or a single-cell lithium battery, monitor charge status, and configure low-power modes for IoT projects."
+title: "Power Management"
+sidebarTitle: "Power Management"
+---
+## Power Management for Glyph C5
+
+### Battery + USB Power
+
+We wanted to make our Glyph boards easy to power both when connected to a computer as well as via battery for portability!
+
+There's two ways to power a Glyph:
+
+1. **USB Power:** You can connect with a USB cable (just plug into the TYPE C Port) and the Glyph will regulate the 5V USB down to 3.3V and power the entire board and peripherals (if any connected).
+2. **Battery Power:** You can also connect a 4.2/3.7V Lithium Polymer (LiPo/lipo) or Lithium Ion (LiIon) battery to Battery Pads. This will let the Glyph run on a rechargeable battery.
+
+When the USB power is powered, it will automatically switch over to USB for power, as well as start charging the battery (if attached). This happens 'hot-swap' style so you can always keep the lipo connected as a 'backup' power that will only get used when USB power is lost.
+
+Additionally, the Glyph C5 features an onboard **Power Slide Switch (ON)** that lets you disconnect the battery line to turn off the board completely when operating on battery power, without unplugging the battery.
+
+<Danger>
+Install the LiPo / Li-ion batteries based on the polarity. Using wrong polarity batteries can destroy your Glyph.
+</Danger>
+
+### Power Supplies
+
+The Glyph C5 offers multiple power supply options:
+
+- **BAT Pin**: Connected to the battery pads (behind the board)
+- **USB Pin**: Provides +5V from USB if connected.
+- **3V3 Pin**: Provides output from the 3.3V regulator with a 900mA peak output.
+
+### Measuring Battery Voltage
+
+To monitor battery voltage, short the MSR pads behind the board.
+
+### Alternative Power Options
+
+For powering the Glyph C5:
+
+- **USB powered**: Use a 5V 1A USB wall adapter to plug in a USB cable for reliable power.
+- **Portable Use Without LiPo**: Use a USB battery pack(Power Bank).
+- **Higher Voltage Power Supply**: Use a 5V buck converter and wire it to a USB cable's 5V and GND input.
+
+<Danger>
+**What You Cannot Do**
+- Do not use alkaline or NiMH batteries and connect to the battery port, as it will destroy the LiPo charger.
+- Do not use anything >4.2v LiPo batteries on the battery port, as it will destroy the board.
+</Danger>
+
+### External Power Supplies
+
+The Glyph ESP32-C5 is not designed for external power supplies. If you must:
+
+- **Connect an external 3.3V power supply** to the 3V3 and GND pins
+- **Connect an external 5V power supply** to the USB and GND pins.

@@ -1,0 +1,132 @@
+---
+description: "Tour the Glyph 2040 board: GPIO pin assignments, power rails, communication buses, USB-C port, breakout pads, and Glink connector reference pinout diagram."
+title: "Pinouts"
+sidebarTitle: "Pinouts"
+---
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-pinout.avif" alt="Glyph 2040 Pinout" width="800" />
+</div>
+
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GD007-Glyph-RP2040/GD007-Glyph-RP2040-pinout.png)
+
+The **Glyph 2040** has many pins, ports, and features. This page takes you on a tour of each pin and interface on the board!
+
+<Note title="Technical Detail: Boot and Reset Sequence">
+The Glyph 2040 features dedicated onboard **BOOT** and **RESET** buttons:
+- **BOOT**: Hold down the BOOT button while plugging the board into USB (or press RESET while holding BOOT) to enter ROM **UF2 bootloader mode**. The board mounts as a USB mass storage drive named `RPI-RP2` on your computer for drag-and-drop firmware flashing.
+- **RESET**: Connected to the RP2040 RUN pin. Pressing this button or pulling the RUN pin to ground restarts the microcontroller.
+</Note>
+
+---
+
+### Power Pins and Connections
+
+- **GND**: Common ground for all power and logic.
+- **BAT (+)**: Positive voltage line connected to the LiPo / Li-ion battery circuit (nominal 3.7V, operating range 2.7V - 4.2V).
+- **USB / 5V**: +5V supply rail provided directly by the USB Type-C connector when connected.
+- **RST / RESET / ENABLE**: Reset / Enable pins. Pulling either to ground resets the RP2040 microcontroller.
+- **3.3V / 3V3**: Regulated 3.3V output from the onboard low-dropout (LDO) regulator, supplying up to 900mA peak capacity.
+- **Lipo Battery PADS**: 2 solder pads on the back of the board to solder LiPo or Li-ion batteries to power the Glyph board.
+- **MSR PADS**: Short this MSR pad to enable the onboard voltage divider and measure battery capacity.
+
+---
+
+### Communication Pins
+
+#### I2C, SPI, and UART on RP2040
+
+The RP2040 microcontroller is capable of routing I2C, SPI, and UART across many pins via its flexible GPIO multiplexing. To simplify circuit design and maintain consistency across the Glyph ecosystem, dedicated standard pins are assigned as follows:
+
+#### I2C Pins
+
+- I2C SCL: **SCL**, GPIO21
+- I2C SDA: **SDA**, GPIO20
+
+Both lines are routed to the physical header pins as well as the onboard **GLINK** connector. Additional hardware I2C peripherals (I2C0 / I2C1) can also be configured across other GPIO pins.
+
+#### SPI Pins
+
+- SPI SCK : **SCK**, GPIO6
+- SPI MOSI: **MOSI**, GPIO7
+- SPI MISO: **MISO**, GPIO4
+- SPI CS  : **D5**, GPIO5 (or any available digital IO)
+
+#### UART Pins
+
+- UART0 TX: **TX**, GPIO12
+- UART0 RX: **RX**, GPIO13
+- Alternate UART0 TX: **D0**, GPIO0
+- Alternate UART0 RX: **D1**, GPIO1
+
+Both pin pairs connect to the same UART0 peripheral; choose one pair for a UART0 connection.
+
+---
+
+### Additional Ports / Pins
+
+#### Glyph Glink Port
+
+A 4-pin JST-SH connector compatible with the SparkFun Qwiic and Adafruit STEMMA QT ecosystems. It provides quick solderless connections to I2C sensors and peripheral boards (GND, 3V3, SDA [GPIO20], SCL [GPIO21]).
+
+#### USB Pins
+
+This is used for power and data transfer. Connect to your computer via a USB Type-C cable to upload firmware via UF2 drag-and-drop, establish serial communication, and supply +5V at the **USB** pin.
+
+#### PWM Pins
+
+The RP2040 supports PWM on all GPIO pins via 8 dual-channel PWM slices (16 independent PWM outputs in total), each with configurable frequency and duty cycle. Please refer to the [RP2040 DATASHEET](https://files.waveshare.com/upload/f/fd/Rp2040_datasheet.pdf) for PWM slice mapping and timing specifications.
+
+#### Power Slide Switch (ON)
+
+A physical slide switch that disconnects the battery line, allowing you to turn off the board completely when operating on battery power without unplugging the battery.
+
+#### Status LED (D0)
+
+An onboard user-controllable status LED connected to **D0** (GPIO0). There is also a dedicated D0 pinout on the board which acts as an enable pin for the status LED.
+
+#### Top SWD Debug Pins
+
+Located at the top of the board are 3 dedicated SWD debug and programming pads:
+- **SDIO**: Serial Wire Data I/O (SWDIO)
+- **GND**: Common ground
+- **SCLK**: Serial Wire Clock (SWCLK)
+
+---
+
+### Analog Pins (ADC)
+
+The RP2040 has four 12-bit SAR ADC channels capable of handling analog inputs as well as digital I/O:
+
+- **A0/GPIO26**: ADC channel 0 (GPIO26, SPI1 SCK, UART1 CTS, I2C1 SDA)
+- **A1/GPIO27**: ADC channel 1 (GPIO27, SPI1 TX, UART1 RTS, I2C1 SCL)
+- **A2/GPIO28**: ADC channel 2 (GPIO28, SPI1 RX, UART0 TX, I2C0 SDA)
+- **A3/GPIO29**: ADC channel 3 (GPIO29, SPI1 CSn, UART0 RX, I2C0 SCL)
+
+---
+
+### Digital Pins
+
+These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time:
+
+- **D0/GPIO0**: Digital I/O pin 0 (GPIO0, Onboard Status LED, UART0 TX, SPI0 RX, I2C0 SDA).
+- **D1/GPIO1**: Digital I/O pin 1 (GPIO1, UART0 RX, SPI0 CSn, I2C0 SCL).
+- **D2/GPIO2**: Digital I/O pin 2 (GPIO2, SPI0 SCK, UART0 CTS, I2C1 SDA).
+- **D3/GPIO3**: Digital I/O pin 3 (GPIO3, SPI0 TX, UART0 RTS, I2C1 SCL).
+- **MISO/GPIO4**: Main SPI MISO pin (GPIO4, UART1 TX, I2C0 SDA).
+- **D5/GPIO5**: Digital I/O pin 5 (GPIO5, SPI0 CSn, UART1 RX, I2C0 SCL).
+- **SCK/GPIO6**: Main SPI SCK pin (GPIO6, UART1 CTS, I2C1 SDA).
+- **MOSI/GPIO7**: Main SPI MOSI pin (GPIO7, UART1 RTS, I2C1 SCL).
+- **D8/GPIO8**: Digital I/O pin 8 (GPIO8, SPI1 RX, UART1 TX, I2C0 SDA).
+- **TX/GPIO12**: Main UART TX pin (GPIO12, SPI1 RX, I2C0 SDA).
+- **RX/GPIO13**: Main UART RX pin (GPIO13, SPI1 CSn, I2C0 SCL).
+- **SDA/GPIO20**: Main I2C SDA pin (GPIO20, SPI0 CSn, UART1 RX).
+- **SCL/GPIO21**: Main I2C SCL pin (GPIO21, SPI0 RX, UART1 TX).
+- **D23/GPIO23**: Digital I/O pin 23 (GPIO23, SPI0 TX, UART1 RTS, I2C1 SCL).
+- **D24/GPIO24**: Digital I/O pin 24 (GPIO24, SPI1 RX, UART1 TX, I2C0 SDA).
+- **D25/GPIO25**: Digital I/O pin 25 (GPIO25, SPI1 CSn, UART1 RX, I2C0 SCL).
+- **A0/GPIO26**: Analog I/O pin 0 (GPIO26, ADC0, SPI1 SCK, UART1 CTS, I2C1 SDA).
+- **A1/GPIO27**: Analog I/O pin 1 (GPIO27, ADC1, SPI1 TX, UART1 RTS, I2C1 SCL).
+- **A2/GPIO28**: Analog I/O pin 2 (GPIO28, ADC2, SPI1 RX, UART0 TX, I2C0 SDA).
+- **A3/GPIO29**: Analog I/O pin 3 (GPIO29, ADC3, SPI1 CSn, UART0 RX, I2C0 SCL).

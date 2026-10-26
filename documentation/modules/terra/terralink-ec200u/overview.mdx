@@ -1,0 +1,125 @@
+---
+description: "Explore the TerraLink EC200U cellular modem board with USB-C, a 3.3 V UART interface, nano SIM holder, and external antenna connections."
+title: "Overview"
+sidebarTitle: "Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+  var [isFullscreen, setIsFullscreen] = useState(false);
+  var [fullscreenDialog, setFullscreenDialog] = useState(null);
+
+
+  useEffect(function () {
+    if (show3D || isFullscreen || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+  function openFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && !dialog.open) dialog.showModal();
+    setIsFullscreen(true);
+  }
+  function closeFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && dialog.open) dialog.close();
+    else setIsFullscreen(false);
+  }
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function(el){if(!el||el._mv)return;el._mv=true;var s=document.createElement('script');s.src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js";s.type="module";s.onload=function(){var mv=document.createElement('model-viewer');mv.setAttribute('src',modelUrl);mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.style.width="100%";mv.style.height="100%";mv.style.backgroundColor="#f8f8f8";el.innerHTML="";el.appendChild(mv);};document.head.appendChild(s);}} style={{width:"100%",height:"100%"}} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" noZoom onClick={openFullscreen} role="button" tabIndex={0} onKeyDown={function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFullscreen(); } }} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px', cursor: 'zoom-in' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+      <dialog ref={setFullscreenDialog} aria-label={img && img.label} onClose={function () { setIsFullscreen(false); }} onClick={function (event) { if (event.target === event.currentTarget) closeFullscreen(); }} style={{ width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none', margin: 0, padding: '2rem', border: 0, background: 'rgba(0,0,0,0.88)' }}>
+        <div style={{ position: 'relative', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          <button type="button" aria-label="Close fullscreen image" onClick={closeFullscreen} style={{ position: 'absolute', top: 0, right: 0, zIndex: 1, width: '2.5rem', height: '2.5rem', border: 0, borderRadius: '999px', background: 'rgba(255,255,255,0.92)', color: '#111', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1 }}>×</button>
+          <img src={img && img.url} alt={img && img.label} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        </div>
+      </dialog>
+    </div>
+  );
+};
+
+<ShopHeader title="TerraLink EC200U" url="https://shop.pcbcupid.com/product/t001/" />
+
+<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/T001-terralink-ec200-ek/T001-terralink-ec200-ek.glb" images={[
+  { url: "https://spell-files.pcbcupid.com/pc-module/images/T001-terralink-ec200-ek/T001-terralink-ec200-ek-FB-o.avif", label: "ILLUSTRATION VIEW", id: "illustration" },
+  { url: "https://spell-files.pcbcupid.com/pc-module/images/T001-terralink-ec200-ek/pcbcupid-T001-terralink-ec200-ek-terralinkEC200uTopview.avif", label: "BOARD VIEW", id: "board" }
+]} />
+
+Introducing **TerraLink EC200U**, a cellular modem board that gives Glyph development boards and other microcontrollers a connection to the mobile network. Glyph runs your application and collects sensor readings; the EC200U handles cellular registration and data communication. This is useful for remote monitoring, telemetry, and connected devices that need to operate beyond a local Wi-Fi network.
+
+- **Modem**: Quectel EC200U series.
+- **Cellular Data**: LTE with rated peak speeds of 10 Mbps download and 5 Mbps upload.
+- **Dimensions**: 63.50 × 45.72 mm PCB, with 1.6 mm nominal thickness.
+- **Host Connections**: USB 2.0 and a five-pin UART/control header at 2.54 mm pitch.
+- **Logic Levels**: 3.3 V on the external UART header, translated to the modem's internal 1.8 V interface.
+- **SIM**: One nano SIM holder.
+- **Power**: USB-C input and a separate VIN/GND terminal, with onboard regulation for the modem.
+- **Additional Features**: Local power-key and reset buttons, activity indicators, antenna connectors, and signal test points.
+
+### What the EC200U Does
+
+The modem manages the cellular radio connection so the host controller does not have to implement it. The host sends **AT commands**: short text instructions that configure the modem, check its status, and request communication operations. The modem returns responses and can also send notifications when its state changes.
+
+The EC200U series includes network functions such as TCP/UDP, MQTT, and HTTP/HTTPS. MQTT is commonly used for exchanging small messages with an IoT service, while HTTP/HTTPS lets an application communicate with a web API. The commands available depend on the installed firmware. See the [Quectel EC200U specifications](https://www.quectel.com/content/uploads/2024/03/Quectel_EC200U_Series_LTE_Standard_Specification_V1.6.pdf?wpId=123500).
+
+The published LTE rates are modem peak ratings. Actual application speed depends on signal strength, the operator, the data plan, the server, and the connection between Glyph and TerraLink. A UART connection can limit throughput even when the cellular connection is faster.
+
+### Connectivity
+
+Use the cellular antenna connection and an activated, compatible SIM for mobile-network operation. The board also routes separate BLE and GNSS antenna connections; availability of those functions depends on the exact EC200U variant and firmware. Cellular band support also varies by variant, so check the module against the network you intend to use.
+
+USB-C provides access from a computer for modem communication and supported firmware tools. The UART header provides the connection to Glyph and other 3.3 V controllers. The header also exposes power-key and reset controls for applications that need to manage the modem's operating state.
+
+### Using TerraLink with Glyph
+
+Glyph compatibility comes through the UART interface. Your program runs on Glyph, sends commands to TerraLink, reads the responses, and decides what to do next. For example, Glyph can read a sensor, send the value to a cloud service, and retry if the network is temporarily unavailable.
+
+The onboard level translator connects the 3.3 V host interface to the modem's 1.8 V UART. Other controllers can use the same connection when their UART voltage is compatible. A 5 V host requires suitable level shifting, and all connected boards need a common ground.
+
+Start with [Programming with Glyph](/documentation/modules/terra/terralink-ec200u/programming) for a wiring table and an Arduino serial-console example. See [Pinouts](/documentation/modules/terra/terralink-ec200u/pinouts) for connector functions.
+
+### Development Options
+
+For standard AT firmware, develop the host application in an environment supported by your Glyph board, such as Arduino, ESP-IDF, or MicroPython. You can also control the modem directly from a computer over USB before moving the command sequence into your application.
+
+EC200U additionally has vendor development options for running application logic inside a supported modem variant. QuecPython requires matching QuecPython firmware, while QuecOpen is a separate vendor development route. These options require checking the exact variant and firmware package; uploading a Glyph sketch does not replace the modem firmware. See [Quectel's firmware guide](https://developer.quectel.com/doc/quecpython/Getting_started/en/4G/flash_firmware.html).
+
+### Power Supply
+
+Power TerraLink through its supported power input rather than a controller GPIO. Cellular transmission draws bursts of current; an inadequate supply can cause resets or lost connections. The VIN screw terminal is marked for **5–15 V DC**; USB-C uses **5 V**. Choose a supply that can handle cellular current bursts.
+
+<Note>
+**Need help with TerraLink EC200U?** Start with [Pinouts](/documentation/modules/terra/terralink-ec200u/pinouts) for connections and voltage levels, or [Programming with Glyph](/documentation/modules/terra/terralink-ec200u/programming) for setup and troubleshooting. When requesting help, include your controller model, power-supply voltage and current rating, wiring photo, modem firmware version, and AT-command responses. Remove SIM identifiers, passwords, and API keys before sharing logs.
+</Note>

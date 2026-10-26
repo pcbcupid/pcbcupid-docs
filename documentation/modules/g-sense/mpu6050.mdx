@@ -1,0 +1,67 @@
+---
+draft: true
+description: "GS007 MPU-6050 motion sensor board pinout, 3.3 V I²C connections, address jumper, and first-use checks."
+title: "MPU-6050 Motion Sensor"
+sidebarTitle: "MPU-6050"
+---
+
+The **GS007 MPU-6050** board exposes a six-axis motion sensor through a 3.3 V I²C bus. It has two parallel four-pin JST connectors for chaining on the same bus and an eight-pin header for additional sensor signals.
+
+## Key features
+
+- MPU-6050 sensor (`U1`) in a 24-pin QFN package.
+- Board outline **25.44 × 22.86 mm**, with **1.59 mm** nominal PCB thickness in the KiCad file.
+- Two parallel four-pin I²C connectors, `J2` and `J3`.
+- Eight-pin, 2.54 mm header `J1` exposing I²C, `AD0/SD0`, `CLKIN`, `INT`, and `FSYNC`.
+- Onboard 4.7 kΩ pull-ups from SDA and SCL to `+3.3V`.
+
+## Pin configuration
+
+`J2` and `J3` have the **same connections**. They are two access points to one I²C bus, not separate channels.
+
+| Pin on `J2` or `J3` | Signal | Use |
+| :--- | :--- | :--- |
+| 1 | `GND` | Ground |
+| 2 | `+3.3V` | Board supply |
+| 3 | `SDA` | I²C data |
+| 4 | `SCL` | I²C clock |
+
+The eight-pin header `J1` adds the sensor control signals. Numbers are **PCB pad numbers**; use the board's pin-1 mark for physical orientation.
+
+| `J1` pin | Signal | Use |
+| :--- | :--- | :--- |
+| 1 | `+3.3V` | Board supply |
+| 2 | `GND` | Ground |
+| 3 | `SDA` | I²C data |
+| 4 | `SCL` | I²C clock |
+| 5 | `AD0/SD0` | Board label for the I²C address-select pin |
+| 6 | `CLKIN` | External clock input |
+| 7 | `INT` | Interrupt output |
+| 8 | `FSYNC` | Frame synchronization input |
+
+<Warning>
+This board has **no 5 V regulator or I²C level shifter**. Supply the `+3.3V` pin from a suitable 3.3 V source and use a 3.3 V I²C host or verified level shifting. The onboard bus pull-ups connect SDA and SCL to `+3.3V`.
+</Warning>
+
+## Solder jumpers and I²C address
+
+All three solder-jumper footprints are marked **open** in the KiCad design. Confirm their actual state on the assembled board.
+
+| Jumper | Pad 1 | Pad 2 | When bridged |
+| :--- | :--- | :--- | :--- |
+| `JP1` | `FSYNC` | `GND` | Pulls FSYNC low |
+| `JP2` | `+3.3V` | `AD0/SD0` | Pulls AD0/SD0 high |
+| `JP3` | `CLKIN` | `GND` | Pulls CLKIN low |
+
+<Note>
+The [MPU-6050 product specification](https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet.pdf) defines 7-bit I²C address `0x68` when AD0 is low and `0x69` when AD0 is high. With `JP2` open, this board design shows **no populated pull-up or pull-down** on `AD0/SD0`, so it does not establish a reliable default address. Set or verify the AD0 connection first, then scan the I²C bus. `FSYNC` and `CLKIN` are also exposed when their jumpers are open; drive or configure them according to the sensor datasheet and application.
+</Note>
+
+## Connect to a Glyph board
+
+1. Power both boards off. Connect GS007 `GND`, `+3.3V`, `SDA`, and `SCL` to the corresponding 3.3 V I²C pins on the Glyph board, using either `J2`, `J3`, or `J1`.
+2. Inspect `JP2` and establish a defined `AD0/SD0` level before expecting reliable address detection.
+3. Power the boards and run the [I²C scanner](/guides/i2c-scan-test) to find the address actually selected by the assembled board.
+4. Configure the sensor's measurement range, filtering, sample rate, and calibration in the host application.
+
+The KiCad files do not establish measured current draw, a reliable address with `JP2` open, or a tested calibration. For connector orientation and component placement, use the [GS007 schematic](https://github.com/pcbcupid/pcbcupid-hardware-design/blob/main/gsense/GS007-MPU6050/GS007-MPU6050.kicad_sch) and [PCB layout](https://github.com/pcbcupid/pcbcupid-hardware-design/blob/main/gsense/GS007-MPU6050/GS007-MPU6050.kicad_pcb).

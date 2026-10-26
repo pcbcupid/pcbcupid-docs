@@ -29,7 +29,6 @@ The Glyph S3 has many pins, ports, and features. This page takes you on a tour o
 </div>
 
 - **Lipo Battery PADS**: 2 Pads behind the board to solder Lipo or li-ion batteries to power the Glyph board.
-- **MSR PADS**: Short this MSR pad to measure battery capacity using IO0 (Marked as A0 on board).
 
 <div style={{ textAlign: "center" }}>
 <img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Battery%20pins.avif" alt= "PCBCUPID_S3_BAT_PINS_REAR_BOARD_C6_result" width="600"/>
@@ -106,15 +105,15 @@ The S3 supports PWM on all pins. However, it is not capable of PWM on all pins a
 
 The S3 has two ADC units — ADC1 and ADC2 — with 10 channels each, totalling 20 ADC-capable pins on the chip. On the Glyph-S3 board, 9 ADC1 pins are exposed: IO1, IO2, IO4, IO5, IO6, IO7, IO8, IO9, IO10
 
-- **A1/IO1**: ADC1 channel 1
-- **A2/IO2**: ADC1 channel 2
+- **A1/IO1**: ADC1 channel 0
+- **A2/IO2**: ADC1 channel 1
 - **IO4**: ADC1 channel 3 (Can also function as ADC1_CH3 when not used for I2C)
 - **IO5**: ADC1 channel 4 (Can also function as ADC1_CH4 when not used for I2C)
-- **A6/IO6**: ADC1 channel 6
-- **A7/IO7**: ADC1 channel 7
-- **A8/IO8**: ADC1 channel 8
-- **A9/IO9**: ADC1 channel 9
-- **A10/IO10**: ADC1 channel 10
+- **A6/IO6**: ADC1 channel 5
+- **A7/IO7**: ADC1 channel 6
+- **A8/IO8**: ADC1 channel 7
+- **A9/IO9**: ADC1 channel 8
+- **A10/IO10**: ADC1 channel 9
 <div style={{ textAlign: "center" }}>
 <img src="https://files.pcbcupid.com/Documentation/Boards/glyph-S3/Analog_pins%5B1%5D.avif" alt= "PCBCUPID_S3_cropped_analog_pins_" width="600"/>
 
@@ -124,13 +123,13 @@ The S3 has two ADC units — ADC1 and ADC2 — with 10 channels each, totalling 
 
 These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time.
 
-- **A1/GPIO1**: ADC1 channel 1
-- **A2/GPIO2**: ADC1 channel 2
-- **A6/GPIO6**: ADC1 channel 6
-- **A7/GPIO7**: ADC1 channel 7
-- **A8/GPIO8**: ADC1 channel 8
-- **A9/GPIO9**: ADC1 channel 9
-- **A10/GPIO10**: ADC1 channel 10
+- **A1/GPIO1**: ADC1 channel 0
+- **A2/GPIO2**: ADC1 channel 1
+- **A6/GPIO6**: ADC1 channel 5
+- **A7/GPIO7**: ADC1 channel 6
+- **A8/GPIO8**: ADC1 channel 7
+- **A9/GPIO9**: ADC1 channel 8
+- **A10/GPIO10**: ADC1 channel 9
 - **SDA/GPIO4**: The main I2C1 data pin(GPIO4).
 - **SCL/GPIO5**: The main I2C1 clock pin(GPIO5).
 - **D13/GPIO13**: Digital I/O pin 13(GPIO13, FSPIIO7, SUBSPIQ, FSPIQ).

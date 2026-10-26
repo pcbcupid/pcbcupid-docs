@@ -1,0 +1,127 @@
+---
+description: "Pinout guide for the Glyph C5: GPIO pin assignments, power rails, I2C, SPI, UART, analog inputs, and Glink connector reference."
+title: "Pinouts"
+sidebarTitle: "Pinouts"
+---
+
+The **Glyph C5** is equipped with a rich set of GPIOs, high-speed communication buses, and dedicated power management pins. This guide details each pin and hardware interface on the board.
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/GD005-Glyph-C5/GD005-Glyph-C5-pinout.avif" alt="Glyph C5 Pinout" width="800" />
+</div>
+
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GD005-Glyph-C5/GD005-Glyph-C5-pinout.png)
+
+<Note title="Technical Detail: Strapping Pins">
+**GPIO 2, GPIO 3, GPIO 7, GPIO 25, GPIO 26, GPIO 27, and GPIO 28** are strapping pins sampled during reset for boot and other startup settings.
+- **GPIO 28**: Controls whether the chip boots from internal Flash (Default: High) or enters **Serial Download Mode** (Low). On the Glyph C5, this pin is connected to the onboard **BOOT** button.
+- When designing external circuits, avoid pulling these pins to unexpected logic levels during startup, as doing so may prevent the SoC from booting or cause it to enter download mode unexpectedly.
+</Note>
+
+---
+
+### Power Pins and Connections
+
+- **GND**: Common ground for all power, logic, and analog signals.
+- **BAT**: Positive voltage line connected to the LiPo / Li-ion battery circuit (nominal 3.7V, operating range 2.7V - 4.2V).
+- **USB**: +5V rail supplied directly by the USB Type-C connector when plugged in.
+- **EN**: Chip Enable pin of the ESP32-C5. Pulling this pin to ground resets the microcontroller.
+- **RST**: Dedicated hardware reset pin connected to the reset button and EN line.
+- **3.3V / 3V3**: Regulated 3.3V power output from the onboard low-dropout (LDO) regulator (900mA peak capacity).
+- **Lipo Battery PADS**: 2 solder pads on the back of the board to solder LiPo or Li-ion batteries to power the Glyph board.
+- **MSR PADS**: Solder pads on the back of the board. Short this MSR pad to enable the onboard voltage divider and measure battery voltage and remaining capacity.
+
+---
+
+### Communication Pins
+
+#### I2C, SPI, and UART on ESP32-C5
+
+The ESP32-C5 is capable of routing I2C, SPI, and UART across many pins via the GPIO matrix. To simplify circuit design and maintain consistency across the Glyph ecosystem, dedicated standard pins are assigned as follows:
+
+#### I2C Pins
+
+- I2C SCL: **SCL**, IO5
+- I2C SDA: **SDA**, IO4
+
+Both lines are routed to the physical header pins as well as the onboard **GLINK** connector.
+
+#### SPI Pins
+
+- SPI SCK : **SCK**, IO23
+- SPI MOSI: **MO**, IO24
+- SPI MISO: **MI**, IO25
+- SPI CS  : **ANY IO That's available** (such as D0, D10, D15)
+
+#### UART Pins
+
+- UART0 TX: **TX**, IO11
+- UART0 RX: **RX**, IO12
+
+---
+
+### Additional Ports / Pins
+
+#### Glyph Glink Port
+
+A 4-pin JST-SH connector compatible with the SparkFun Qwiic and Adafruit STEMMA QT ecosystems. It provides quick solderless connection to I2C sensors and peripheral boards (GND, 3V3, SDA, SCL).
+
+#### USB Pins
+
+This is used for power and data transfer. Connect to your computer via a USB Type-C cable to update firmware, program the board using the native USB Serial/JTAG controller, and supply +5V at the **USB** pin.
+
+#### PWM Pins
+
+The ESP32-C5 supports PWM on all general-purpose pins via the LED PWM (LEDC) controller. Multiple independent PWM channels with configurable frequency and duty cycle are available. Please refer to the [ESP32C5 DATASHEET](https://www.espressif.com/sites/default/files/documentation/esp32-c5_datasheet_en.pdf) for channel mapping and timing specifications.
+
+#### Power Slide Switch (ON)
+
+A physical slide switch that disconnects the battery line, allowing you to turn off the board completely when operating on battery power without unplugging the battery.
+
+
+#### Status LED (D0)
+
+An onboard status LED connected to D0 / GPIO0 for visual feedback, blinking indicators, or debugging.
+
+---
+
+### Analog Pins (ADC)
+
+The ESP32-C5 integrates an internal 12-bit SAR ADC controller with up to 6 input channels on ADC1 (GPIO1 to GPIO6). These pins are capable of handling analog inputs as well as digital I/O:
+
+- **A1/IO1**: ADC1 channel 0 (GPIO 1)
+- **A2/IO2**: ADC1 channel 1 (GPIO 2 / Strapping Pin)
+- **A3/IO3**: ADC1 channel 2 (GPIO 3 / Strapping Pin)
+- **SDA/IO4**: ADC1 channel 3 (GPIO 4 / I2C SDA)
+- **SCL/IO5**: ADC1 channel 4 (GPIO 5 / I2C SCL)
+- **A6/IO6**: ADC1 channel 5 (GPIO 6)
+
+---
+
+### Digital Pins
+
+These are the digital I/O pins. They all have multiple capabilities but can be used only one at a time:
+
+- **D0/GPIO0**: Digital I/O pin 0 (GPIO0, Onboard Status LED).
+- **A1/GPIO1**: Analog I/O pin 1 (GPIO1, ADC1_CH0).
+- **A2/GPIO2**: Analog I/O pin 2 (GPIO2, ADC1_CH1, Strapping Pin).
+- **A3/GPIO3**: Analog I/O pin 3 (GPIO3, ADC1_CH2, Strapping Pin).
+- **SDA/GPIO4**: Main I2C data pin (GPIO4, ADC1_CH3, FSPIHD).
+- **SCL/GPIO5**: Main I2C clock pin (GPIO5, ADC1_CH4, FSPIWP).
+- **A6/GPIO6**: Analog I/O pin 6 (GPIO6, ADC1_CH5, FSPICLK).
+- **D7/GPIO7**: Digital I/O pin 7 (GPIO7, FSPID, Strapping Pin).
+- **D8/GPIO8**: Digital I/O pin 8 (GPIO8, FSPIQ).
+- **D9/GPIO9**: Digital I/O pin 9 (GPIO9).
+- **D10/GPIO10**: Digital I/O pin 10 (GPIO10, FSPICS0).
+- **TX/GPIO11**: UART0 TX header pin (GPIO11, U0TXD).
+- **RX/GPIO12**: UART0 RX header pin (GPIO12, U0RXD).
+- **D-/GPIO13**: Native USB D- pin (GPIO13, USB_D-).
+- **D+/GPIO14**: Native USB D+ pin (GPIO14, USB_D+).
+- **D15/GPIO15**: Digital I/O pin 15 (GPIO15).
+- **SCK/GPIO23**: Main SPI clock pin (GPIO23).
+- **MO/GPIO24**: Main SPI MOSI pin (GPIO24).
+- **MI/GPIO25**: Main SPI MISO pin (GPIO25, Strapping Pin).
+- **D26/GPIO26**: Digital I/O pin 26 (GPIO26, Strapping Pin).
+- **D27/GPIO27**: Digital I/O pin 27 (GPIO27, Strapping Pin).
+- **D28/GPIO28**: Digital I/O pin 28 (GPIO28, BOOT Button, Strapping Pin).
