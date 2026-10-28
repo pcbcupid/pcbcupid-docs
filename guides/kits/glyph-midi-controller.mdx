@@ -1,0 +1,93 @@
+---
+description: "Build a six-key USB MIDI controller with the Glyph Mini 2040, CircuitPython, knobs, an encoder, and an OLED."
+title: "GLYPH MIDI Controller Kit"
+sidebarTitle: "GLYPH MIDI Controller"
+---
+
+# GLYPH MIDI Controller Kit
+
+<CardGroup cols={2}>
+  <Card title="GitHub Repository" icon="github" href="https://github.com/pcbcupid/Glyph-MIDI-Controller/tree/main">
+    Get the firmware, complete setup guide, and printable wiring reference.
+  </Card>
+  <Card title="Six-Switch PCB" icon="microchip" href="https://spell.pcbcupid.com/explore/01a13685-d20e-7e50-fb2f-0dd55dda1933/preview">
+    See the PCB design matched by the current firmware.
+  </Card>
+</CardGroup>
+
+## What does it do?
+
+The [Glyph Mini 2040](/documentation/modules/glyph-mini/glyph-mini-2040/overview) reads **six note switches**, **three potentiometers**, and a **rotary encoder**. It sends USB MIDI messages to a computer or phone running a MIDI instrument app. A 128 × 64 I2C OLED shows the current controls and an edit menu. **The board does not produce audio on its own**; the receiving app or synthesizer makes the sound.
+
+This guide follows the repository's current **six-switch** design. Older five-key wiring does not match its `code.py`.
+
+## What you need
+
+| Part | Quantity | Purpose |
+| :--- | :---: | :--- |
+| Glyph Mini 2040 and six-switch controller PCB | 1 each | USB MIDI controller and control board |
+| Momentary switches | 6 | Note keys |
+| 10 kΩ linear potentiometers | 3 | Continuous MIDI controls |
+| Rotary encoder with push button | 1 | OLED menu navigation and editing |
+| 128 × 64 I2C OLED (SSD1306 or SH1106) | 1 | Display |
+| USB data cable and MIDI-capable host | 1 each | Power, programming, and MIDI receiver |
+
+Use [CircuitPython 10.x for the Glyph Mini 2040](https://circuitpython.org/board/pcbcupid_glyph_mini_2040/) and a matching [10.x library bundle](https://circuitpython.org/libraries). The repository's setup was documented with CircuitPython 10.3.1.
+
+## Wiring
+
+| Part | Glyph Mini 2040 pin | Other connection |
+| :--- | :--- | :--- |
+| OLED SDA / SCL | GP0 / GP1 | OLED VCC to **3V3**, GND to **GND** |
+| Switches 1–6 | GP2–GP7, in order | Other leg of each switch to GND |
+| Encoder A / B | GP8 / GP9 | Encoder common `C` to GND |
+| Encoder push button `S2` | GP10 | `S1` to GND |
+| Pot A / B / C wipers | GP26 / GP27 / GP28 | Outer legs to 3V3 and GND |
+
+The switches and encoder button use internal pull-ups. Supply the OLED and potentiometers with **3.3 V, never 5 V**. If a potentiometer turns backwards, swap its outer legs.
+
+## Install and play
+
+<Steps>
+  <Step title="Install CircuitPython">
+    Download the board's CircuitPython 10.x `.uf2`. Hold **BOOT** while connecting USB, then copy the file to the `RPI-RP2` drive. After restart, confirm `CIRCUITPY/boot_out.txt` reports board ID `pcbcupid_glyph_mini_2040`.
+  </Step>
+  <Step title="Copy the libraries">
+    From the matching 10.x bundle, copy the folders `adafruit_midi`, `adafruit_display_text`, and `adafruit_display_shapes` into `CIRCUITPY/lib/`. Also copy `adafruit_displayio_ssd1306.mpy`, `adafruit_displayio_sh1106.mpy`, `adafruit_debouncer.mpy`, `adafruit_ticks.mpy`, and `simpleio.mpy` there.
+  </Step>
+  <Step title="Copy the program">
+    Copy [glyph_mini_2040_midi_keyset/code.py](https://github.com/pcbcupid/Glyph-MIDI-Controller/blob/main/glyph_mini_2040_midi_keyset/code.py) to the root of `CIRCUITPY` as `code.py`. It starts automatically. Later program updates only require replacing this file.
+  </Step>
+  <Step title="Choose a MIDI instrument">
+    Connect the board normally, without holding BOOT. In your music app, select the CircuitPython/Glyph device as a **MIDI input** and select a synthesizer or software instrument as the output. Press a physical key to test it. On Windows, [VMPK](https://vmpk.sourceforge.io/) is one option; on macOS, GarageBand can use a Software Instrument track. See the [repository guide](https://github.com/pcbcupid/Glyph-MIDI-Controller/tree/main#make-sound-on-linux) for a Linux FluidSynth setup.
+  </Step>
+</Steps>
+
+## Controls
+
+| Action | Default result |
+| :--- | :--- |
+| Press / release a note switch | Send MIDI Note On / Note Off; multiple switches can make a chord |
+| Turn Pot A | Modulation (CC 1) |
+| Turn Pot B | Pitch bend; center is normal pitch |
+| Turn Pot C | Expression (CC 11) |
+| Turn encoder | Move the OLED selection among knobs and keys |
+| Short-press encoder | Open the selected item's edit page; press again to return |
+| Double-press encoder | Send All Notes Off on all 16 channels |
+
+On an edit page, turn the encoder to choose a line, long-press to edit, turn to change the value, and long-press again to finish. Menu edits last only until restart; change the defaults in `code.py` to keep them. The six default MIDI note numbers are **61, 64, 66, 68, 73, and 75** on channel 1.
+
+The firmware defaults to an **SSD1306** display at I2C address `0x3C`. Set `OLED_DRIVER` to `"SH1106"` for that display type, or adjust `OLED_ADDRESS` if your module uses `0x3D`. The MIDI controls can still run without the OLED.
+
+## Troubleshooting
+
+| Symptom | Check |
+| :--- | :--- |
+| Only `RPI-RP2` appears | Release BOOT and reset. If needed, reinstall the board-specific `.uf2`. |
+| `CIRCUITPY` appears but no MIDI input | Check `boot_out.txt`, required libraries, and the CircuitPython serial console for a `code.py` error. |
+| App plays from mouse clicks but not the hardware keys | Select the Glyph/CircuitPython MIDI **input** and enable MIDI Thru if your app requires it. |
+| Some keys or the encoder do not work | Check the GPIO-to-GND switch connections and the encoder's common GND net. |
+| OLED is blank or shifted | Check 3V3, GND, GP0/GP1, display driver, and `0x3C` versus `0x3D`. |
+| Knobs change by themselves | Check pot wiring; set `POTS_CONNECTED = False` if the pots are not installed yet. |
+
+For the full beginner guide and printable wiring sheet, see the [project repository](https://github.com/pcbcupid/Glyph-MIDI-Controller/tree/main) and its [PDF](https://github.com/pcbcupid/Glyph-MIDI-Controller/blob/main/docs/Glyph_Mini_2040_MIDI_Keyset.pdf).

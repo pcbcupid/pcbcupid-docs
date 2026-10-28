@@ -251,7 +251,9 @@
             "group": "Kits",
             "pages": [
               "guides/kits/beginner-kit",
-              "guides/kits/glyph-voice"
+              "guides/kits/glyph-voice",
+              "guides/kits/glyph-midi-controller",
+              "guides/kits/glyph-tank"
             ]
           },
           {

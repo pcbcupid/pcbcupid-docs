@@ -1,0 +1,86 @@
+---
+description: "Build and flash the Lun-E Glyph tracked rover firmware on a Glyph ESP32-S3 with a TB6612FNG motor driver."
+title: "GLYPH Tank Kit"
+sidebarTitle: "GLYPH Tank Kit"
+---
+
+# GLYPH Tank Kit
+
+<CardGroup cols={2}>
+  <Card title="Firmware Repository" icon="github" href="https://github.com/pcbcupid/Glyph-tank">
+    Get the Glyph ESP32-S3 firmware, pin configuration, and shared protocol.
+  </Card>
+  <Card title="Lun-E Project" icon="link" href="https://whybit.in/lun-e/">
+    Explore the tracked rover, controller, and phone app that inspired this port.
+  </Card>
+</CardGroup>
+
+## What is the GLYPH Tank?
+
+**GLYPH Tank** is the [Lun-E](https://whybit.in/lun-e/) tracked rover firmware ported to the [Glyph ESP32-S3](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-overview) and a **TB6612FNG** dual motor driver. It drives two tracks through independent motors, shows animated eyes on an I2C OLED, and accepts commands from a paired **Connect** thumbstick controller over ESP-NOW or the [Lun-E phone controller](https://whybit.in/drive/) over Web Bluetooth.
+
+The controller that moves first takes control. If its commands stop for **0.3 seconds**, the firmware stops the motors. The Bluetooth device name is `Lun-E Glyph-XXXX`, with the suffix taken from the board's MAC address.
+
+<Note>
+The whybit Lun-E RC page describes a **different, custom ESP32-C3 board** with a DRV8833 driver. Use the Glyph S3 and TB6612FNG connections below for this firmware; the C3 board's pinout and power design do not apply here.
+</Note>
+
+## Hardware and pin map
+
+The firmware repository provides the following **signal pin map**. You also need a tracked chassis, two suitable motors, an OLED, a motor power source, and a shared ground. Select the motor supply and wiring to match your actual motors, driver board, and Glyph hardware; the repository does not publish a complete Glyph Tank power schematic or mechanical bill of materials.
+
+| Function | Glyph ESP32-S3 GPIO |
+| :--- | :--- |
+| BOOT button / wake, active low | 0 |
+| OLED SDA / SCL | 4 / 5 |
+| TB6612FNG AIN1 / AIN2 / PWMA | 39 / 38 / 41 |
+| TB6612FNG BIN1 / BIN2 / PWMB | 47 / 48 / 40 |
+| TB6612FNG STBY | 42 |
+| Gate (defined but unused) | 34 |
+
+Check [src/config.h](https://github.com/pcbcupid/Glyph-Tank/blob/main/src/config.h) before wiring or changing motor direction. **Headlights are disabled**, and the Gate pin is currently unused by the firmware.
+
+## Build and flash
+
+The project uses **PlatformIO with pioarduino (Arduino-ESP32 core 3.x)**. Its [platformio.ini](https://github.com/pcbcupid/Glyph-Tank/blob/main/platformio.ini) selects the Glyph-compatible ESP32-S3 environment, a 4 MB flash setting, USB CDC, and the NimBLE-Arduino and U8g2 libraries. PlatformIO downloads those libraries when building. The repository notes that the stock `espressif32` platform on core 2.x cannot build this project, so keep its configured platform URL.
+
+<Steps>
+  <Step title="Prepare the hardware">
+    Wire the OLED and motor driver to the GPIOs above. Keep the tracks off the ground for the first motor test and confirm the motor power rail and common GND before powering the driver.
+  </Step>
+  <Step title="Open the repository in PlatformIO">
+    Clone or download [pcbcupid/Glyph-Tank](https://github.com/pcbcupid/Glyph-Tank), then open the folder containing `platformio.ini` in PlatformIO.
+  </Step>
+  <Step title="Upload and monitor">
+    Connect the Glyph S3 over a USB data cable and run:
+
+    ```bash
+    pio run -t upload
+    pio device monitor
+    ```
+
+    The monitor runs at 115200 baud. If upload cannot connect, hold BOOT while plugging in USB, then retry.
+  </Step>
+  <Step title="Test direction and control">
+    With the tracks raised, command forward motion and check that **both tracks turn forward**. If not, review `MOTOR_A_IS_LEFT`, `MOTOR_LEFT_INVERT`, and `MOTOR_RIGHT_INVERT` in `src/config.h` before driving on a surface.
+  </Step>
+</Steps>
+
+## Drive the tank
+
+- **Connect controller:** Pair the Lun-E [Connect](https://whybit.in/connect/) thumbstick controller with the rover, then push the stick to drive and lean it to steer. The controller and rover must use the same [shared protocol](https://github.com/pcbcupid/Glyph-Tank/blob/main/include/lune_protocol.h); if you change it, update both boards.
+- **Phone:** Open [whybit.in/drive](https://whybit.in/drive/) in a Web Bluetooth-capable browser, connect to `Lun-E Glyph-XXXX`, and use the on-screen controls. The [phone controller page](https://whybit.in/drive/) lists browser support and keyboard controls.
+
+Two motor speeds provide differential steering: equal speeds go straight, slowing one side turns toward it, and opposite directions pivot in place. The firmware's **0.3-second command timeout** is an additional stop behavior; test the full drive system with the tracks raised before floor use.
+
+## Current limits and troubleshooting
+
+| Symptom | First check |
+| :--- | :--- |
+| Upload cannot connect | Hold BOOT while connecting USB, check the selected port, then retry the upload. |
+| Tank drives backward or turns the wrong way | Check motor A/B placement and the direction flags in `src/config.h` with the tracks raised. |
+| Motors stop shortly after control input | Check that the active controller continues sending commands; the timeout is 0.3 seconds. |
+| Phone cannot find the tank | Use a Web Bluetooth-capable browser and look for `Lun-E Glyph-XXXX`. |
+| No headlights or Gate output | These functions are not active in the current firmware. |
+
+The [Glyph Tank repository](https://github.com/pcbcupid/Glyph-tank) is the source for this S3 firmware. [Whybit's Lun-E pages](https://whybit.in/lun-e/) show the broader rover design and its evolution, including hardware versions that use different boards and drivers.
