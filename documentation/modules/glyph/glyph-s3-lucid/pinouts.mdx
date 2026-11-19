@@ -66,7 +66,16 @@ Both lines are routed to the physical header pins as well as the onboard **GLINK
 
 #### Integrated 0.91" LCD Display
 
-The board features an onboard 0.91" LCD display for visual output, graphics, and interactive gaming.
+The onboard 0.91" 160 × 80 TFT LCD uses an ST7735-compatible display controller over SPI. Its connections are:
+
+- **SCK**: GPIO35
+- **MOSI**: GPIO36
+- **CS**: GPIO21
+- **DC**: GPIO12
+- **RESET**: GPIO42
+- **Backlight**: GPIO41
+
+The display shares the SPI clock and MOSI lines with the exposed SPI bus.
 
 #### 3 SPST Action Button Switches
 
