@@ -1,0 +1,28 @@
+---
+description: "Power the Glyph S3 Motor Driver over USB-C or a single-cell LiPo battery and supply motors within the TB6612FNG limits."
+title: "Power Management"
+sidebarTitle: "Power Management"
+---
+
+## Power the Glyph S3 Motor Driver
+
+The board combines ESP32-S3 logic power management with an integrated TB6612FNG motor driver. Keep the controller's logic supply and the motor supply requirements in mind when choosing how to power a project.
+
+### USB-C and battery power
+
+- **USB-C** provides board power and programming over USB.
+- **Single-cell LiPo/Li-ion battery** connects through the board's battery connector. The design includes an onboard MCP73831 charger for a connected single-cell battery.
+- Observe the battery connector polarity. Reversed polarity can damage the board.
+
+### Motor supply
+
+Use the motor-power connection shown in the [board pinout](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-pinouts). The TB6612FNG motor supply (VM) has a 2.5–13.5 V operating range. Match the supply to the motors, and check the motors' stall current before use. The IC's 3.2 A rating is a single-pulse peak, not a continuous current rating; the average output rating is 1.2 A per channel. See the [TB6612FNG datasheet](https://toshiba.semicon-storage.com/info/datasheet_en_20141001.pdf?did=10660).
+
+Keep a common ground between the controller, motor driver, and motor supply. Do not power motors from an ESP32-S3 GPIO or the 3.3 V logic rail.
+
+<Warning>
+Do not exceed the motor driver's operating voltage or current limits. Confirm the supply polarity and each motor's stall current before connecting power.
+</Warning>
+
+For the general controller power and battery guidance, see [Glyph S3 Power Management](/documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-power-management).
+
