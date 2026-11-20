@@ -1,5 +1,5 @@
 ---
-description: "Board-specific pinout for the Glyph S3 Motor Driver, including its ESP32-S3 pins and integrated motor-driver connections."
+description: "Glyph S3 Motor Driver pinout reference for its ESP32-S3 headers, solder pads, motor outputs, USB-C, battery, and Glink connectors."
 title: "Pinouts"
 sidebarTitle: "Pinouts"
 ---
@@ -7,19 +7,102 @@ sidebarTitle: "Pinouts"
 <div style={{ textAlign: "center" }}>
   <img src="https://spell-files.pcbcupid.com/pc-module/images/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver-pinout.avif" alt="Glyph S3 Motor Driver pinout diagram" width="800" />
 </div>
+<br />
 
-The diagram shows the board-specific pin assignments and connector labels. Use it when wiring motors, power, and peripherals; this version includes the motor-driver connections as well as the ESP32-S3 pins.
+The pinout diagram shows the board labels and connector locations. The tables below list the nets and GPIO assignments from the board schematic.
 
-### Motor outputs
+### J1: 12-pin header
 
-The TB6612FNG exposes two output pairs:
+| Pin | Board label | ESP32-S3 / function |
+| :--- | :--- | :--- |
+| 1 | +BATT | Board battery/system rail |
+| 2 | EN | Enable/reset |
+| 3 | VBUS | USB 5 V input rail |
+| 4 | D10 | GPIO10 |
+| 5 | D9 | GPIO9 |
+| 6 | D8 | GPIO8 |
+| 7 | D7 | GPIO7 |
+| 8 | D6 | GPIO6 |
+| 9 | D2 | GPIO2 |
+| 10 | D1 / BATT_MSR | GPIO1 / battery measurement |
+| 11 | SDA | GPIO4 / I²C data |
+| 12 | SCL | GPIO5 / I²C clock |
 
-- **AO_1 / AO_2**: Motor A output
-- **BO_1 / BO_2**: Motor B output
+### J2: 16-pin header
 
-Connect each brushed DC motor across one output pair. For one bipolar stepper motor, use both pairs as its two windings. Motor direction and PWM control use the ESP32-S3 connections marked in the pinout diagram.
+| Pin | Board label | ESP32-S3 / function |
+| :--- | :--- | :--- |
+| 1 | RESET | ESP32-S3 reset (EN) |
+| 2 | 3V3 | Regulated 3.3 V |
+| 3 | 3V3 | Regulated 3.3 V |
+| 4 | GND | Ground |
+| 5 | D13 | GPIO13 |
+| 6 | D14 | GPIO14 |
+| 7 | D15 | GPIO15 |
+| 8 | D16 | GPIO16 |
+| 9 | D17 | GPIO17 |
+| 10 | D18 | GPIO18 |
+| 11 | SCK | GPIO35 / SPI clock |
+| 12 | MOSI | GPIO36 / SPI data to peripheral |
+| 13 | MISO | GPIO37 / SPI data from peripheral |
+| 14 | uRx | GPIO44 / UART0 RX |
+| 15 | uTx | GPIO43 / UART0 TX |
+| 16 | GND | Ground |
 
-### ESP32-S3 pins and peripherals
+### Additional solder pads
 
-The board uses the ESP32-S3 pin functions shown in the diagram. Check the labels before assigning GPIOs in firmware, especially for pins already used by the onboard motor driver, USB, boot, or reset circuitry. For the general ESP32-S3 peripheral reference, see the [Glyph S3 pinouts](/documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-pinouts).
+These schematic pads expose extra power and GPIO connections:
 
+| Reference | Pad signal | ESP32-S3 / function |
+| :--- | :--- | :--- |
+| J3 | +3.3 V | Regulated 3.3 V |
+| J9 | D34 | GPIO34 |
+| J10 | D26 | GPIO26 |
+| J11 | D3 | GPIO3 |
+| J12 | D33 | GPIO33 |
+| J13 | GND | Ground |
+
+### Glink connector J5
+
+| Pin | Signal |
+| :--- | :--- |
+| 1 | GND |
+| 2 | +3.3 V |
+| 3 | SDA / GPIO4 |
+| 4 | SCL / GPIO5 |
+
+J5 is the Qwiic/STEMMA QT-compatible Glink connector.
+
+### Motor connectors
+
+J7 and J8 are 2-pin Molex PicoBlade motor output connectors wired to the onboard TB6612FNG:
+
+| Connector | Pin 1 | Pin 2 | Channel |
+| :--- | :--- | :--- | :--- |
+| J7 | AO_2 | AO_1 | Motor A |
+| J8 | BO_2 | BO_1 | Motor B |
+
+Connect one brushed DC motor across each pair. A bipolar stepper motor uses both output pairs for its two windings.
+
+### Motor-driver control GPIOs
+
+These ESP32-S3 GPIOs are connected internally to the TB6612FNG control inputs:
+
+| TB6612FNG signal | ESP32-S3 GPIO | Function |
+| :--- | :--- | :--- |
+| PWMA | GPIO41 | Motor A speed (PWM) |
+| AIN1 | GPIO39 | Motor A direction |
+| AIN2 | GPIO38 | Motor A direction |
+| STBY | GPIO42 | Driver standby/enable |
+| PWMB | GPIO40 | Motor B speed (PWM) |
+| BIN1 | GPIO47 | Motor B direction |
+| BIN2 | GPIO48 | Motor B direction |
+
+These pins are used by the onboard motor driver. Use the [motor power notes](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-power-management) before wiring motors.
+
+### Battery and USB-C
+
+- **Battery connector J6:** Pin 1 GND; pin 2 Bat_PWR (battery positive).
+- **USB-C connector J4:** USB power and native USB data/programming.
+
+Use the [Power Management](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-power-management) page for supply details and limits.

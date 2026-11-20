@@ -71,7 +71,7 @@ The **GLYPH S3 Motor Driver** combines an ESP32-S3 development board with an onb
     <span className="module-version-title">Controller</span>
     <ul className="module-spec-list">
       <li><strong>Module:</strong> ESP32-S3-MINI-1-N8</li>
-      <li><strong>Flash:</strong> 8 MB</li>
+      <li><strong>Flash:</strong> 8 MB Quad SPI</li>
       <li><strong>PSRAM:</strong> None</li>
     </ul>
   </div>
@@ -86,7 +86,19 @@ The **GLYPH S3 Motor Driver** combines an ESP32-S3 development board with an onb
   </div>
 </div>
 
-The board is built around the same ESP32-S3 family used by the Glyph S3, with an **N8 module configuration: 8 MB flash and no PSRAM**. The ESP32-S3 provides dual-core processing, 2.4 GHz Wi-Fi, and Bluetooth LE. See the [Espressif module datasheet](https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html).
+The board measures approximately **50.9 mm × 22.9 mm × 1.6 mm** from the PCB design, without headers soldered. It uses the **ESP32-S3-MINI-1-N8** configuration: 8 MB Quad SPI flash and no PSRAM. The ESP32-S3 has a dual-core Xtensa LX7 processor, up to 240 MHz, and 512 KB internal SRAM. See the [Espressif module datasheet](https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html).
+
+- **Logic voltage:** 3.3 V
+- **GPIO and buses:** GPIO, ADC, I²C, SPI, UART, PWM, and native USB functions; some GPIOs are used internally by the motor driver
+- **USB-C:** Board power, native USB programming, and serial debugging
+- **Battery:** Single-cell LiPo/Li-ion connector with an onboard MCP73831 charger and USB/battery power path
+- **3.3 V regulator:** AP2112K-3.3, rated for up to 600 mA continuous load by the regulator datasheet
+- **Motor outputs:** Two integrated TB6612FNG output channels on dedicated motor connectors
+- **Glink:** Qwiic/STEMMA QT-compatible I²C connector
+- **Onboard controls:** BOOT and RESET buttons; onboard LED on GPIO21
+- **Battery measurement:** GPIO1 is also assigned to BATT_MSR
+
+The USB VBUS and battery path feed the board's **+BATT** rail. The motor driver's VM supply is connected to this same rail. See [Power Management](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-power-management) before choosing a motor supply.
 
 ## Integrated dual motor control
 
@@ -101,6 +113,39 @@ The peak rating is for a single pulse, not continuous operation. Usable current 
 <Warning>
 Select a motor supply that matches the motors and stays within the TB6612FNG limits. Check motor stall current and wiring polarity before powering the board. Do not treat the single-pulse peak rating as continuous current.
 </Warning>
+
+### Native Bootloader and Programming
+
+The Glyph S3 Motor Driver uses the ESP32-S3 native USB bootloader. Hold **BOOT** while connecting the USB-C cable to enter download mode, then select the detected serial port in the development environment. USB-C also provides serial debugging.
+
+### Connectivity
+
+The ESP32-S3-MINI-1 module provides 2.4 GHz Wi-Fi (802.11 b/g/n) and Bluetooth LE. This allows the board to receive motion commands and report sensor or motor-control data wirelessly.
+
+<Info>
+The wireless module on the GLYPH board is CE and FCC certified.
+</Info>
+
+### Development Support
+
+The Glyph S3 Motor Driver can be programmed with:
+
+- **Arduino**
+- **MicroPython**
+- **ESP-IDF (Espressif IoT Development Framework)**
+
+### Memory and Storage
+
+This board uses the **N8** module version with **8 MB Quad SPI flash** and **no external PSRAM**. It also has 512 KB internal SRAM for the ESP32-S3's runtime and buffers.
+
+### S3 Chip Features
+
+- **BluFi**
+- **RF coexistence**
+- **ESP-BLE-MESH**
+- **ESP-WIFI-MESH**
+
+For more ESP32-S3 details, see the [ESP32-S3 datasheet](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/PCBCUPID_esp32-s3_datasheet.pdf) and [Espressif's getting-started guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/get-started/).
 
 ## Project uses
 
