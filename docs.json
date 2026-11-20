@@ -105,6 +105,12 @@
                     ]
                   },
                   {
+                    "group": "Glyph S3 Motor Driver",
+                    "pages": [
+                      "documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver"
+                    ]
+                  },
+                  {
                     "group": "Glyph C5",
                     "pages": [
                       "documentation/modules/glyph/glyph-c5/overview-glyph-c5",

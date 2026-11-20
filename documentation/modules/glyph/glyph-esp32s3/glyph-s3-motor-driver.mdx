@@ -1,0 +1,69 @@
+---
+description: "A Glyph S3 development board with an integrated TB6612FNG dual motor driver for robotics and motion-control projects."
+title: "Glyph S3 Motor Driver"
+sidebarTitle: "Motor Driver"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ModelPreview = ({ modelUrl }) => (
+  <div ref={function (el) {
+    if (!el || el._mv) return;
+    el._mv = true;
+    var script = document.createElement('script');
+    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js';
+    script.type = 'module';
+    script.onload = function () {
+      var viewer = document.createElement('model-viewer');
+      viewer.setAttribute('src', modelUrl);
+      viewer.setAttribute('camera-controls', '');
+      viewer.setAttribute('auto-rotate', '');
+      viewer.style.width = '100%';
+      viewer.style.height = '100%';
+      viewer.style.backgroundColor = '#f8f8f8';
+      el.replaceChildren(viewer);
+    };
+    document.head.appendChild(script);
+  }} style={{ height: '450px', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '24px', overflow: 'hidden', margin: '1rem 0 1.5rem' }} />
+);
+
+<ShopHeader title="Glyph S3 Motor Driver" url="https://shop.pcbcupid.com/product/gd011/" />
+
+The **GLYPH S3 Motor Driver** combines the ESP32-S3 platform with a built-in **TB6612FNG dual H-bridge**. It can control two brushed DC motors independently, or one bipolar stepper motor, while leaving the S3 available for wireless control, sensing, and application logic.
+
+<ModelPreview modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver.glb" />
+
+[Open or download the 3D model](https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver.glb)
+
+## At a glance
+
+| Feature | Description |
+| :--- | :--- |
+| **Controller** | Espressif ESP32-S3-MINI-1-N4R2 module |
+| **Memory** | 4 MB flash and 2 MB PSRAM |
+| **Wireless** | 2.4 GHz Wi-Fi and Bluetooth LE |
+| **Motor driver** | Toshiba TB6612FNG dual H-bridge |
+| **Motor control** | Two brushed DC motors, or one bipolar stepper motor |
+| **Programming** | USB-C and ESP32-S3 development tools |
+
+## Integrated motor control
+
+The TB6612FNG provides two direction-and-speed control channels. Set direction with the channel input pins and control speed with PWM. The driver also supports braking, coast, and standby modes. Since the driver is already on the board, a project does not need a separate G-Mod motor-driver module or its extra board-to-board wiring.
+
+The TB6612FNG datasheet specifies a 2.5–13.5 V motor supply range and 1.2 A average output per channel. Its 3.2 A rating is for a single pulse; it is not a continuous current rating. Actual usable motor current depends on the motor, PCB cooling, operating conditions, and the driver's datasheet limits. [See Toshiba's TB6612FNG datasheet](https://toshiba.semicon-storage.com/info/datasheet_en_20141001.pdf?did=10660).
+
+<Warning>
+Choose a motor supply that matches the motors and remains within the TB6612FNG limits. Check motor stall current and wiring polarity before powering the board. Do not treat the driver's single-pulse peak current as a continuous rating.
+</Warning>
+
+## A compact platform for motion projects
+
+This is a premium all-in-one option for projects that need a capable S3 controller and motor control on one board: small robots, differential-drive vehicles, pan-and-tilt mechanisms, and interactive moving builds. The ESP32-S3 module supports Wi-Fi and Bluetooth LE, so the same board can handle motor commands, sensor readings, and wireless control.
+
+The design uses an ESP32-S3-MINI-1-N4R2 module. For its processor, memory, and wireless capabilities, see the [Espressif module datasheet](https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html). For the rest of the Glyph S3 pin and power information, see the [Glyph S3 overview](/documentation/modules/glyph/glyph-esp32s3/glyph-s3-overview) and [pinouts](/documentation/modules/glyph/glyph-esp32s3/glyph-esp32-s3-pinouts).
