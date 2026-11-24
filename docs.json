@@ -107,9 +107,9 @@
                   {
                     "group": "Glyph S3 Motor Driver",
                     "pages": [
-                      "documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver",
-                      "documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-pinouts",
-                      "documentation/modules/glyph/glyph-esp32s3/glyph-s3-motor-driver-power-management"
+                      "documentation/modules/glyph/glyph-s3-motor-driver/overview",
+                      "documentation/modules/glyph/glyph-s3-motor-driver/pinouts",
+                      "documentation/modules/glyph/glyph-s3-motor-driver/power-management"
                     ]
                   },
                   {

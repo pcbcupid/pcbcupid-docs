@@ -1,0 +1,194 @@
+---
+description: "Tour the Glyph S3 Motor Driver board: GPIO pin assignments, power rails, integrated TB6612FNG dual motor outputs, USB-C port, and Glink connector reference pinout diagram."
+title: "Pinouts"
+sidebarTitle: "Pinouts"
+---
+
+<div style={{ textAlign: "center" }}>
+<img src="https://spell-files.pcbcupid.com/pc-module/images/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver-pinout.avif" alt="Glyph S3 Motor Driver Pinouts" width="800" />
+</div>
+
+<br/>
+
+[CLICK HERE TO DOWNLOAD HD](https://spell-files.pcbcupid.com/pc-module/images/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver-pinout.png)
+
+The **Glyph S3 Motor Driver** is equipped with a rich set of GPIOs, high-speed communication buses, dedicated power management, an integrated TB6612FNG dual H-bridge motor driver, and a Qwiic-compatible Glink connector. This page takes you on a tour of each pin and hardware interface on the board!
+
+<Note title="Technical Detail: Strapping and Boot Pins">
+The ESP32-S3 uses specific strapping pins during reset:
+- **GPIO 0**: Controls whether the chip boots into internal flash or enters **Serial Download Boot Mode**. On the Glyph S3 Motor Driver, this pin is wired to the onboard **BOOT** button.
+- Avoid pulling strapping pins to unexpected logic states during startup to ensure reliable booting.
+</Note>
+
+---
+
+### Power Pins and Connections
+
+- **GND**: Common ground for all power, logic, analog, and motor signals.
+- **BAT / +BATT**: Board battery/system rail connected to the battery connector and power-path circuit (nominal 2.7V – 4.2V). This rail directly feeds the TB6612FNG motor driver VM supply and the 3.3V LDO regulator.
+- **USB / VBUS**: +5V rail supplied directly by the USB Type-C connector when plugged in.
+- **EN / RESET**: Chip Enable pin of the ESP32-S3. Pulling this pin to ground resets the microcontroller; connected to the onboard **RESET** button.
+- **3.3V / 3V3**: Regulated 3.3V output from the onboard 3.3 low-dropout regulator (rated for up to 900mA continuous load).
+- **Battery Connector**: 2-pin connector for a single-cell LiPo/Li-ion rechargeable battery (Pin 1: GND, Pin 2: Bat_PWR).
+
+---
+
+### Communication Pins
+
+#### I2C, SPI, and UART on S3
+
+The ESP32-S3 is capable of routing I2C, SPI, and UART across many pins via the GPIO matrix. To maintain ecosystem consistency and ease of use, dedicated standard pins are assigned as follows:
+
+#### I2C Pins
+
+- I2C0 SCL: **SCL**, IO5
+- I2C0 SDA: **SDA**, IO4
+
+Both lines are routed to the physical header pins as well as the onboard **GLINK** connector. A secondary I2C bus can also be assigned to any available GPIO pair.
+
+#### SPI Pins
+
+- SPI0 SCK : **SCK**, IO35
+- SPI0 MOSI: **MOSI**, IO36
+- SPI0 MISO: **MISO**, IO37
+- SPI0 CS  : **ANY IO That's available** (such as D13, D14, D15, D16)
+
+#### UART Pins
+
+- UART0 TX: **uTx**, IO43
+- UART0 RX: **uRx**, IO44
+
+S3 has 3 UART controllers total. Additional UART buses can be assigned to any GPIO via the GPIO matrix.
+
+---
+
+### Motor Connectors and Control Pins
+
+#### Integrated TB6612FNG Dual H-Bridge Driver
+
+The onboard Toshiba TB6612FNG driver controls two brushed DC motors or one bipolar stepper motor. The driver's control inputs are internally connected to the ESP32-S3 as follows:
+
+| TB6612FNG Signal | ESP32-S3 GPIO | Function |
+| :--- | :--- | :--- |
+| **PWMA** | GPIO41 | Motor A speed (PWM) |
+| **AIN1** | GPIO39 | Motor A direction input 1 |
+| **AIN2** | GPIO38 | Motor A direction input 2 |
+| **STBY** | GPIO42 | Driver standby / enable (Active High) |
+| **PWMB** | GPIO40 | Motor B speed (PWM) |
+| **BIN1** | GPIO47 | Motor B direction input 1 |
+| **BIN2** | GPIO48 | Motor B direction input 2 |
+
+#### Motor Output Connectors
+
+Two 2-pin Molex PicoBlade connectors provide dedicated motor outputs:
+
+| Connector | Pin 1 | Pin 2 | Channel / Load |
+| :--- | :--- | :--- | :--- |
+| **Motor A** | AO_2 | AO_1 | Motor A output |
+| **Motor B** | BO_2 | BO_1 | Motor B output |
+
+Connect one brushed DC motor across each connector. For a 4-wire bipolar stepper motor, connect winding A to J7 and winding B to J8.
+
+---
+
+### Additional Ports and Peripherals
+
+#### Glyph Glink Port 
+
+A 4-pin JST-SH connector compatible with SparkFun Qwiic and Adafruit STEMMA QT ecosystems, allowing solderless plug-and-play connection to I2C sensors and peripherals.
+
+| Pin | Signal | Description |
+| :--- | :--- | :--- |
+| 1 | **GND** | Ground |
+| 2 | **+3.3V** | 3.3V regulated power |
+| 3 | **SDA** | I2C Data (GPIO4) |
+| 4 | **SCL** | I2C Clock (GPIO5) |
+
+#### USB-C Port
+
+Used for board power, firmware flashing via native USB Serial/JTAG, and serial debugging. Supplies +5V at the **VBUS** pin.
+
+#### PWM Pins
+
+The ESP32-S3 supports PWM on all general-purpose pins via the LED PWM (LEDC) controller with configurable frequency and duty cycle.
+
+#### Status LED
+
+An onboard user LED is connected to **GPIO21**.
+
+#### Analog Pins (ADC1)
+
+The ESP32-S3 has two ADC units. On the Glyph S3 Motor Driver, 9 ADC1 channels are exposed:
+
+- **D1/BATT_MSR (IO1)**: ADC1 channel 0 (also used for battery voltage measurement)
+- **D2 (IO2)**: ADC1 channel 1
+- **SDA (IO4)**: ADC1 channel 3 (when not used for I2C)
+- **SCL (IO5)**: ADC1 channel 4 (when not used for I2C)
+- **D6 (IO6)**: ADC1 channel 5
+- **D7 (IO7)**: ADC1 channel 6
+- **D8 (IO8)**: ADC1 channel 7
+- **D9 (IO9)**: ADC1 channel 8
+- **D10 (IO10)**: ADC1 channel 9
+
+#### Digital Pins
+
+All exposed pins can function as general-purpose digital I/O:
+- **D1/GPIO1**, **D2/GPIO2**, **D6/GPIO6**, **D7/GPIO7**, **D8/GPIO8**, **D9/GPIO9**, **D10/GPIO10**
+- **SDA/GPIO4**, **SCL/GPIO5**
+- **D13/GPIO13**, **D14/GPIO14**, **D15/GPIO15**, **D16/GPIO16**, **D17/GPIO17**, **D18/GPIO18**
+- **SCK/GPIO35**, **MOSI/GPIO36**, **MISO/GPIO37**
+- **uTx/GPIO43**, **uRx/GPIO44**
+
+---
+
+### Header Mapping Tables
+
+
+| Pin | Board Label | ESP32-S3 / Net Function | Description |
+| :--- | :--- | :--- | :--- |
+| 1 | **+BATT** | +BATT | Board battery/system rail (supplies VM) |
+| 2 | **EN** | EN / CHIP_PU | Microcontroller enable / reset |
+| 3 | **VBUS** | VBUS | USB 5V rail input |
+| 4 | **D10** | GPIO10 | GPIO / ADC1_CH9 |
+| 5 | **D9** | GPIO9 | GPIO / ADC1_CH8 |
+| 6 | **D8** | GPIO8 | GPIO / ADC1_CH7 |
+| 7 | **D7** | GPIO7 | GPIO / ADC1_CH6 |
+| 8 | **D6** | GPIO6 | GPIO / ADC1_CH5 |
+| 9 | **D2** | GPIO2 | GPIO / ADC1_CH1 / Strapping |
+| 10 | **D1 / BATT_MSR** | GPIO1 | GPIO / ADC1_CH0 / Battery measurement |
+| 11 | **SDA** | GPIO4 | GPIO / I2C SDA / ADC1_CH3 |
+| 12 | **SCL** | GPIO5 | GPIO / I2C SCL / ADC1_CH4 |
+
+
+
+| Pin | Board Label | ESP32-S3 / Net Function | Description |
+| :--- | :--- | :--- | :--- |
+| 1 | **RESET** | EN | Hardware reset |
+| 2 | **3V3** | +3.3V | Regulated 3.3V output |
+| 3 | **3V3** | +3.3V | Regulated 3.3V output |
+| 4 | **GND** | GND | Power & signal ground |
+| 5 | **D13** | GPIO13 | Digital I/O |
+| 6 | **D14** | GPIO14 | Digital I/O |
+| 7 | **D15** | GPIO15 | Digital I/O |
+| 8 | **D16** | GPIO16 | Digital I/O |
+| 9 | **D17** | GPIO17 | Digital I/O |
+| 10 | **D18** | GPIO18 | Digital I/O|
+| 11 | **SCK** | GPIO35 | SPI Clock |
+| 12 | **MOSI** | GPIO36 | SPI MOSI |
+| 13 | **MISO** | GPIO37 | SPI MISO |
+| 14 | **uRx** | GPIO44 | UART0 RX |
+| 15 | **uTx** | GPIO43 | UART0 TX |
+| 16 | **GND** | GND | Power & signal ground |
+
+#### Additional Solder Pads
+
+| Pad Signal | ESP32-S3 / Function | Description |
+| :--- | :--- | :--- |
+|+3.3V |  +3.3V | Regulated 3.3V power |
+| D34  |  GPIO34| Digital I/O |
+| D26  |  GPIO26| Digital I/O |
+| D3   |  GPIO3 | Digital I/O |
+| D33  |  GPIO33| Digital I/O |
+| GND  |  GND   | Ground      |
+
+For power details and supply connections, see [Power Management](/documentation/modules/glyph/glyph-s3-motor-driver/power-management).

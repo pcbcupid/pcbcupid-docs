@@ -97,9 +97,9 @@ The ESP32-S3 supports PWM on all general-purpose pins via the LED PWM (LEDC) con
 
 A physical slide switch that disconnects the battery line, allowing you to turn off the board completely when operating on battery power without unplugging the battery.
 
-#### Status LED (GPIO33)
+#### NeoPixel RGB LED (GPIO33)
 
-An onboard user-controllable status LED connected to **GPIO 33** for visual blinking feedback, status monitoring, or debugging.
+An onboard addressable NeoPixel (WS2812B-compatible) RGB LED connected to **GPIO 33** for multi-color status feedback, visual indicators, or custom lighting effects.
 
 ---
 
@@ -138,7 +138,7 @@ These are the digital I/O pins and primary hardware assignments:
 - **D16/GPIO16**: Digital I/O pin 16 (U0CTS).
 - **D17/GPIO17**: Digital I/O pin 17 (UART1 TX / U1TXD).
 - **D18/GPIO18**: Digital I/O pin 18 (UART1 RX / U1RXD).
-- **LED/GPIO33**: On-board Status LED (GPIO33).
+- **LED/GPIO33**: On-board NeoPixel RGB LED (GPIO33).
 - **SCK/GPIO35**: Main SPI SCK pin.
 - **MO/GPIO36**: Main SPI MOSI pin.
 - **MI/GPIO37**: Main SPI MISO pin.

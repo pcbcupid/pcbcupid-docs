@@ -1,0 +1,191 @@
+---
+description: "Overview of the Glyph S3 Motor Driver development board: an ESP32-S3 microcontroller with an integrated TB6612FNG dual motor driver, 8MB flash, and Qwiic Glink connector."
+title: "Overview"
+sidebarTitle: "Overview"
+---
+
+export const ShopHeader = ({ title, url }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%', marginBottom: '1rem', gap: '20px' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', backgroundColor: '#00b894', color: '#fff', padding: '8px 18px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>
+      Shop now
+    </a>
+  </div>
+);
+
+export const ImgGallery = ({ images, modelUrl }) => {
+  var [active, setActive] = useState(0);
+  var [show3D, setShow3D] = useState(false);
+  var [isFullscreen, setIsFullscreen] = useState(false);
+  var [fullscreenDialog, setFullscreenDialog] = useState(null);
+
+  useEffect(function () {
+    if (show3D || isFullscreen || images.length <= 1) return;
+    var t = setTimeout(function () { setActive(function (p) { return (p + 1) % images.length; }); }, 3500);
+    return function () { clearTimeout(t); };
+  });
+
+  var img = images[active];
+  function openFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && !dialog.open) dialog.showModal();
+    setIsFullscreen(true);
+  }
+  function closeFullscreen() {
+    var dialog = fullscreenDialog;
+    if (dialog && dialog.open) dialog.close();
+    else setIsFullscreen(false);
+  }
+
+  return (
+    <div style={{ position: 'relative', background: 'linear-gradient(to bottom, #fff 0%, #fff 80%, #f8f8f8 100%)', borderRadius: '32px', border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden', marginTop: '0.75rem', marginBottom: '1.5rem' }}>
+      <div style={{ position: 'relative', height: '450px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', padding: '1rem' }}>
+        {show3D && modelUrl ? (
+          <div ref={function (el) { if (!el || el._mv) return; el._mv = true; var s = document.createElement('script'); s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js'; s.type = 'module'; s.onload = function () { var mv = document.createElement('model-viewer'); mv.setAttribute('src', modelUrl); mv.setAttribute('camera-controls', ''); mv.setAttribute('auto-rotate', ''); mv.style.width = '100%'; mv.style.height = '100%'; mv.style.backgroundColor = '#f8f8f8'; el.replaceChildren(mv); }; document.head.appendChild(s); }} style={{ width: '100%', height: '100%' }} />
+        ) : (
+          <img src={img && img.url} alt={img && img.label} loading="lazy" noZoom onClick={openFullscreen} role="button" tabIndex={0} onKeyDown={function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFullscreen(); } }} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px', cursor: 'zoom-in' }} />
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', padding: '1rem', background: '#eee', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        {images.map(function (img, idx) {
+          return (
+            <button key={img.id || idx} onClick={function () { setActive(idx); setShow3D(false); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: !show3D && idx === active ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: !show3D && idx === active ? '#00b894' : '#fff', color: !show3D && idx === active ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+              {img.label}
+            </button>
+          );
+        })}
+        {modelUrl ? (
+          <button onClick={function () { setShow3D(true); }} style={{ padding: '0.6rem 1.5rem', borderRadius: '12px', border: show3D ? '1px solid #00b894' : '1px solid rgba(0,184,148,0.4)', background: show3D ? '#00b894' : '#fff', color: show3D ? '#fff' : '#000', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', fontFamily: 'inherit' }}>
+            3D VIEW
+          </button>
+        ) : null}
+      </div>
+      <dialog ref={setFullscreenDialog} aria-label={img && img.label} onClose={function () { setIsFullscreen(false); }} onClick={function (event) { if (event.target === event.currentTarget) closeFullscreen(); }} style={{ width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none', margin: 0, padding: '2rem', border: 0, background: 'rgba(0,0,0,0.88)' }}>
+        <div style={{ position: 'relative', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          <button type="button" aria-label="Close fullscreen image" onClick={closeFullscreen} style={{ position: 'absolute', top: 0, right: 0, zIndex: 1, width: '2.5rem', height: '2.5rem', border: 0, borderRadius: '999px', background: 'rgba(255,255,255,0.92)', color: '#111', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1 }}>×</button>
+          <img src={img && img.url} alt={img && img.label} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+        </div>
+      </dialog>
+    </div>
+  );
+};
+
+<ShopHeader title="Glyph S3 Motor Driver Overview" url="https://shop.pcbcupid.com/product/gd011/" />
+<ImgGallery modelUrl="https://spell-files.pcbcupid.com/pc-module/3d-model/glb/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver.glb" images={[{ url: "https://spell-files.pcbcupid.com/pc-module/images/GD011-Glyph-S3-MotorDriver/GD011-Glyph-S3-MotorDriver-FB-o.avif", label: "ILLUSTRATION VIEW", id: "illustration" }]} />
+
+Introducing the **Glyph S3 Motor Driver**, a powerful microcontroller and motor drive development board combining the ESP32-S3 chip with an onboard **Toshiba TB6612FNG dual H-bridge motor driver**. It controls two brushed DC motors independently or one bipolar stepper motor, while the dual-core S3 handles compute, sensing, motion algorithms, and wireless IoT connectivity in a single compact footprint.
+
+- **Dimensions**: Measures 50.9mm × 22.9mm × 1.6mm (without headers soldered)
+- **Processor**: ESP32-S3 dual-core LX7 microprocessor @ 240 MHz, 3.3V logic and power
+- **Memory**:
+  - **SRAM**: 512 KB Internal SRAM
+  - **Flash Memory**: 8 MB Quad SPI Flash
+  - **PSRAM**: None
+- **GPIO**: Rich set of GPIO pins with the following capabilities:
+  - 9 GPIO pins support 12-bit ADC (ADC1): IO1 (BATT_MSR), IO2, IO4, IO5, IO6, IO7, IO8, IO9, IO10
+  - I2C (SDA IO4, SCL IO5)
+  - SPI (SCK IO35, MOSI IO36, MISO IO37)
+  - UART (uTx IO43, uRx IO44)
+  - Native USB Serial / JTAG
+- **Integrated Motor Driver (TB6612FNG)**:
+  - Dual independent H-bridge channels on 2-pin Molex PicoBlade connectors
+  - Supports 2 brushed DC motors (CW, CCW, short brake, stop) or 1 bipolar 4-wire stepper motor
+  - 1.2A average continuous output current per channel (3.2A peak pulse)
+  - Dedicated direction, PWM speed, and standby (STBY) control pins wired to ESP32-S3 GPIOs
+- **Power Management**:
+  - USB Type-C connector for power, programming, and serial port debugging
+  - 3.3 low-dropout voltage regulator rated for up to 900mA continuous load
+  - Built-in MCP73831 single-cell LiPo/Li-ion charger with charging status indicator LED
+  - Automatic hot-swap power-path between Battery (+BATT) and USB (VBUS)
+  - Battery voltage monitoring on D1 / BATT_MSR (GPIO1)
+  - Reverse voltage protection diode and polyfuse
+- **Additional Features**:
+  - Onboard user LED (connected to GPIO21)
+  - Onboard GLINK connector for easy integration with Qwiic and STEMMA QT I2C sensors & modules
+  - High-quality tactile Reset and Bootloader buttons for easy access
+
+---
+
+### Integrated Dual Motor Control
+
+The onboard Toshiba TB6612FNG provides high-efficiency MOSFET-based H-bridge outputs with lower heat dissipation compared to traditional bipolar drivers like the L298N. It supports flexible control modes including forward, reverse, brake, coast, and standby.
+
+- **Motor Supply (VM) Range:** 2.5V – 13.5V
+- **Output Current:** 1.2A average continuous per channel; 3.2A single-pulse peak
+- **Control Signals:** Direction pins (AIN1/2, BIN1/2), speed pins (PWMA, PWMB), and standby (STBY)
+
+<Warning>
+Always ensure motor stall current stays within safe operating parameters and check polarity before powering. Do not treat the 3.2A single-pulse peak rating as continuous current. See [Toshiba's TB6612FNG datasheet](https://toshiba.semicon-storage.com/info/datasheet_en_20141001.pdf?did=10660).
+</Warning>
+
+---
+
+### Native Bootloader and Programming
+
+The Glyph S3 Motor Driver features a built-in USB bootloader that makes programming new firmware easy and keeps the cost of the board down. On first time use, hold down the **BOOT** button while plugging it into USB, and it will appear as a COM port in your Device Manager. If you face any issue related to hardware not detecting on your system, please check out our troubleshooting guide [here](https://learn.pcbcupid.com/boards/needs/arduino-ide-setup#hardware-not-detecting).
+
+---
+
+### Connectivity
+
+The Glyph S3 Motor Driver excels in connectivity with its built-in Wi-Fi and Bluetooth LE support. This makes it ideal for IoT and wireless robotics applications, where reliable communication is crucial.
+
+<Info>
+The wireless module on GLYPH board is CE & FCC Certified.
+</Info>
+
+---
+
+### Development Support
+
+The ESP32-S3 Glyph Motor Driver is supported by a variety of development environments, including:
+
+- **Arduino**
+- **MicroPython**
+- **ESP-IDF (Espressif IoT Development Framework)**
+
+<div style={{ textAlign: "center" }}>
+<img src="https://files.pcbcupid.com/Documentation/Boards/PCBCUPID_arduino_espressif_micropython_result.avif" alt="PCBCUPID_arduino_espressif_micropython_result" width="350"/>
+</div>
+
+With extensive library support and a large community, getting started with the Glyph S3 Motor Driver is straightforward.
+
+---
+
+### Memory and Storage
+
+The Glyph S3 Motor Driver configuration:
+
+<div className="technical-info-card">
+  <div className="tech-info-header">
+    <span className="tech-info-chip">Technical Specs</span>
+    <span>Memory Architecture</span>
+  </div>
+  <p>The board is equipped with <b>512KB onboard SRAM</b> for core operations and buffers:</p>
+  <ul>
+    <li><b>Flash Memory:</b> 8MB Quad SPI Flash for storing application firmware, assets, and file systems.</li>
+  </ul>
+</div>
+
+---
+
+### S3 Chip Features
+
+- **BluFi**
+- **RF Coexistence**
+- **ESP-BLE-MESH**
+- **ESP-WIFI-MESH**
+
+You can read more about the ESP32-S3 in the [ESP32S3 DATASHEET](https://files.pcbcupid.com/Documentation/Boards/glyph-S3/PCBCUPID_esp32-s3_datasheet.pdf) and [ESP32S3 OFFICIAL](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/get-started/) documentation.
+
+---
+
+### Project Applications
+
+The integration of dual H-bridge motor drivers with an ESP32-S3 makes this board ideal for:
+- Two-wheel differential-drive mobile robots
+- Wi-Fi/Bluetooth remote-controlled rovers and cars
+- Pan-and-tilt motorized camera mounts
+- Automated smart blinds and motorized valves
+- Compact robotic arms and stepper-driven linear slides
+
+For hardware connections and power guidance, see [Pinouts](/documentation/modules/glyph/glyph-s3-motor-driver/pinouts) and [Power Management](/documentation/modules/glyph/glyph-s3-motor-driver/power-management).

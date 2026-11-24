@@ -1,0 +1,86 @@
+---
+description: "Power the Glyph S3 Motor Driver over USB-C or a single-cell lithium battery, manage motor VM power, and monitor battery status."
+title: "Power Management"
+sidebarTitle: "Power Management"
+---
+
+## Power Management for Glyph S3 Motor Driver
+
+### Battery + USB Power
+
+We designed the Glyph S3 Motor Driver to be easy to power both when connected to a computer and via a battery. Here are the ways to power your Glyph:
+
+1. **USB Power**: Connect with a USB-C cable. The onboard low-dropout (LDO) regulator steps down the 5V USB rail to 3.3V for logic, while USB VBUS feeds the system **+BATT** rail through the onboard power-path diode and polyfuse.
+2. **Battery Power**: Connect a 3.7V / 4.2V single-cell Lithium Polymer (LiPo) or Lithium Ion (Li-ion) battery to the 2-pin battery connector.
+
+When USB power is plugged in, the system automatically hot-swaps to USB power and simultaneously begins charging the battery (if attached) via the onboard MCP73831 battery charger. This hot-swap functionality allows you to keep the LiPo connected as a backup power source that will only be used when USB power is lost.
+
+<Danger>
+Install the LiPo / Li-ion batteries based on the polarity. Ensure positive (+) connects to Bat_PWR and negative (-) to GND. Using wrong polarity batteries can destroy your Glyph and motor driver.
+</Danger>
+
+---
+
+### Power Supplies
+
+The Glyph S3 Motor Driver offers multiple power supply access points:
+
+- **BAT / +BATT Pin**: Connected to the battery connector and power-path circuit. This rail directly feeds the motor driver VM supply and the 3.3V LDO regulator.
+- **USB / VBUS Pin**: Supplies +5V directly from the USB Type-C connector when plugged in.
+- **3.3V / 3V3 Pin**: Regulated 3.3V output from the onboard low-dropout regulator, rated for up to 900mA continuous load.
+
+---
+
+### Motor Driver Power Supply
+
+The integrated TB6612FNG motor driver module receives power from two dedicated rails:
+
+- **3.3V Rail (VCC)**: Powers the motor driver's internal logic and control circuitry from the onboard regulated 3.3V rail.
+- **BATT(+) Rail (VM)**: Powers the H-bridge drive outputs for the motors directly from the **BATT(+)** rail.
+
+The TB6612FNG driver supports an operating voltage range of 2.5V – 13.5V with an output current of up to 1.2A continuous (3.2A peak) per channel.
+
+---
+
+### Driver Standby (STBY Pin)
+
+The TB6612FNG **STBY** (Standby) input is internally connected to **GPIO42**:
+- **STBY LOW (0)**: Puts the motor driver into low-power standby mode, turning off all H-bridge outputs and minimizing quiescent current.
+- **STBY HIGH (1)**: Enables normal operation of the motor driver outputs.
+
+Putting the driver into standby stops motor drive current, but does not disconnect the ESP32-S3 or other board peripherals from power.
+
+---
+
+### Measuring Battery Voltage
+
+The Glyph S3 Motor Driver provides battery monitoring capabilities:
+- **GPIO1** is assigned to **D1 / BATT_MSR**.
+- Firmware can read the battery voltage through the ESP32-S3 ADC1 channel 0 to track battery discharge state and alert on low battery conditions.
+
+---
+
+### Alternative Power Options
+
+For powering the Glyph S3 Motor Driver:
+
+- **USB powered**: Use a 5V 1A USB wall adapter to plug in a USB cable for reliable power.
+- **Portable Use Without LiPo**: Use a USB battery pack (Power Bank).
+- **Higher Voltage Power Supply**: Use a 5V buck converter and wire it to a USB cable's 5V and GND input.
+
+<Danger>
+**What You Cannot Do**
+- Do not use alkaline or NiMH batteries and connect to the battery port, as it will destroy the LiPo charger.
+- Do not use anything >4.2v LiPo batteries on the battery port, as it will destroy the board.
+</Danger>
+
+---
+
+### External Power Supplies
+
+The Glyph S3 Motor Driver is not designed for external power supplies. If you must:
+
+- **Connect an external 3.3V power supply** to the 3V3 and GND pins.
+- **Connect an external 5V power supply** to the USB and GND pins.
+
+For chip-level electrical specifications, refer to the [Toshiba TB6612FNG Datasheet](https://toshiba.semicon-storage.com/info/datasheet_en_20141001.pdf?did=10660).
